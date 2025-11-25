@@ -8,17 +8,17 @@ services:
       - "8888:8888" # Jupyter
     volumes:
       - /etc/machine-id:/etc/machine-id:ro
-      - /home/pi/ImSwitchConfig:/config
-      - /home/pi/Datasets:/datasets
+      - /home/pi/ImSwitchConfig:/home/pi/ImSwitchConfig
+      - /home/pi/Datasets:/home/pi/Datasets
       - /media:/media
     environment:
       - HEADLESS=1
       - HTTP_PORT=8001
-      - CONFIG_PATH=/config
+      - CONFIG_PATH=/home/pi/ImSwitchConfig
       - CONFIG_FILE=example_virtual_microscope.json
       - UPDATE_GIT=0
       - UPDATE_CONFIG=0
-      - DATA_PATH=/datasets
+      - DATA_PATH=/home/pi/Datasets
       - SCAN_EXT_DATA_PATH=1
       - EXT_DATA_PATH=/media
       - SSL=0
