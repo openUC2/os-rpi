@@ -15,10 +15,7 @@ polkit.addRule(function(action, subject) {
     "org.freedesktop.NetworkManager.wifi.share.protected": YES,
   };
 
-  polkit.log("action=" + action);
-  polkit.log("subject=" + subject);
   if (subject.isInGroup("netdev")) {
-    polkit.log("20-networkmanager-result=" + permissions[action.id]);
     return permissions[action.id];
   }
 });
