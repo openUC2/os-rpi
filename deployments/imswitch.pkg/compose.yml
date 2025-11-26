@@ -1,24 +1,24 @@
 services:
 
   imswitch-noqt:
-    image: ghcr.io/openuc2/imswitch-noqt:sha-c1383c0@sha256:b0abc0aea112fc13e76c45560b433af4091f3c083cd58601c4c8adc4d3503269
+    image: ghcr.io/openuc2/imswitch-noqt:sha-69533ee@sha256:a71e70e300cdcf5a63e51762f1a35bfdb25bc97d8b6f00f47968483de4b4dfa1
     privileged: true
     ports:
       - "8001:8001" # frontend, HTTP API, WebSockets API
       - "8888:8888" # Jupyter
     volumes:
       - /etc/machine-id:/etc/machine-id:ro
-      - /home/pi/ImSwitchConfig:/config
-      - /home/pi/Datasets:/datasets
+      - /home/pi/ImSwitchConfig:/home/pi/ImSwitchConfig
+      - /home/pi/Datasets:/home/pi/Datasets
       - /media:/media
     environment:
       - HEADLESS=1
       - HTTP_PORT=8001
-      - CONFIG_PATH=/config
+      - CONFIG_PATH=/home/pi/ImSwitchConfig
       - CONFIG_FILE=example_virtual_microscope.json
       - UPDATE_GIT=0
       - UPDATE_CONFIG=0
-      - DATA_PATH=/datasets
+      - DATA_PATH=/home/pi/Datasets
       - SCAN_EXT_DATA_PATH=1
       - EXT_DATA_PATH=/media
       - SSL=0
