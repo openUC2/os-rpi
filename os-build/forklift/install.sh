@@ -79,13 +79,7 @@ if ! sudo -E forklift stage apply; then
   echo "The staged pallet couldn't be applied; we'll try again now..."
   # Reset the "apply-failed" status of the staged pallet to apply:
   sudo -E forklift stage set-next --cache-img=false next
-  if ! sudo -E forklift stage apply; then
-    echo "Warning: the next staged pallet could not be successfully applied. We'll try again on the next boot, since the pallet might require some files which will only be created during the next boot."
-    # Reset the "apply-failed" status of the staged pallet to apply:
-    sudo -E forklift stage set-next --cache-img=false next
-    echo "Checking the plan for applying the staged pallet..."
-    sudo -E forklift stage plan
-  fi
+  sudo -E forklift stage apply
 fi
 
 # Use forklift on future boot sequences
