@@ -66,11 +66,24 @@ forklift plt ls-img |
   rush "$config_files_root/load-precached-image.sh" \
     {} "$HOME/.cache/forklift/containers/docker-archives"
 
-# Prepare to apply the local pallet
-
+# Prepare to apply the local pallet on the next boot
 # FIXME: containerd or runc always fails when we try to create containers (at least in a
-# systemd-nspawn container), so we can't run `forklift stage apply here`
-sudo -E forklift --stage-store /var/lib/forklift/stages stage plan
+# systemd-nspawn container), for some reason, so `forklift stage apply` never actually completes
+# here. Nevertheless, we still need to run `forklift stage apply` here so that Docker will correctly
+# associate container image labels+tags to container images which are loaded just as a sha256 hash.
+
+# Make a temporary file which may be required by some Docker Compose apps in the pallet, just so
+# that those Compose apps can be successfully created (this is a rather dirty hack/workaround):
+echo "setup" | sudo tee /run/machine-name
+
+export FORKLIFT_STAGE_STORE=/var/lib/forklift/stages
+if ! sudo -E forklift stage apply; then
+  echo "Warning: the next staged pallet couldn't be successfully applied. We'll try again on the next boot, since the pallet might require some files which will only be created during the next boot."
+  # Reset the "apply-failed" status of the staged pallet to apply:
+  sudo -E forklift stage set-next --cache-img=false next
+  echo "Checking the plan for applying the staged pallet..."
+  sudo -E forklift stage plan
+fi
 
 # Use forklift on future boot sequences
 sudo systemctl preset forklift-apply.service
