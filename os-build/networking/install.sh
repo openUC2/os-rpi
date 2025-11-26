@@ -32,5 +32,4 @@ sudo -E apt-get update -y -o Dpkg::Progress-Fancy=0
 sudo -E apt-get install -y -o Dpkg::Progress-Fancy=0 \
   tailscale
 
-sudo groupadd netdev
 sudo usermod -aG netdev "$USER"
