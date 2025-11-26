@@ -6,9 +6,19 @@ polkit.addRule(function(action, subject) {
     "org.freedesktop.udisks2.encrypted-unlock": YES,
     "org.freedesktop.udisks2.eject-media": YES,
     "org.freedesktop.udisks2.power-off-drive": YES,
+    // required for udisks2 when launched from another seat (e.g. systemd or udev rules):
+    "org.freedesktop.udisks2.filesystem-mount-other-seat": YES,
+    "org.freedesktop.udisks2.filesystem-unmount-others": YES,
+    "org.freedesktop.udisks2.encrypted-unlock-other-seat": YES,
+    "org.freedesktop.udisks2.encrypted-unlock-system": YES,
+    "org.freedesktop.udisks2.eject-media-other-seat": YES,
+    "org.freedesktop.udisks2.power-off-drive-other-seat": YES,
   };
 
   if (subject.isInGroup("storage")) {
+    polkit.log("action=" + action);
+    polkit.log("subject=" + subject);
+    polkit.log("20-udisks2-result=" + permissions[action.id]);
     return permissions[action.id];
   }
 });
