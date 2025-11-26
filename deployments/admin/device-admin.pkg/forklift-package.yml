@@ -33,3 +33,11 @@ features:
           paths:
             - /admin/panel
             - /admin/panel/*
+  as-user-pi:
+    description: Runs the machine administration panel as the pi user
+    compose-files:
+      - as-user-pi.compose.yml
+    provides:
+      file-exports:
+        - description: polkit rules for using NetworkManager's D-Bus API as the pi user
+          target: overlays/usr/share/polkit-1/rules.d/20-networkmanager.rules

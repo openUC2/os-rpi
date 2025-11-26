@@ -103,4 +103,5 @@ sudo systemctl preset \
   overlay-usr.service \
   overlay-etc.service \
   start-overlaid-units.service \
+  reload-overlaid-polkit-rules.service \
   fake-hwclock-overlay-support.service
