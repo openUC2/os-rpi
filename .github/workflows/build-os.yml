@@ -48,10 +48,10 @@ jobs:
         id: rpi-os-image
         run: |
           case '${{ inputs.base_release_name }}' in
-            'bookworm')
+            'trixie')
               IMAGE_RELEASE_CHANNEL='raspios'
               ;;
-            'bullseye')
+            'bookworm')
               IMAGE_RELEASE_CHANNEL='raspios_oldstable'
               ;;
             *)

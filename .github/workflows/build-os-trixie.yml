@@ -1,0 +1,43 @@
+---
+name: build-os-trixie
+on:
+  push:
+    branches:
+      - 'main'
+    tags:
+      - 'v*'
+    paths:
+      - '**'
+      - '!README.md'
+  pull_request:
+    paths:
+      - '**'
+      - '!README.md'
+  merge_group:
+  workflow_dispatch:
+    inputs:
+      git-ref:
+        description: 'Git ref (optional)'
+        required: false
+
+jobs:
+  build:
+    name: build
+    strategy:
+      fail-fast: false
+      matrix:
+        base_variant_name:
+          - lite
+    permissions:
+      contents: read
+      packages: write
+      id-token: write
+    uses: ./.github/workflows/build-os.yml
+    secrets: inherit
+    with:
+      name: rpi-imswitch-os
+      base_release_name: trixie
+      base_image_variant: ${{ matrix.base_variant_name }}
+      base_release_date: 2025-11-24
+      base_file_release_date: 2025-11-24
+      arch: arm64
