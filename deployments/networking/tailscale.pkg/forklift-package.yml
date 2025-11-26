@@ -1,0 +1,26 @@
+package:
+  description: Tailscale agent ambiently provided by the OS
+  maintainers:
+    - name: Ethan Li
+      email: lietk12@gmail.com
+  license: BSD-3-Clause
+  sources:
+    - https://github.com/tailscale/tailscale
+
+host:
+  provides:
+    filesets:
+      - description: Sockets for tailscaled
+        paths:
+          - /run/tailscale/tailscaled.sock
+          - /var/run/tailscale/tailscaled.sock
+
+features:
+  tailscale-funnel-compatibility:
+    description: >
+      Unit override for tailscaled.service to add an ordering dependency for it to start after
+      forklift-apply.service
+    provides:
+      file-exports:
+        - description: Override of ordering dependencies for tailscaled.service
+          target: overlays/etc/systemd/system/tailscaled.service.d/after.conf
