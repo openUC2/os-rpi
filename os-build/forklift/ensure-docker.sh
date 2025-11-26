@@ -7,10 +7,10 @@ if ! [ -S /var/run/docker.sock ] &&
   ! sudo systemctl start docker.socket docker.service; then
   echo "Warning: couldn't start docker the easy way!"
   echo "Starting containerd daemon directly..."
-  sudo /usr/bin/containerd &
+  sudo su -c /usr/bin/containerd &
   sleep 5
   echo "Starting docker daemon directly..."
-  sudo /usr/bin/dockerd &
+  sudo su -c /usr/bin/dockerd &
   sleep 5
 fi
 if ! sudo docker image ls >/dev/null; then
