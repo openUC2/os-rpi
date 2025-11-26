@@ -2,7 +2,6 @@
 Description=Set %i as the tailscale operator
 Requires=tailscaled.service
 After=tailscaled.service
-Before=forklift-apply.service
 
 [Service]
 Type=oneshot
