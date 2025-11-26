@@ -1,13 +1,13 @@
-const YES = polkit.Result.YES;
-const permissions = {
-  // required for udisks2:
-  "org.freedesktop.udisks2.filesystem-mount": YES,
-  "org.freedesktop.udisks2.encrypted-unlock": YES,
-  "org.freedesktop.udisks2.eject-media": YES,
-  "org.freedesktop.udisks2.power-off-drive": YES,
-};
-
 polkit.addRule(function(action, subject) {
+  const YES = polkit.Result.YES;
+  const permissions = {
+    // required for udisks2:
+    "org.freedesktop.udisks2.filesystem-mount": YES,
+    "org.freedesktop.udisks2.encrypted-unlock": YES,
+    "org.freedesktop.udisks2.eject-media": YES,
+    "org.freedesktop.udisks2.power-off-drive": YES,
+  };
+
   if (subject.isInGroup("storage")) {
     return permissions[action.id];
   }
