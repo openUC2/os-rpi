@@ -41,6 +41,12 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
+        with:
+          # We check out the PR's HEAD commit instead of its merge commit for traceability when
+          # running `forklift plt show`/`forklift stage show`, and so that `forklift plt upgrade`
+          # can be used without `--force`; if the CI run isn't a PR, we'll just use the default ref
+          # via an empty string:
+          ref: ${{ github.event.pull_request.head.sha }}
 
       # GET BASE IMAGE
 
