@@ -1,0 +1,13 @@
+[Unit]
+Description=Set %i as the tailscale operator
+Requires=tailscaled.service
+After=tailscaled.service
+Before=forklift-apply.service
+
+[Service]
+Type=oneshot
+ExecStart=tailscale set --operator=%i
+RemainAfterExit=yes
+
+[Install]
+WantedBy=multi-user.target

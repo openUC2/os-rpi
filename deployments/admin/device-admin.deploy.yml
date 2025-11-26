@@ -1,4 +1,5 @@
 package: /deployments/admin/device-admin.pkg
 features:
   - frontend
+  - as-user-pi
 disabled: false
