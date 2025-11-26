@@ -68,12 +68,6 @@ forklift plt ls-img |
 
 # Prepare to apply the local pallet
 
-# Note: the pi user will only be able to run `forklift stage plan` and `forklift stage cache-img`
-# without root permissions after a reboot, so we may need `sudo -E` here; I had tried running
-# `newgrp docker` in the script to avoid the need for `sudo -E here`, but it doesn't work in the
-# script here (even though it works after the script finishes, before rebooting):
-"$config_files_root/ensure-docker.sh"
-
 # Make a temporary file which may be required by some Docker Compose apps in the pallet, just so
 # that those Compose apps can be successfully created (this is a rather dirty hack/workaround):
 echo "setup" | sudo tee /run/machine-name
