@@ -18,9 +18,9 @@ host:
 features:
   tailscale-funnel-compatibility:
     description: >
-      Unit override for tailscaled.service to add an ordering dependency for it to start after
-      forklift-apply.service
+      Unit override for forklift-apply.service to bring down Tailscale (and thus Tailscale Funnel)
+      while forklift-apply.service is running
     provides:
       file-exports:
-        - description: Override of ordering dependencies for tailscaled.service
-          target: overlays/etc/systemd/system/tailscaled.service.d/after.conf
+        - description: Override forklift-apply.service to temporarily bring down Tailscale Funnel
+          target: overlays/etc/systemd/system/forklift-apply.service.d/tailscale-funnel-workaround.conf
