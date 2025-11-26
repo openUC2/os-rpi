@@ -1,23 +1,21 @@
+const YES = polkit.Result.YES;
 // Run `nmcli general permissions` for a full list of possible permissions
-const actions = [
-  'org.freedesktop.NetworkManager.checkpoint-rollback',
-  'org.freedesktop.NetworkManager.enable-disable-connectivity-check',
-  'org.freedesktop.NetworkManager.enable-disable-network',
-  'org.freedesktop.NetworkManager.enable-disable-wifi',
-  'org.freedesktop.NetworkManager.network-control',
-  'org.NetworkManager.reload',
-  'org.freedesktop.NetworkManager.settings.modify.own',
-  'org.freedesktop.NetworkManager.settings.modify.system',
-  'org.freedesktop.NetworkManager.wifi.scan',
-  'org.freedesktop.NetworkManager.wifi.share.open',
-  'org.freedesktop.NetworkManager.wifi.share.protected',
-];
-const users = [
-  'pi',
-];
+const permissions = {
+  'org.freedesktop.NetworkManager.checkpoint-rollback': YES,
+  'org.freedesktop.NetworkManager.enable-disable-connectivity-check': YES,
+  'org.freedesktop.NetworkManager.enable-disable-network': YES,
+  'org.freedesktop.NetworkManager.enable-disable-wifi': YES,
+  'org.freedesktop.NetworkManager.network-control': YES,
+  'org.NetworkManager.reload': YES,
+  'org.freedesktop.NetworkManager.settings.modify.own': YES,
+  'org.freedesktop.NetworkManager.settings.modify.system': YES,
+  'org.freedesktop.NetworkManager.wifi.scan': YES,
+  'org.freedesktop.NetworkManager.wifi.share.open': YES,
+  'org.freedesktop.NetworkManager.wifi.share.protected': YES,
+};
 
 polkit.addRule(function(action, subject) {
-  if (actions.includes(action) && users.includes(subject.user)) {
-    return polkit.Result.YES
+  if (subject.isInGroup("netdev")) {
+    return permissions[action.id];
   }
 });

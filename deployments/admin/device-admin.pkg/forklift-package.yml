@@ -41,3 +41,5 @@ features:
       file-exports:
         - description: polkit rules for using NetworkManager's D-Bus API as the pi user
           target: overlays/usr/share/polkit-1/rules.d/20-networkmanager.rules
+        - description: polkit rules for using UDisks2's D-Bus API as the pi user
+          target: overlays/usr/share/polkit-1/rules.d/20-udisks2.rules

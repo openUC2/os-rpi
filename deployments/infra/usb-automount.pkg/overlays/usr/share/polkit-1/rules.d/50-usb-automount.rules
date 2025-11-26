@@ -1,0 +1,16 @@
+const YES = polkit.Result.YES;
+const permissions = {
+  // required for udisks2:
+  "org.freedesktop.udisks2.filesystem-mount": YES,
+  "org.freedesktop.udisks2.encrypted-unlock": YES,
+  // required for udisks2 when launched from another seat (e.g. systemd or udev rules):
+  "org.freedesktop.udisks2.filesystem-mount-other-seat": YES,
+  "org.freedesktop.udisks2.encrypted-unlock-other-seat": YES,
+  "org.freedesktop.udisks2.encrypted-unlock-system": YES,
+};
+
+polkit.addRule(function(action, subject) {
+  if (subject.isInGroup("storage")) {
+    return permissions[action.id];
+  }
+});
