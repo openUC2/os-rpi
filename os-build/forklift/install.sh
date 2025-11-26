@@ -68,19 +68,9 @@ forklift plt ls-img |
 
 # Prepare to apply the local pallet
 
-# Make a temporary file which may be required by some Docker Compose apps in the pallet, just so
-# that those Compose apps can be successfully created (this is a rather dirty hack/workaround):
-echo "setup" | sudo tee /run/machine-name
-
-# Applying the staged pallet (i.e. making Docker instantiate all the containers) significantly
-# decreases first-boot time, by up to 30 sec for github.com/PlanktoScope/pallet-standard.
-export FORKLIFT_STAGE_STORE=/var/lib/forklift/stages
-if ! sudo -E forklift stage apply; then
-  echo "The staged pallet couldn't be applied; we'll try again now..."
-  # Reset the "apply-failed" status of the staged pallet to apply:
-  sudo -E forklift stage set-next --cache-img=false next
-  sudo -E forklift stage apply
-fi
+# FIXME: containerd or runc always fails when we try to create containers (at least in a
+# systemd-nspawn container), so we can't run `forklift stage apply here`
+sudo -E forklift --stage-store /var/lib/forklift/stages stage plan
 
 # Use forklift on future boot sequences
 sudo systemctl preset forklift-apply.service
