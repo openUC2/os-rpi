@@ -160,7 +160,7 @@ jobs:
           image: ${{ steps.expand-image.outputs.destination }}
           run: echo "Done!"
 
-      - name: Copy pre-downloaded container images into OS image
+      - name: Move pre-downloaded container images into OS image
         uses: ethanjli/pinspawn-action@v0.1.5
         with:
           image: ${{ steps.expand-image.outputs.destination }}
@@ -169,9 +169,9 @@ jobs:
             --bind ${{ steps.setup-precaching.outputs.path }}:/run/container-images
             --machine=raspberrypi
           run: |
-            local_cache="$HOME/.cache/forklift/containers/docker-archives"
+            local_cache="$HOME/.cache/forklift/containers/docker-archives/"
             mkdir -p "$local_cache"
-            sudo cp -r /run/container-images/* "$local_cache"
+            sudo mv /run/container-images/* "$local_cache"
             sudo chown $USER -R "$local_cache"
 
       # RUN OS SETUP SCRIPTS
