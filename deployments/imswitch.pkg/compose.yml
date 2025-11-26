@@ -11,6 +11,7 @@ services:
       - /home/pi/ImSwitchConfig:/home/pi/ImSwitchConfig
       - /home/pi/Datasets:/home/pi/Datasets
       - /media:/media
+      - /run/udev:/run/udev:ro      
     environment:
       - HEADLESS=1
       - HTTP_PORT=8001

@@ -21,7 +21,7 @@ deployment:
       - description: systemd service enablement for udev-readd.service
         target: overlays/etc/systemd/system/multi-user.target.wants/udev-readd.service
       - description: polkit rules for using UDisks2 to mount drives as users in `storage` group
-        target: overlays/etc/polkit-1/rules.d/50-usb-automount.rules
+        target: overlays/usr/share/polkit-1/rules.d/50-usb-automount.rules
 
 features:
   noatime:

@@ -1,6 +1,6 @@
 services:
   server:
-    image: ghcr.io/openuc2/device-admin:0.1.3@sha256:83d257c0fb25bf181b96b00e6b669b048ede9365cc870a7b00387e3931d03884
+    image: ghcr.io/openuc2/device-admin:0.1.5-alpha.2@sha256:c64cb793f6362f34dc3c66fd40a01590a42d9ee96807141489565d675e9a0180
     environment:
       - HTTP_BASEPATH=/admin/panel/
       - TEMPLATES_PATH=/web/templates
@@ -15,6 +15,9 @@ services:
       - type: bind
         source: /run/tailscale/tailscaled.sock
         target: /var/run/tailscale/tailscaled.sock
+      - type: bind
+        source: /media
+        target: /media
 networks:
   default:
     name: none
