@@ -2,4 +2,4 @@ package: /deployments/imswitch.pkg
 features:
   - firewall-allow-direct
   - firewall-allow-public
-disabled: true
+disabled: false

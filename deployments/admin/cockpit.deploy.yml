@@ -9,4 +9,4 @@ features:
   - firewall-allow-direct
   - firewall-allow-public
   - frontend
-disabled: true
+disabled: false

@@ -38,6 +38,6 @@ jobs:
       name: rpi-imswitch-os
       base_release_name: bookworm
       base_image_variant: ${{ matrix.base_variant_name }}
-      base_release_date: 2025-05-13
-      base_file_release_date: 2025-05-13
+      base_release_date: 2025-11-24
+      base_file_release_date: 2025-11-24
       arch: arm64
