@@ -1,6 +1,6 @@
 services:
   server:
-    image: ghcr.io/openuc2/device-admin:0.1.4@sha256:ef24dcf8fb1afa4591ff5c900da1a939a4d2136a6667acf2d57913b8217b579b
+    image: ghcr.io/openuc2/device-admin:0.1.5-alpha.2@sha256:c64cb793f6362f34dc3c66fd40a01590a42d9ee96807141489565d675e9a0180
     environment:
       - HTTP_BASEPATH=/admin/panel/
       - TEMPLATES_PATH=/web/templates
