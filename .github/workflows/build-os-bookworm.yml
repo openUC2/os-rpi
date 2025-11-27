@@ -26,11 +26,11 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
+        base_variant_name:
+          - lite
         build_variant:
           - ''
           - 'dx'
-        base_variant_name:
-          - lite
     permissions:
       contents: read
       packages: write
