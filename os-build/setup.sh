@@ -3,6 +3,7 @@
 # Determine the base path for sub-scripts
 
 build_scripts_root=$(dirname "$(realpath "$BASH_SOURCE")")
+pallet_root="$(dirname "$build_scripts_root")"
 
 # Set up pretty error printing
 
@@ -25,6 +26,10 @@ function panic {
   echo -e "${error_fmt}Error: couldn't ${1}${reset_fmt}"
   exit 1
 }
+
+# Parse args
+
+build_variant="$1"
 
 # Run sub-scripts
 
@@ -104,4 +109,16 @@ if "$build_scripts_root"/init-root/prepare.sh; then
   report_finished "$description"
 else
   panic "$description"
+fi
+
+if [[ "$build_variant" == "dx" ]]; then
+
+  description="set up developer mode"
+  report_starting "$description"
+  if "$pallet_root"/dx/setup.sh; then
+    report_finished "$description"
+  else
+    panic "$description"
+  fi
+
 fi

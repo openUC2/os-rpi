@@ -26,6 +26,9 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
+        build_variant:
+          - ''
+          - 'dx'
         base_variant_name:
           - lite
     permissions:
@@ -36,6 +39,7 @@ jobs:
     secrets: inherit
     with:
       name: rpi-imswitch-os
+      build_variant: ${{ matrix.build_variant }}
       base_release_name: bookworm
       base_image_variant: ${{ matrix.base_variant_name }}
       base_release_date: 2025-11-24

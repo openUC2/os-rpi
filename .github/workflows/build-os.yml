@@ -6,6 +6,10 @@ on:
         description: 'The name of the OS image to build'
         required: true
         type: string
+      build_variant:
+        description: 'The variant of the OS image to build'
+        required: false
+        type: string
       base_release_name:
         description: 'The release name of the RPi OS base image (bullseye, bookworm)'
         required: true
@@ -200,7 +204,6 @@ jobs:
           # unbooted container). Setting the machine ID (and therefore hostname) to `raspberrypi`
           # resolves noisy (but harmless) error messages from sudo.
           args: >-
-            --bind "$(pwd)/os-build":/run/os-build
             --bind "$(pwd)":/run/pallet
             --capability=CAP_NET_ADMIN
             --machine=raspberrypi
@@ -210,7 +213,7 @@ jobs:
             cp -r /run/pallet /home/pi/.local/share/forklift/pallet
             echo "Running setup scripts..."
             export DEBIAN_FRONTEND=noninteractive
-            /run/os-build/setup.sh
+            /run/pallet/os-build/setup.sh "${{ inputs.build_variant }}"
             echo "Done!"
 
       - name: Prepare for a headless first boot on bare metal
@@ -269,7 +272,11 @@ jobs:
           fi
 
           # Assemble the image name
-          output_name="${{ inputs.name }}-$version"
+          output_name="${{ inputs.name }}"
+          if [[ -n "${{ inputs.build_variant }}" ]]; then
+            output_name="$output_name-${{ inputs.build_variant }}"
+          fi
+          output_name="$output_name-$version"
           echo "OUTPUT_IMAGE_NAME=$output_name" >> $GITHUB_ENV
 
       - name: Shrink the OS image
