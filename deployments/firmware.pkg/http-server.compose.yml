@@ -1,0 +1,26 @@
+services:
+  server:
+    image: docker.io/library/caddy:2.10.2@sha256:cef7fe17d4df3b0843eae25bed319d6140b1a7bb13ccef076f5f1783d5bca9b1
+    volumes:
+      - server-data:/data
+      - server-config:/config
+      - ./Caddyfile:/etc/caddy/Caddyfile:ro
+      - /usr/lib/firmware/openUC2:/srv:ro
+    networks:
+      - caddy-ingress
+    labels:
+      caddy: :80
+      caddy.redir: /firmware /firmware/
+      caddy.handle: /firmware/*
+      caddy.handle.reverse_proxy: "{{upstreams 80}}"
+
+networks:
+  default:
+    name: none
+    external: true
+  caddy-ingress:
+    external: true
+
+volumes:
+  server-data: null
+  server-config: null
