@@ -2,12 +2,16 @@ package: /deployments/networking/networkmanager/wifi-hotspot.pkg
 features:
   - wlan0
   - wlan0-localization
-  - wlan0-ssid
+  - wlan0-hostname-ssid
+  - wlan0-static-bg-channel
+  - wlan0-randomized-bg-channel
   - wlan0-branded-password
   - wlan0-direct-ip-address
   - wlan1
   - wlan1-localization
-  - wlan1-ssid
+  - wlan1-hostname-ssid
+  - wlan1-static-bg-channel
+  - wlan1-randomized-bg-channel
   - wlan1-branded-password
   - wlan1-direct-ip-address
   - dhcp-default-route

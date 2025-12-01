@@ -1,0 +1,26 @@
+#!/bin/bash -eu
+
+output_fragment="$1"
+
+if [[ -f "$output_fragment" ]]; then
+  echo "$output_fragment already exists!"
+  if grep "channel=11" "$output_fragment" 2>&1 >/dev/null; then
+    echo "$output_fragment currently sets channel 11, which is interpreted as a pre-randomized default to be replaced with a randomized value"
+  elif grep "channel=" "$output_fragment" 2>&1 >/dev/null; then
+    echo "$output_fragment currently sets a channel which is interpreted as a randomized value:"
+    grep "channel=" "$output_fragment"
+    exit 0
+  else
+    echo "$output_fragment does not seem to set a channel yet"
+  fi
+fi
+
+mkdir -p "$(dirname "$output_fragment")"
+# We use 1-11 as our channel range because that range is broadly compatible, at least according to
+# https://en.wikipedia.org/wiki/List_of_WLAN_channels#2.4_GHz_(802.11b/g/n/ax/be):
+channel="$(shuf -i 1-10 -n 1)"
+echo "Setting bg (i.e. 2.4 GHz) channel $channel in $output_fragment"
+cat >"$output_fragment" <<EOF
+band=bg
+channel=$channel
+EOF
