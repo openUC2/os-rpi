@@ -102,11 +102,9 @@ features:
         - description: >
             Shell script to generate a NetworkManager connection fragment with Wi-Fi frequency
             settings including a randomized channel
-          paths:
-            - /usr/libexec/generate-networkmanager-wifi-bg-channel
+          target: /usr/libexec/generate-networkmanager-wifi-bg-channel
         - description: systemd service to assemble a NetworkManager connection file during boot
-          paths:
-            - /usr/lib/systemd/system/generate-networkmanager-wifi-bg-channel@.service
+          target: /usr/lib/systemd/system/generate-networkmanager-wifi-bg-channel@.service
         - description: systemd service enablement for generate-networkmanager-wifi-bg-channel@wlan0-hotspot.service
           target: overlays/etc/systemd/system/assemble-networkmanager-connection@wlan0-hotspot.service.wants/generate-networkmanager-wifi-bg-channel@wlan0-hotspot.service
   wlan0-hostname-ssid:
@@ -132,11 +130,9 @@ features:
     requires:
       filesets:
         - description: systemd service to assemble a NetworkManager connection file during boot
-          paths:
-            - /usr/lib/systemd/system/assemble-networkmanager-connection@.service
+          target: /usr/lib/systemd/system/assemble-networkmanager-connection@.service
         - description: systemd service to assemble a templated NetworkManager connection drop-in file during boot
-          paths:
-            - /usr/lib/systemd/system/assemble-networkmanager-connection-templated@.service
+          target: /usr/lib/systemd/system/assemble-networkmanager-connection-templated@.service
     provides:
       file-exports:
         - description: systemd service enablement for assemble-networkmanager-connection@wlan1-hotspot.service
@@ -203,8 +199,7 @@ features:
     provides:
       file-exports:
         - description: systemd service to assemble a NetworkManager connection file during boot
-          paths:
-            - /usr/lib/systemd/system/generate-networkmanager-wifi-bg-channel@.service
+          target: /usr/lib/systemd/system/generate-networkmanager-wifi-bg-channel@.service
         - description: systemd service enablement for generate-networkmanager-wifi-bg-channel@wlan1-hotspot.service
           target: overlays/etc/systemd/system/assemble-networkmanager-connection@wlan1-hotspot.service.wants/generate-networkmanager-wifi-bg-channel@wlan1-hotspot.service
   wlan1-hostname-ssid:
