@@ -25,8 +25,8 @@ jobs:
           timeout: 240 # 4-minute timeout, since checks may take ~30 seconds to run
           interval: 15
           ignored: |
-            build (lite) / Build image,
-            build (lite, dx) / Build image
+            build / Build image,
+            build (dx) / Build image
 
       - name: Run Merge Gatekeeper in Merge Queue
         if: github.event_name == 'merge_group'
@@ -37,5 +37,5 @@ jobs:
           timeout: 240 # 4-minute timeout, since checks may take ~30 seconds to run
           interval: 15
           ignored: |
-            build (lite) / Build image,
-            build (lite, dx) / Build image
+            build / Build image,
+            build (dx) / Build image

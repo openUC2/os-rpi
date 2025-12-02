@@ -26,8 +26,6 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        base_variant_name:
-          - lite
         build_variant:
           - ''
           - 'dx'
@@ -41,7 +39,7 @@ jobs:
       name: rpi-imswitch-os
       build_variant: ${{ matrix.build_variant }}
       base_release_name: bookworm
-      base_image_variant: ${{ matrix.base_variant_name }}
+      base_image_variant: lite
       base_release_date: 2025-11-24
       base_file_release_date: 2025-11-24
       arch: arm64

@@ -23,11 +23,6 @@ on:
 jobs:
   build:
     name: build
-    strategy:
-      fail-fast: false
-      matrix:
-        base_variant_name:
-          - lite
     permissions:
       contents: read
       packages: write
@@ -37,7 +32,7 @@ jobs:
     with:
       name: rpi-imswitch-os
       base_release_name: trixie
-      base_image_variant: ${{ matrix.base_variant_name }}
+      base_image_variant: lite
       base_release_date: 2025-11-24
       base_file_release_date: 2025-11-24
       arch: arm64
