@@ -6,6 +6,10 @@ on:
         description: 'The name of the OS image to build'
         required: true
         type: string
+      build_variant:
+        description: 'The variant of the OS image to build'
+        required: false
+        type: string
       base_release_name:
         description: 'The release name of the RPi OS base image (bullseye, bookworm)'
         required: true
@@ -41,6 +45,12 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
+        with:
+          # We check out the PR's HEAD commit instead of its merge commit for traceability when
+          # running `forklift plt show`/`forklift stage show`, and so that `forklift plt upgrade`
+          # can be used without `--force`; if the CI run isn't a PR, we'll just use the default ref
+          # via an empty string:
+          ref: ${{ github.event.pull_request.head.sha }}
 
       # GET BASE IMAGE
 
@@ -48,10 +58,10 @@ jobs:
         id: rpi-os-image
         run: |
           case '${{ inputs.base_release_name }}' in
-            'bookworm')
+            'trixie')
               IMAGE_RELEASE_CHANNEL='raspios'
               ;;
-            'bullseye')
+            'bookworm')
               IMAGE_RELEASE_CHANNEL='raspios_oldstable'
               ;;
             *)
@@ -160,7 +170,7 @@ jobs:
           image: ${{ steps.expand-image.outputs.destination }}
           run: echo "Done!"
 
-      - name: Copy pre-downloaded container images into OS image
+      - name: Move pre-downloaded container images into OS image
         uses: ethanjli/pinspawn-action@v0.1.5
         with:
           image: ${{ steps.expand-image.outputs.destination }}
@@ -169,19 +179,12 @@ jobs:
             --bind ${{ steps.setup-precaching.outputs.path }}:/run/container-images
             --machine=raspberrypi
           run: |
-            local_cache="$HOME/.cache/forklift/containers/docker-archives"
+            local_cache="$HOME/.cache/forklift/containers/docker-archives/"
             mkdir -p "$local_cache"
-            sudo cp -r /run/container-images/* "$local_cache"
+            sudo mv /run/container-images/* "$local_cache"
             sudo chown $USER -R "$local_cache"
 
       # RUN OS SETUP SCRIPTS
-
-      - name: Download and cache Hik Driver
-        id: download-hik-driver
-        uses: ethanjli/cached-download-action@v0.1.2
-        with:
-          url: https://www.hikrobotics.com/en2/source/vision/video/2024/9/3/MVS_STD_V3.0.1_240902.zip
-          destination: /tmp/MVS_STD_V3.0.1_240902.zip
 
       # Note: the following step isn't strictly necessary, but it's nice to separate the GitHub
       # Actions log outputs for setting up pinspawn-action for the first time from the logs for
@@ -201,9 +204,7 @@ jobs:
           # unbooted container). Setting the machine ID (and therefore hostname) to `raspberrypi`
           # resolves noisy (but harmless) error messages from sudo.
           args: >-
-            --bind "$(pwd)/os-build":/run/os-build
             --bind "$(pwd)":/run/pallet
-            --bind ${{ steps.download-hik-driver.outputs.destination }}:${{ steps.download-hik-driver.outputs.destination }}
             --capability=CAP_NET_ADMIN
             --machine=raspberrypi
           run: |
@@ -212,7 +213,7 @@ jobs:
             cp -r /run/pallet /home/pi/.local/share/forklift/pallet
             echo "Running setup scripts..."
             export DEBIAN_FRONTEND=noninteractive
-            /run/os-build/setup.sh
+            /run/pallet/os-build/setup.sh "${{ inputs.build_variant }}"
             echo "Done!"
 
       - name: Prepare for a headless first boot on bare metal
@@ -271,7 +272,11 @@ jobs:
           fi
 
           # Assemble the image name
-          output_name="${{ inputs.name }}-$version"
+          output_name="${{ inputs.name }}"
+          if [[ -n "${{ inputs.build_variant }}" ]]; then
+            output_name="$output_name-${{ inputs.build_variant }}"
+          fi
+          output_name="$output_name-$version"
           echo "OUTPUT_IMAGE_NAME=$output_name" >> $GITHUB_ENV
 
       - name: Shrink the OS image

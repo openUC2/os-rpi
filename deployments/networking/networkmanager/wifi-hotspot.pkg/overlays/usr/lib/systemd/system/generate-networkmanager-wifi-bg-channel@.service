@@ -1,0 +1,13 @@
+[Unit]
+Description=Generate a drop-in NetworkManager connection fragment file specifying a Wi-Fi 2.4GHz channel for %i
+ConditionFileIsExecutable=/usr/libexec/generate-networkmanager-wifi-bg-channel
+ConditionPathIsDirectory=/etc/NetworkManager/system-connections.d/%i
+Before=assemble-networkmanager-connection@%i.service
+
+[Service]
+Type=oneshot
+ExecStart=/usr/libexec/generate-networkmanager-wifi-bg-channel /etc/NetworkManager/system-connections.d/%i/31-wifi-frequency.nmconnection
+RemainAfterExit=yes
+
+[Install]
+WantedBy=assemble-networkmanager-connection@%i.service

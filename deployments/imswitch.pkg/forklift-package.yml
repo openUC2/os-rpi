@@ -11,6 +11,14 @@ package:
 
 deployment:
   compose-files: [compose.yml]
+  provides:
+    listeners:
+      - description: Web server for the ImSwitch API and GUI
+        port: 8001
+        protocol: tcp
+      - description: Web server for Jupyter Notebooks
+        port: 8888
+        protocol: tcp
 
 features:
   firewall-allow-direct:
