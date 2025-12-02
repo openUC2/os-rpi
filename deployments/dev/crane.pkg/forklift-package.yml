@@ -13,10 +13,10 @@ deployment:
     file-exports:
       - description: crane binary
         source-type: oci-image
-        # Warning: we use the latest label only because docker.io/chainguard/crane doesn't provide
-        # any other labels; in real-world use, you should provide a label which doesn't change, for
-        # reproducibility (and also because Forklift's download cache never updates downloads of
-        # images for any given label)
-        url: cgr.dev/chainguard/crane:latest
+        # Warning: we use the latest label only because gcr.io/go-containerregistry/crane otherwise
+        # only provides the v0.20.3 label; in real-world use, you should provide a label which
+        # doesn't change, for reproducibility (and also because Forklift's download cache never
+        # updates downloads of images for any given label)
+        url: gcr.io/go-containerregistry/crane:latest
         source: usr/bin/crane
         target: overlays/usr/bin/crane

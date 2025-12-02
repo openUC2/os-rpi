@@ -1,4 +1,4 @@
 package: /deployments/docs.pkg
 features:
   - website
-disabled: true
+disabled: false

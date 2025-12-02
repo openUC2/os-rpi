@@ -1,4 +1,2 @@
 package: /deployments/networking/tailscale.pkg
-features:
-  - tailscale-funnel-compatibility
 disabled: false
