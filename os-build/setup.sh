@@ -111,6 +111,14 @@ else
   panic "$description"
 fi
 
+description="set up imswitch hardware"
+report_starting "$description"
+if "$build_scripts_root"/imswitch-hardware/install.sh; then
+  report_finished "$description"
+else
+  panic "$description"
+fi
+
 if [[ "$build_variant" == "dx" ]]; then
 
   description="set up developer mode"
