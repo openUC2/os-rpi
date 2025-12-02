@@ -19,7 +19,7 @@ else
   exit 1
 fi
 
-HIK_DEB_FILE="$(mktemp -s ".deb")"
+HIK_DEB_FILE="$(mktemp --suffix=".deb")"
 curl -L "https://github.com/openUC2/ImSwitchDockerInstall/releases/download/imswitch-master/MVS-3.0.1_${HIK_ARCH}_20241128.deb" \
   >"$HIK_DEB_FILE"
 sudo dpkg -i "$HIK_DEB_FILE"
