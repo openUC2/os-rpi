@@ -11,6 +11,26 @@ Raspberry Pi computers in the OS.
 
 These are usage instructions for developers.
 
+### Downloading an OS image
+
+If you have appropriate permissions on this repo, you can download OS images from the
+`build-os-bookworm` GitHub Actions CI workflow. Otherwise, you can download one of the images from
+[our Google Drive archive of selected images](https://drive.google.com/drive/folders/1i5baXgEq9UAybYQGHqEnLtaQ7-Js22MK?usp=sharing).
+You should flash the OS image to an SD card using
+[Raspberry Pi Imager](https://www.raspberrypi.com/software/).
+
+### Enabling `dx` (developer experience) mode
+
+If you downloaded the basic variant of our OS images instead of the `dx` variant, you can enable
+`dx` mode by running:
+```
+bash "$(forklift plt locate-file dx/setup.sh)"
+```
+
+This will set up a development environment for locally developing and testing ImSwitch on your RPi.
+Note that you should only one this once per OS installation: if you run it multiple times on the
+same OS installation, things might break in weird ways.
+
 ### Integrating changes in ImSwitch
 
 1. Commit and push your changes to the [openUC2/ImSwitch](https://github.com/openUC2/ImSwitch) repo.
