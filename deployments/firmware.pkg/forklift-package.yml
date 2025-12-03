@@ -1,56 +1,24 @@
 package:
-  description: Firmware binaries for microcontrollers in attached peripherals
+  description: Server hosting firmware binaries for microcontrollers in attached peripherals
   # Note: this is the maintainer for the Forklift package, not for the firmware!
   maintainers:
     - name: Ethan Li
       email: lietk12@gmail.com
-  # Note: no license has been listed for this project
-  #license: 
+  # Note: no license has been listed for the firmware binaries
+  # The following license is for Caddy
+  license: Apache-2.0
   sources:
     - https://github.com/youseetoo/uc2-esp32
 
 deployment:
-  provides:
-    file-exports:
-      # TODO: if the uc2-esp32 project can publish a single zip file with all the binaries within,
-      # then we could have a single file-export entry which covers all binaries. It would be easier
-      # to maintain, since we'd only need to update one URL when we want to bump to a new release!
-      - source-type: http
-        url: https://github.com/youseetoo/uc2-esp32/releases/download/untagged-37e13f8/esp32_seeed_xiao_esp32s3_can_slave_laser_debug.bin
-        target: overlays/usr/lib/firmware/openUC2/esp32_seeed_xiao_esp32s3_can_slave_laser_debug.bin
-      - source-type: http
-        url: https://github.com/youseetoo/uc2-esp32/releases/download/untagged-37e13f8/esp32_seeed_xiao_esp32s3_can_slave_led_debug.bin
-        target: overlays/usr/lib/firmware/openUC2/esp32_seeed_xiao_esp32s3_can_slave_led_debug.bin
-      - source-type: http
-        url: https://github.com/youseetoo/uc2-esp32/releases/download/untagged-37e13f8/esp32_seeed_xiao_esp32s3_can_slave_motor.bin
-        target: overlays/usr/lib/firmware/openUC2/esp32_seeed_xiao_esp32s3_can_slave_motor.bin
-      - source-type: http
-        url: https://github.com/youseetoo/uc2-esp32/releases/download/untagged-37e13f8/esp32_seeed_xiao_esp32s3_can_slave_motor_debug.bin
-        target: overlays/usr/lib/firmware/openUC2/esp32_seeed_xiao_esp32s3_can_slave_motor_debug.bin
-      - source-type: http
-        url: https://github.com/youseetoo/uc2-esp32/releases/download/untagged-37e13f8/esp32_seeed_xiao_esp32s3_can_slave_motor_default.bin
-        target: overlays/usr/lib/firmware/openUC2/esp32_seeed_xiao_esp32s3_can_slave_motor_default.bin
-      - source-type: http
-        url: https://github.com/youseetoo/uc2-esp32/releases/download/untagged-37e13f8/esp32_seeed_xiao_esp32s3_ledservo.bin
-        target: overlays/usr/lib/firmware/openUC2/esp32_seeed_xiao_esp32s3_ledservo.bin
-      - source-type: http
-        url: https://github.com/youseetoo/uc2-esp32/releases/download/untagged-37e13f8/esp32_UC2_3.bin
-        target: overlays/usr/lib/firmware/openUC2/esp32_UC2_3.bin
-      - source-type: http
-        url: https://github.com/youseetoo/uc2-esp32/releases/download/untagged-37e13f8/esp32_UC2_3_CAN_HAT_Master.bin
-        target: overlays/usr/lib/firmware/openUC2/esp32_UC2_3_CAN_HAT_Master.bin
-      - source-type: http
-        url: https://github.com/youseetoo/uc2-esp32/releases/download/untagged-37e13f8/esp32_UC2_3_CAN_HAT_Master_debug.bin
-        target: overlays/usr/lib/firmware/openUC2/esp32_UC2_3_CAN_HAT_Master_debug.bin
-      - source-type: http
-        url: https://github.com/youseetoo/uc2-esp32/releases/download/untagged-37e13f8/esp32_UC2_3_CAN_HAT_Master_default.bin
-        target: overlays/usr/lib/firmware/openUC2/esp32_UC2_3_CAN_HAT_Master_default.bin
+  compose-files:
+    - deployment.compose.yml
 
 features:
-  http-server:
-    description: Enables downloading of firmware binaries via HTTP
+  api:
+    description: Provides access to the API
     compose-files:
-      - http-server.compose.yml
+      - api.compose.yml
     requires:
       networks:
         - description: Overlay network for Caddy to connect to upstream services
