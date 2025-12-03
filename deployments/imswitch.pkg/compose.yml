@@ -12,6 +12,7 @@ services:
       - /home/pi/Datasets:/home/pi/Datasets
       - /media:/media
       - /run/udev:/run/udev:ro
+      - /dev/dma_heap:/dev/dma_heap      
     environment:
       - HEADLESS=1
       - HTTP_PORT=8001
