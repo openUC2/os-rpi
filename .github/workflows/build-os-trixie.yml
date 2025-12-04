@@ -23,6 +23,12 @@ on:
 jobs:
   build:
     name: build
+    strategy:
+      fail-fast: false
+      matrix:
+        build_variant:
+          - ''
+          - 'dx'
     permissions:
       contents: read
       packages: write

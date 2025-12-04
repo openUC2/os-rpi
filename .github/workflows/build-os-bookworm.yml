@@ -1,19 +1,6 @@
 ---
 name: build-os-bookworm
 on:
-  push:
-    branches:
-      - 'main'
-    tags:
-      - 'v*'
-    paths:
-      - '**'
-      - '!README.md'
-  pull_request:
-    paths:
-      - '**'
-      - '!README.md'
-  merge_group:
   workflow_dispatch:
     inputs:
       git-ref:
