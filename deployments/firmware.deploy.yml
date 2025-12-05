@@ -1,4 +1,4 @@
 package: /deployments/firmware.pkg
 features:
-  - http-server
+  - api
 disabled: false

@@ -129,6 +129,28 @@ wiping your local pallet, then you should run:
 forklift plt switch --force github.com/openUC2/rpi-imswitch-os@main
 ```
 
+### Disabling/enabling functionalities
+
+To disable the deployment of ImSwitch on your RPi, you can change the configuration on your RPi by
+running:
+
+```bash
+forklift plt disable-depl imswitch
+```
+
+To apply your modified configuration, then you can either
+
+1) run `forklift plt apply`, or
+2) run `forklift plt stage` and then reboot (e.g. via `sudo reboot`).
+
+If you later want to re-enable ImSwitch, you can then run `forklift plt enable-depl imswitch` (and
+then apply your modified configuration using the command(s) you prefer).
+
+To see the full list of deployments you can disable or enable, run `forklift plt ls-depl`. Note that
+for some deployments, especially some deployments whose names begin with `provisioning/`,
+`networking/`, `infra/`, and `dev/`, you will have to reboot in order for changes to actually take
+effect.
+
 ## Licensing
 
 Any source code provided with this Forklift pallet is covered by the following information, except

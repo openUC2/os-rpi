@@ -1,0 +1,13 @@
+services:
+  server:
+    image: ghcr.io/youseetoo/firmware-image-server:sha-dec554c@sha256:79fafec555cd7a2379d6193abfa1a07dd6e965e18186ecc1c7b0bd0f79be867b
+    volumes:
+      - server-data:/data
+      - server-config:/config
+networks:
+  default:
+    name: none
+    external: true
+volumes:
+  server-data: null
+  server-config: null
