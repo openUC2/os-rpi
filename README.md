@@ -31,6 +31,19 @@ This will set up a development environment for locally developing and testing Im
 Note that you should only one this once per OS installation: if you run it multiple times on the
 same OS installation, things might break in weird ways.
 
+### Disabling ImSwitch on Boot 
+
+You can change the configuration locally on your RPi by running 
+
+```bash
+forklift pallet disable-deployment imswitch
+```
+To apply your modified configuration, then you can either 
+1) run `forklift pallet apply` or
+2) run `forklift pallet stage` and then reboot
+
+(in these commands, you can also abbreviate pallet to plt and deployment to depl, if you want)
+
 ### Integrating changes in ImSwitch
 
 1. Commit and push your changes to the [openUC2/ImSwitch](https://github.com/openUC2/ImSwitch) repo.
