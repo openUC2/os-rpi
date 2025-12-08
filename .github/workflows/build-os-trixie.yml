@@ -37,6 +37,7 @@ jobs:
     secrets: inherit
     with:
       name: rpi-imswitch-os
+      build_variant: ${{ matrix.build_variant }}
       base_release_name: trixie
       base_image_variant: lite
       base_release_date: 2025-11-24
