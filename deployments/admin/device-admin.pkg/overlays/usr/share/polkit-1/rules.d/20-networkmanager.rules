@@ -7,6 +7,10 @@ polkit.addRule(function(action, subject) {
     "org.freedesktop.NetworkManager.enable-disable-network": YES,
     "org.freedesktop.NetworkManager.enable-disable-wifi": YES,
     "org.freedesktop.NetworkManager.network-control": YES,
+    // FIXME: the following rule isn't sufficient for allowing non-root users to reload NM
+    // connections; we may need to edit a D-Bus policy file (e.g. as described at
+    // https://stackoverflow.com/questions/11170118/dbus-systembus-policies). See
+    // https://bugzilla.redhat.com/show_bug.cgi?id=1921082 for more details.
     "org.freedesktop.NetworkManager.reload": YES,
     "org.freedesktop.NetworkManager.settings.modify.own": YES,
     "org.freedesktop.NetworkManager.settings.modify.system": YES,
