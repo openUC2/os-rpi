@@ -7,7 +7,7 @@ polkit.addRule(function(action, subject) {
     "org.freedesktop.NetworkManager.enable-disable-network": YES,
     "org.freedesktop.NetworkManager.enable-disable-wifi": YES,
     "org.freedesktop.NetworkManager.network-control": YES,
-    "org.NetworkManager.reload": YES,
+    "org.freedesktop.NetworkManager.reload": YES,
     "org.freedesktop.NetworkManager.settings.modify.own": YES,
     "org.freedesktop.NetworkManager.settings.modify.system": YES,
     "org.freedesktop.NetworkManager.wifi.scan": YES,
