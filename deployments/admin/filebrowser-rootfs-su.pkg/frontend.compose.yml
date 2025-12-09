@@ -4,7 +4,7 @@ services:
       - caddy-ingress
     environment:
       - FB_PORT=80 # for some reason filebrowser doesn't work if this is port 8080
-      - FB_BASEURL=/admin/fs-su
+      - FB_BASE_URL=/admin/fs-su
       - FB_NOAUTH=true
     labels:
       caddy: :80
