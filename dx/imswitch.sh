@@ -20,8 +20,10 @@ sudo apt-get install -y git curl
 # echo "Clone ImSwitchConfig"
 # ./git_clone_imswitchconfig.sh
 
-echo "Install HIK Driver"
-./install_hikdriver.sh
+# Note: We skip this here because the base OS already installs the HIK driver, and trying to install
+# it again seems to make the script quit with an error, or something:
+# echo "Install HIK Driver"
+# ./install_hikdriver.sh
 
 echo "Install Daheng Driver"
 ./install_dahengdriver.sh
