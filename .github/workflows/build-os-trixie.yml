@@ -28,7 +28,10 @@ jobs:
       matrix:
         build_variant:
           - ''
-          - 'dx'
+          # Note(ethanjli): dx builds are disabled because the CI runner runs out of disk space!
+          # Once we are a bit less wasteful with disk usage (e.g. with the docs site), we can
+          # re-enable dx builds.
+          # - 'dx'
     permissions:
       contents: read
       packages: write
