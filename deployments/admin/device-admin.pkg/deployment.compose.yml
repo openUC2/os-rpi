@@ -1,9 +1,10 @@
 services:
   server:
-    image: ghcr.io/openuc2/device-admin:0.1.5-alpha.7@sha256:fafa01f65d567b161e17a55e92ffcc9e9076a007e69a0f92d7c1a8a1116a6de7
+    image: ghcr.io/openuc2/device-admin:0.1.5-alpha.8@sha256:cf09a2b450874f8f83398084f3f63d91ed81bc0a141cf2a42d837b2b5373e915
     environment:
       - HTTP_BASEPATH=/admin/panel/
       - TEMPLATES_PATH=/web/templates
+      - ACTIONCABLE_HASH_KEYFILE=/secrets/action-cable/hash.key
     volumes:
       - type: bind
         source: ./templates
@@ -18,7 +19,10 @@ services:
       - type: bind
         source: /media
         target: /media
+      - secrets:/secrets
 networks:
   default:
     name: none
     external: true
+volumes:
+  secrets: null
