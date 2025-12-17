@@ -23,6 +23,9 @@ services:
       - SCAN_EXT_DATA_PATH=1
       - EXT_DATA_PATH=/media
       - SSL=0
+    depends_on:
+      volume-setup:
+        condition: service_completed_successfully
     restart: always
 
   volume-setup:
