@@ -2,6 +2,9 @@ services:
 
   server:
     user: 1000:1000
+    depends_on:
+      volume-setup:
+        condition: service_completed_successfully
 
   volume-setup:
     # This service ensures that pi is the owner of the secrets volume, since Docker creates it with
