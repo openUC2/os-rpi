@@ -1,7 +1,7 @@
 services:
 
   imswitch-noqt:
-    image: ghcr.io/openuc2/imswitch-noqt:sha-14c2f73@sha256:24a263d7090ccfb0b05abb54cea964baf2d34f1dd6e43cc3c1e0678cb5ce1072
+    image: ghcr.io/openuc2/imswitch-noqt:sha-4df0dce
     privileged: true
     ports:
       - "8001:8001" # frontend, HTTP API, WebSockets API
