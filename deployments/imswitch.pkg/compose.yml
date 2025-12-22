@@ -1,7 +1,7 @@
 services:
 
   imswitch-noqt:
-    image: ghcr.io/openuc2/imswitch-noqt:sha-4df0dce
+    image: ghcr.io/openuc2/imswitch-noqt:sha-4df0dce@sha256:3b32da048a7f20cb89d605ce182a46aac3287804f98ac42874f335be76690d33
     privileged: true
     ports:
       - "8001:8001" # frontend, HTTP API, WebSockets API
@@ -32,7 +32,7 @@ services:
     # This service ensures that root isn't the owner of /home/pi/Datasets and
     # /home/pi/ImSwitchConfig, since Docker auto-creates those paths if they didn't exist before
     # for the bind mounts, and Docker creates such directories with root ownership.
-    image: docker.io/library/alpine:3.23.0@sha256:51183f2cfa6320055da30872f211093f9ff1d3cf06f39a0bdb212314c5dc7375
+    image: docker.io/library/alpine:3.23.2@sha256:865b95f46d98cf867a156fe4a135ad3fe50d2056aa3f25ed31662dff6da4eb62
     volumes:
       - /home/pi/Datasets:/home/pi/Datasets
       - /home/pi/ImSwitchConfig:/home/pi/ImSwitchConfig
