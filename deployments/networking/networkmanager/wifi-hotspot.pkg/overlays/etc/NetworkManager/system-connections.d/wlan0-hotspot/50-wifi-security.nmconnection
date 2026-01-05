@@ -4,3 +4,5 @@ group=ccmp;
 key-mgmt=wpa-psk
 pairwise=ccmp;
 proto=rsn;
+# disable WPS to prevent Windows 10 from asking for a PIN instead of a password:
+wps-method=1
