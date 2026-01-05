@@ -1,0 +1,4 @@
+services:
+  server:
+    ports:
+      - "8003:80"

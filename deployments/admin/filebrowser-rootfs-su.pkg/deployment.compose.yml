@@ -17,9 +17,6 @@ services:
       - FB_DATABASE=/database/filebrowser.db
       - FB_ROOT=/root
     user: root
-networks:
-  default:
-    name: none
-    external: true
+
 volumes:
   server-data: {}

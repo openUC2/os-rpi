@@ -4,10 +4,6 @@ services:
     volumes:
       - server-data:/data
       - server-config:/config
-networks:
-  default:
-    name: none
-    external: true
 volumes:
   server-data: null
   server-config: null

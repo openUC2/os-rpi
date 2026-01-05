@@ -14,10 +14,7 @@ services:
       - host.docker.internal:host-gateway
     environment:
       - CADDY_DOCKER_SCAN_STOPPED_CONTAINERS=1
-networks:
-  default:
-    name: none
-    external: true
+
 volumes:
   server-data: null
   server-config: null
