@@ -22,5 +22,15 @@ services:
         target: /media
       - secrets:/secrets
 
+# TODO(ethanjli): figure out how to enable this! For some reason, I get the following error when I
+# uncomment it:
+# Error response from daemon: invalid config for network none: invalid endpoint settings:
+# network-scoped aliases are only supported for user-defined networks
+#
+# networks:
+#   default:
+#     name: none
+#     external: true
+
 volumes:
   secrets: null
