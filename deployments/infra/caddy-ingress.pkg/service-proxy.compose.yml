@@ -11,5 +11,8 @@ services:
       caddy.auto_https: disable_redirects
 
 networks:
+  default:
+    name: none
+    external: true
   proxied:
     name: caddy-ingress

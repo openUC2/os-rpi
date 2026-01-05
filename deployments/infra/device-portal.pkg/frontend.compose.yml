@@ -16,5 +16,8 @@ services:
       caddy.handle_4.reverse_proxy: "{{upstreams 3000}}"
 
 networks:
+  default:
+    name: none
+    external: true
   caddy-ingress:
     external: true

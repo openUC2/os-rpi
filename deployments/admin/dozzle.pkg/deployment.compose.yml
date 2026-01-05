@@ -9,7 +9,3 @@ services:
           create_host_path: false
     environment:
       - DOZZLE_ENABLE_ACTIONS=true
-networks:
-  default:
-    name: none
-    external: true
