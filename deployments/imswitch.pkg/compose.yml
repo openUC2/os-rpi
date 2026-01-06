@@ -36,4 +36,4 @@ services:
     volumes:
       - /home/pi/Datasets:/home/pi/Datasets
       - /home/pi/ImSwitchConfig:/home/pi/ImSwitchConfig
-    command: 'sh -c "chown -R 1000:1000 /home/pi/Datasets /home/pi/ImSwitchConfig; sleep 60"'
+    command: 'sh -c "chown -R 1000:1000 /home/pi/Datasets /home/pi/ImSwitchConfig"'
