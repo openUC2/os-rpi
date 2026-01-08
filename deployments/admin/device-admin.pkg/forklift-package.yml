@@ -5,7 +5,6 @@ package:
       email: lietk12@gmail.com
   license: Apache-2.0
   sources:
-    # Forklift-deployed software (MIT):
     - https://github.com/openUC2/device-admin
 
 deployment:
