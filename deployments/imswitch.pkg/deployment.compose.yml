@@ -1,6 +1,5 @@
 services:
-
-  imswitch-noqt:
+  server:
     image: ghcr.io/openuc2/imswitch-noqt:pr-204
     privileged: true
     volumes:
