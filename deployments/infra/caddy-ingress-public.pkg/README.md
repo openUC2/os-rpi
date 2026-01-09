@@ -4,10 +4,16 @@ An ingress proxy on port 8001 which only exposes unprivileged services.
 
 ## Use with Tailscale Funnel
 
-To only expose unprivileged services over Tailscale Funnel, run:
+To expose unprivileged services over Tailscale Funnel until you interrupt with `Ctrl+C`, run:
 
 ```
 tailscale funnel --https=8443 8001
+```
+
+To run Tailscale Funnel as a background service, run:
+
+```
+tailscale funnel --https=8443 --bg 8001
 ```
 
 Then you can access the services from the public internet on port 8443 of the domain name assigned
@@ -19,6 +25,6 @@ prevent `caddy-ingress.pkg` from starting correctly when the machine boots. Don'
 To stop Tailscale Funnel, run:
 
 ```
-tailscale funnel --https=8443 8001 off
+tailscale funnel --https=8443 off
 ```
 
