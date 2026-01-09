@@ -1,0 +1,23 @@
+services:
+  server:
+    networks:
+      - caddy-ingress-public
+    labels:
+      caddy: :80
+      caddy.handle_0: /
+      caddy.handle_0.reverse_proxy: "{{upstreams 3000}}"
+      caddy.handle_1: /favicon.ico
+      caddy.handle_1.reverse_proxy: "{{upstreams 3000}}"
+      caddy.handle_2: /app/*
+      caddy.handle_2.reverse_proxy: "{{upstreams 3000}}"
+      caddy.handle_3: /static/*
+      caddy.handle_3.reverse_proxy: "{{upstreams 3000}}"
+      caddy.handle_4: /fonts/*
+      caddy.handle_4.reverse_proxy: "{{upstreams 3000}}"
+
+networks:
+  default:
+    name: none
+    external: true
+  caddy-ingress-public:
+    external: true

@@ -1,0 +1,17 @@
+services:
+  server:
+    ports:
+      - 8001:80
+    networks:
+      - proxied
+    environment:
+      - CADDY_INGRESS_NETWORKS=caddy-ingress-public
+    labels:
+      caddy.auto_https: disable_redirects
+
+networks:
+  default:
+    name: none
+    external: true
+  proxied:
+    name: caddy-ingress-public

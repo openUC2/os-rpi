@@ -1,0 +1,16 @@
+services:
+  server:
+    networks:
+      - caddy-ingress-public
+    labels:
+      caddy: :80
+      caddy.redir: /openUC2 /openUC2/
+      caddy.handle: /openUC2/*
+      caddy.handle.reverse_proxy: "{{upstreams 80}}"
+
+networks:
+  default:
+    name: none
+    external: true
+  caddy-ingress-public:
+    external: true

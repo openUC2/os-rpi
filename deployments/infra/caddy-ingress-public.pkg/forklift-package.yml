@@ -1,6 +1,6 @@
 package:
   description: >
-    Reverse proxy for web services, and configuration of it using Docker container image labels
+    Reverse proxy for public-access web services, and configuration of it using Docker container image labels
   maintainers:
     - name: Ethan Li
       email: lietk12@gmail.com
@@ -25,24 +25,16 @@ features:
     provides:
       networks:
         - description: Bridge network for Caddy to connect to upstream services
-          name: caddy-ingress
+          name: caddy-ingress-public
       listeners:
         - description: Web server for all HTTP requests
-          port: 80
-          protocol: tcp
-        - description: Web server for all HTTPS requests
-          port: 443
+          port: 8001
           protocol: tcp
       services:
         - description: Web server which reverse-proxies web services on the machine
           tags: [caddy-docker-proxy]
-          port: 80
+          port: 8001
           protocol: http
-        - description: >
-            Reverse-proxy web server which provides TLS termination to web services on the machine
-          tags: [caddy-docker-proxy]
-          port: 443
-          protocol: https
   firewall-allow-direct:
     description:
       Firewall configuration to allow accessing the reverse proxy from directly-connected devices
@@ -55,8 +47,10 @@ features:
             - /etc/firewalld/zones.d/nm-shared
     provides:
       file-exports:
-        - description: Drop-in XML fragment for firewalld's HTTP & HTTPS services
-          target: overlays/etc/firewalld/zones.d/nm-shared/60-service-http.xml
+        - description: Definition for firewalld's http-ingress-public service
+          target: overlays/etc/firewalld/services/http-ingress-public.xml
+        - description: Drop-in XML fragment for firewalld's http-ingress-public service
+          target: overlays/etc/firewalld/zones.d/nm-shared/60-service-http-ingress-public.xml
   firewall-allow-public:
     description:
       Firewall configuration to allow public access to the reverse proxy
@@ -69,5 +63,7 @@ features:
             - /etc/firewalld/zones.d/public
     provides:
       file-exports:
-        - description: Drop-in XML fragment for firewalld's HTTP & HTTPS services
-          target: overlays/etc/firewalld/zones.d/public/60-service-http.xml
+        - description: Definition for firewalld's http-ingress-public service
+          target: overlays/etc/firewalld/services/http-ingress-public.xml
+        - description: Drop-in XML fragment for firewalld's http-ingress-public service
+          target: overlays/etc/firewalld/zones.d/public/60-service-http-ingress-public.xml

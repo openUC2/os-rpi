@@ -2,5 +2,4 @@ package: /deployments/infra/caddy-ingress.pkg
 features:
   - service-proxy
   - firewall-allow-direct
-  - firewall-allow-public
 disabled: false

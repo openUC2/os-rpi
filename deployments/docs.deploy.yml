@@ -1,4 +1,5 @@
 package: /deployments/docs.pkg
 features:
   - website
+  - website-public
 disabled: false

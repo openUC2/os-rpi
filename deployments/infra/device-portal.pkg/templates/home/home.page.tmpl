@@ -258,8 +258,14 @@
           </li>
           <li>
             <strong>Ingress proxy</strong>:
-            A Caddy reverse-proxy to make browser applications and HTTP network APIs uniformly
-            available at different paths at <code>{{$hostname}}</code> on port 80
+            A Caddy reverse-proxy to make all browser applications and HTTP network APIs
+            uniformly available at different paths at <code>{{$hostname}}</code> on port 80
+          </li>
+          <li>
+            <strong>Public ingress proxy</strong>:
+            A Caddy reverse-proxy to make unprivileged browser applications and HTTP network APIs
+            uniformly available at different paths at <code>{{$hostname}}</code> on port 8001,
+            for public (unauthenticated) access.
           </li>
           <li>
             <strong><a href="/" target="_blank">Device portal</a></strong>:

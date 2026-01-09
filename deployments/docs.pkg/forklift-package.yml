@@ -34,3 +34,23 @@ features:
           paths:
             - /openUC2
             - /openUC2/*
+  website-public:
+    description: Provides public access to the website
+    compose-files:
+      - website-public.compose.yml
+    requires:
+      networks:
+        - description: Overlay network for Caddy to connect to upstream services
+          name: caddy-ingress-public
+      services:
+        - tags: [caddy-docker-proxy]
+          port: 8001
+          protocol: http
+    provides:
+      services:
+        - description: openUC2 documentation site
+          port: 8001
+          protocol: http
+          paths:
+            - /openUC2
+            - /openUC2/*
