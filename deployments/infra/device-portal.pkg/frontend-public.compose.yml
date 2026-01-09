@@ -3,7 +3,7 @@ services:
     networks:
       - caddy-ingress-public
     labels:
-      caddy: http://, https://, *.ts.net
+      caddy: http://, https://, *.queue-macaroni.ts.net
       caddy.handle_0: /
       caddy.handle_0.reverse_proxy: "{{upstreams 3000}}"
       caddy.handle_1: /favicon.ico

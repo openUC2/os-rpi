@@ -3,7 +3,7 @@ services:
     networks:
       - caddy-ingress
     labels:
-      caddy: http://, https://, *.ts.net
+      caddy: http://, https://, *.queue-macaroni.ts.net
       caddy.redir: /firmware /firmware/
       caddy.handle: /firmware/*
       caddy.handle.reverse_proxy: "{{upstreams 80}}"
