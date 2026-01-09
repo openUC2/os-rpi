@@ -38,6 +38,29 @@ features:
             - /app/*
             - /static/*
             - /fonts/*
+  frontend-public:
+    description: Provides public access to a browser landing page
+    compose-files:
+      - frontend-public.compose.yml
+    requires:
+      networks:
+        - description: Overlay network for Caddy to connect to upstream services
+          name: caddy-ingress
+      services:
+        - tags: [caddy-docker-proxy]
+          port: 8001
+          protocol: http
+    provides:
+      services:
+        - description: Landing page for the machine's network services
+          port: 8001
+          protocol: http
+          paths:
+            - /
+            - /favicon.ico
+            - /app/*
+            - /static/*
+            - /fonts/*
   deploy-rpi:
     description: Integrates with Imswitch OS
     compose-files:

@@ -1,5 +1,6 @@
 package: /deployments/infra/device-portal.pkg
 features:
   - frontend
+  - frontend-public
   - deploy-rpi
 disabled: false

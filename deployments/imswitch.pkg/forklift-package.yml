@@ -23,7 +23,7 @@ deployment:
 
 features:
   frontend:
-    description: Provides access to a machine administration panel
+    description: Provides access to the microscope control server
     compose-files:
       - frontend.compose.yml
     requires:
@@ -48,6 +48,32 @@ features:
           paths:
             - /jupyter
             - /jupyter/*
+  frontend-public:
+    description: Provides public access to the microscope control server
+    compose-files:
+      - frontend-public.compose.yml
+    requires:
+      networks:
+        - description: Overlay network for Caddy to connect to upstream services
+          name: caddy-ingress-public
+      services:
+        - tags: [caddy-docker-proxy]
+          port: 8001
+          protocol: http
+    provides:
+      services:
+        - description: ImSwitch graphical user interface and API
+          port: 8001
+          protocol: http
+          paths:
+            - /imswitch
+            - /imswitch/*
+        # - description: Jupyter Lab server
+        #   port: 8001
+        #   protocol: http
+        #   paths:
+        #     - /jupyter
+        #     - /jupyter/*
   firewall-allow-direct:
     description:
       Firewall configuration to allow requests from directly-connected devices
