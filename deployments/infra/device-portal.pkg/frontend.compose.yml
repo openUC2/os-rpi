@@ -3,7 +3,7 @@ services:
     networks:
       - caddy-ingress
     labels:
-      caddy: :80
+      caddy: :80, :443
       caddy.handle_0: /
       caddy.handle_0.reverse_proxy: "{{upstreams 3000}}"
       caddy.handle_1: /favicon.ico

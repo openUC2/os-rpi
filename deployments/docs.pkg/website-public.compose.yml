@@ -3,7 +3,7 @@ services:
     networks:
       - caddy-ingress-public
     labels:
-      caddy: :80
+      caddy: :80, :443
       caddy.redir: /openUC2 /openUC2/
       caddy.handle: /openUC2/*
       caddy.handle.reverse_proxy: "{{upstreams 80}}"
