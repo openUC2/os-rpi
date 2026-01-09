@@ -3,7 +3,7 @@ services:
     networks:
       - caddy-ingress
     labels:
-      caddy: :80
+      caddy: http://, https://
       caddy.redir: /firmware /firmware/
       caddy.handle: /firmware/*
       caddy.handle.reverse_proxy: "{{upstreams 80}}"

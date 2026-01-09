@@ -3,7 +3,7 @@ services:
     networks:
       - caddy-ingress
     labels:
-      caddy: :80, :443
+      caddy: http://, https://
       caddy.redir: /admin/panel /admin/panel/
       caddy.handle: /admin/panel/*
       caddy.handle.reverse_proxy: "{{upstreams 3001}}"

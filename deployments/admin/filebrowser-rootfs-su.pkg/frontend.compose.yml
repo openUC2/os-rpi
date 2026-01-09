@@ -7,7 +7,7 @@ services:
       - FB_BASE_URL=/admin/fs-su
       - FB_NOAUTH=true
     labels:
-      caddy: :80, :443
+      caddy: http://, https://
       caddy.redir: /admin/fs-su /admin/fs-su/
       caddy.handle: /admin/fs-su/*
       caddy.handle.reverse_proxy: "{{upstreams 80}}"
