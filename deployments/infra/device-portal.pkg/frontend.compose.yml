@@ -3,7 +3,7 @@ services:
     networks:
       - caddy-ingress
     labels:
-      caddy: http://, https://
+      caddy: http://, https://, *.ts.net
       caddy.handle_0: /
       caddy.handle_0.reverse_proxy: "{{upstreams 3000}}"
       caddy.handle_1: /favicon.ico
