@@ -46,6 +46,10 @@ features:
           tags: [caddy-docker-proxy]
           port: 443
           protocol: https
+  tailscale-certs:
+    description: Integrates with Tailscale to automatically provision HTTPS certificates on the tailnet
+    compose-files:
+      - tailscale-certs.compose.yml
   firewall-allow-direct:
     description:
       Firewall configuration to allow accessing the reverse proxy from directly-connected devices
