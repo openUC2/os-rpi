@@ -1,11 +1,7 @@
 services:
-
-  imswitch-noqt:
-    image: ghcr.io/openuc2/imswitch-noqt:sha-856d94d@sha256:8ae17b8542e8b02ef4e0ec6c7f081170ab251aaddf289834d37c42479de20b18
+  server:
+    image: ghcr.io/openuc2/imswitch-noqt:sha-212570d@sha256:6e9179058af62bf5ef467df71c5437b2f1d03c442d5b1b64fe31e486279580d8
     privileged: true
-    ports:
-      - "8001:8001" # frontend, HTTP API, WebSockets API
-      - "8888:8888" # Jupyter
     volumes:
       - /etc/machine-id:/etc/machine-id:ro
       - /home/pi/ImSwitchConfig:/home/pi/ImSwitchConfig

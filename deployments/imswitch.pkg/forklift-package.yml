@@ -10,17 +10,44 @@ package:
     - https://github.com/ImSwitch/ImSwitch
 
 deployment:
-  compose-files: [compose.yml]
+  compose-files:
+    - deployment.compose.yml
   provides:
     listeners:
-      - description: Web server for the ImSwitch API and GUI
-        port: 8001
+      - description: "FIXME: Unknown functionality for ESP32 OTA firmware updates"
+        port: 3333
         protocol: tcp
-      - description: Web server for Jupyter Notebooks
-        port: 8888
+      - description: "FIXME: Unknown functionality for ESP32 OTA firmware updates"
+        port: 3232
         protocol: tcp
 
 features:
+  frontend:
+    description: Provides access to a machine administration panel
+    compose-files:
+      - frontend.compose.yml
+    requires:
+      networks:
+        - description: Overlay network for Caddy to connect to upstream services
+          name: caddy-ingress
+      services:
+        - tags: [caddy-docker-proxy]
+          port: 80
+          protocol: http
+    provides:
+      services:
+        - description: ImSwitch graphical user interface and API
+          port: 80
+          protocol: http
+          paths:
+            - /imswitch
+            - /imswitch/*
+        - description: Jupyter Lab server
+          port: 80
+          protocol: http
+          paths:
+            - /jupyter
+            - /jupyter/*
   firewall-allow-direct:
     description:
       Firewall configuration to allow requests from directly-connected devices
@@ -34,9 +61,9 @@ features:
     provides:
       file-exports:
         - description: Definition for firewalld's imswitch service
-          target: overlays/etc/firewalld/services/imswitch.xml
+          target: overlays/etc/firewalld/services/esp32-ota-firmware.xml
         - description: Drop-in XML fragment for firewalld's imswitch service
-          target: overlays/etc/firewalld/zones.d/nm-shared/70-service-imswitch.xml
+          target: overlays/etc/firewalld/zones.d/nm-shared/70-service-esp32-ota-firmware.xml
   firewall-allow-public:
     description:
       Firewall configuration to allow public requests
@@ -50,10 +77,9 @@ features:
     provides:
       file-exports:
         - description: Definition for firewalld's imswitch service
-          target: overlays/etc/firewalld/services/imswitch.xml
+          target: overlays/etc/firewalld/services/esp32-ota-firmware.xml
         - description: Drop-in XML fragment for firewalld's imswitch service
-          target: overlays/etc/firewalld/zones.d/public/70-service-imswitch.xml
-
+          target: overlays/etc/firewalld/zones.d/public/70-service-esp32-ota-firmware.xml
   dev-edge:
     description: >-
       Uses the `edge` tag for the ImSwitch docker container image, for faster development
