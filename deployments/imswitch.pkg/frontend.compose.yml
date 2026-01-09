@@ -3,7 +3,7 @@ services:
     networks:
       - caddy-ingress
     labels:
-      caddy: http://, https://, *.queue-macaroni.ts.net
+      caddy: http://, https://, openuc2-sweet-lead-1137.queue-macaroni.ts.net
       caddy.redir: /imswitch /imswitch/
       caddy.handle_0: /imswitch/*
       caddy.handle_0.reverse_proxy: "{{upstreams 8001}}"

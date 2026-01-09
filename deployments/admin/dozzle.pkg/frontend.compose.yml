@@ -5,7 +5,7 @@ services:
     environment:
       - DOZZLE_BASE=/admin/dozzle
     labels:
-      caddy: http://, https://, *.queue-macaroni.ts.net
+      caddy: http://, https://, openuc2-sweet-lead-1137.queue-macaroni.ts.net
       caddy.redir: /admin/dozzle /admin/dozzle/
       caddy.handle: /admin/dozzle/*
       caddy.handle.reverse_proxy: "{{upstreams 8080}}"
