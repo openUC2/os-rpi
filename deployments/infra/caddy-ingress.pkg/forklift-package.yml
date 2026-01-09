@@ -33,6 +33,9 @@ features:
         - description: Web server for all HTTPS requests
           port: 443
           protocol: tcp
+        - description: Web server for all HTTP/3 requests
+          port: 443
+          protocol: udp
       services:
         - description: Web server which reverse-proxies web services on the machine
           tags: [caddy-docker-proxy]
