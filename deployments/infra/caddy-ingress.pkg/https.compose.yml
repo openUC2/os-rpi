@@ -8,8 +8,8 @@ services:
       - type: bind
         source: ./https.Caddyfile
         target: /etc/caddy/Caddyfile
-      - server-https-data:/data
-      - server-https-config:/config
+      - https-data:/data
+      - https-config:/config
 
 volumes:
   https-data: null

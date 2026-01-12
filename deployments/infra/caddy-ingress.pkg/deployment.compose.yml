@@ -8,8 +8,8 @@ services:
         read_only: true
         bind:
           create_host_path: false
-      - server-data:/data
-      - server-config:/config
+      - http-data:/data
+      - http-config:/config
     ports:
       - 80:80
     networks:
