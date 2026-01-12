@@ -3,8 +3,7 @@
 }
 
 openuc2-sweet-lead-1137.queue-macaroni.ts.net {
-  respond "Hello, world!"
-  # handle * {
-  #   reverse_proxy host.docker.internal:80
-  # }
+  handle * {
+    reverse_proxy host.docker.internal:80
+  }
 }
