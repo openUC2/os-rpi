@@ -32,7 +32,7 @@ deployment:
 
 features:
   https:
-    description: TLS termination for reverse-proxy access over HTTPS
+    description: TLS termination for reverse-proxy access over HTTPS over Tailscale
     compose-files:
       - https.compose.yml
     provides:
@@ -49,10 +49,6 @@ features:
           tags: [caddy-docker-proxy]
           port: 443
           protocol: https
-  tailscale-certs:
-    description: Integrates with Tailscale to automatically provision HTTPS certificates on the tailnet
-    compose-files:
-      - tailscale-certs.compose.yml
   firewall-allow-direct-http:
     description:
       Firewall configuration to allow accessing the reverse proxy over HTTP from directly-connected devices

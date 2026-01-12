@@ -10,6 +10,11 @@ services:
         target: /etc/caddy/Caddyfile
       - https-data:/data
       - https-config:/config
+      - type: bind
+        source: /run/tailscale/tailscaled.sock
+        target: /var/run/tailscale/tailscaled.sock
+    extra_hosts:
+      - host.docker.internal:host-gateway
 
 volumes:
   https-data: null

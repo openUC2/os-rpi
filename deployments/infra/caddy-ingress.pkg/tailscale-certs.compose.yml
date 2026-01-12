@@ -1,6 +1,0 @@
-services:
-  https:
-    volumes:
-      - type: bind
-        source: /run/tailscale/tailscaled.sock
-        target: /var/run/tailscale/tailscaled.sock
