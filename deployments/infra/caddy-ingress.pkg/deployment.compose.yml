@@ -27,8 +27,5 @@ volumes:
   server-config: null
 
 networks:
-  default:
-    name: none
-    external: true
   proxied:
     name: caddy-ingress
