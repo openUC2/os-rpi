@@ -23,8 +23,8 @@ services:
       caddy.auto_https: disable_redirects
 
 volumes:
-  server-data: null
-  server-config: null
+  http-data: null
+  http-config: null
 
 networks:
   proxied:

@@ -12,5 +12,5 @@ services:
       - server-https-config:/config
 
 volumes:
-  server-https-data: null
-  server-https-config: null
+  https-data: null
+  https-config: null
