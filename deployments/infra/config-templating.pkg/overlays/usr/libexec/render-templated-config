@@ -86,7 +86,7 @@ fi
 
 if [ "$tailscale_dns_name" = "" ]; then
   echo "Note: Tailscale DNS name was not set! Falling back to localhost" >&2
-  tailscale_dns_name = "localhost"
+  tailscale_dns_name="localhost"
   config="$(
     echo "$config" |
       sed '/^[^#]/ s~\(.*{tailscale-dns-name}.*\)~# Disabled because {tailscale-dns-name} is unset: \1~'
