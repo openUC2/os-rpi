@@ -1,3 +1,7 @@
+{
+  auto_https disable_redirects
+}
+
 https:// {
   respond "Hello, world!"
   # handle * {
