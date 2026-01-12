@@ -1,5 +1,5 @@
 services:
-  server-https:
+  https:
     volumes:
       - type: bind
         source: /run/tailscale/tailscaled.sock

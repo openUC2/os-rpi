@@ -1,5 +1,5 @@
 services:
-  server-https:
+  https:
     image: docker.io/library/caddy:2.10.2
     ports:
       - 443:443/tcp

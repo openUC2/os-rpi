@@ -1,5 +1,5 @@
 services:
-  server:
+  http:
     image: docker.io/lucaslorentz/caddy-docker-proxy:2.10.0@sha256:a255f6712f0e576f90d2a1919fc930783121e0ac5c7767a562ad12c480c5ac20
     volumes:
       - type: bind
