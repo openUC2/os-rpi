@@ -3,8 +3,8 @@ Description=Update Caddyfile for HTTPS ingress proxying with Tailscale
 
 [Timer]
 Unit=generate-caddy-ingress-https-config.service
-OnBootSec=0
-OnActiveSec=30
+OnActiveSec=0
+OnUnitActiveSec=30
 
 [Install]
 WantedBy=multi-user.target
