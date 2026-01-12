@@ -16,36 +16,61 @@ deployment:
       - description: Docker socket
         paths:
           - /run/docker.sock
+  provides:
+    networks:
+      - description: Bridge network for Caddy to connect to upstream services
+        name: caddy-ingress
+    listeners:
+      - description: Web server for all HTTP requests
+        port: 80
+        protocol: tcp
+    services:
+      - description: Web server which reverse-proxies web services on the machine
+        tags: [caddy-docker-proxy]
+        port: 80
+        protocol: http
 
 features:
-  service-proxy:
-    description: Provides reverse-proxying access to Docker Compose services defined by other packages
+  https:
+    description: TLS termination for reverse-proxy access over HTTPS over Tailscale
     compose-files:
-      - service-proxy.compose.yml
+      - https.compose.yml
+    requires:
+      filesets:
+        - description: Shell script to string-interpolate a templated stdin to stdout
+          paths:
+            - /usr/libexec/render-templated-config
     provides:
-      networks:
-        - description: Bridge network for Caddy to connect to upstream services
-          name: caddy-ingress
+      file-exports:
+        - description: Caddyfile template for ingress proxying HTTPS over Tailscale
+          target: overlays/etc/caddy-ingress/https/Caddyfile.template
+        - description:
+            systemd service to generate a Caddyfile for HTTPS ingress proxying from a Caddyfile
+            template
+          target: overlays/usr/lib/systemd/system/generate-caddy-ingress-https-config.service
+        - description: systemd service enablement for generate-caddy-ingress-https-config.service
+          target: overlays/etc/systemd/system/forklift-apply.service.wants/generate-caddy-ingress-https-config.service
+        - description:
+            systemd timer to periodically regenerate the Caddyfile for HTTPS ingress proxying
+          target: overlays/usr/lib/systemd/system/generate-caddy-ingress-https-config.timer
+        - description: systemd timer enablement for generate-caddy-ingress-https-config.timer
+          target: overlays/etc/systemd/system/multi-user.target.wants/generate-caddy-ingress-https-config.timer
       listeners:
-        - description: Web server for all HTTP requests
-          port: 80
-          protocol: tcp
         - description: Web server for all HTTPS requests
           port: 443
           protocol: tcp
+        - description: Web server for all HTTP/3 requests
+          port: 443
+          protocol: udp
       services:
-        - description: Web server which reverse-proxies web services on the machine
-          tags: [caddy-docker-proxy]
-          port: 80
-          protocol: http
         - description: >
             Reverse-proxy web server which provides TLS termination to web services on the machine
           tags: [caddy-docker-proxy]
           port: 443
           protocol: https
-  firewall-allow-direct:
+  firewall-allow-direct-http:
     description:
-      Firewall configuration to allow accessing the reverse proxy from directly-connected devices
+      Firewall configuration to allow accessing the reverse proxy over HTTP from directly-connected devices
     requires:
       filesets:
         - description: Drop-in directory for XML fragment files to generate the nm-shared zone definition
@@ -55,11 +80,25 @@ features:
             - /etc/firewalld/zones.d/nm-shared
     provides:
       file-exports:
-        - description: Drop-in XML fragment for firewalld's HTTP & HTTPS services
+        - description: Drop-in XML fragment for firewalld's HTTP service
           target: overlays/etc/firewalld/zones.d/nm-shared/60-service-http.xml
-  firewall-allow-public:
+  firewall-allow-direct-https:
     description:
-      Firewall configuration to allow public access to the reverse proxy
+      Firewall configuration to allow accessing the reverse proxy via HTTPS from directly-connected devices
+    requires:
+      filesets:
+        - description: Drop-in directory for XML fragment files to generate the nm-shared zone definition
+          tags:
+            - drop-in-assembly
+          paths:
+            - /etc/firewalld/zones.d/nm-shared
+    provides:
+      file-exports:
+        - description: Drop-in XML fragment for firewalld's HTTPS
+          target: overlays/etc/firewalld/zones.d/nm-shared/60-service-https.xml
+  firewall-allow-public-http:
+    description:
+      Firewall configuration to allow public access to the reverse proxy via HTTP
     requires:
       filesets:
         - description: Drop-in directory for XML fragment files to generate the public zone definition
@@ -69,5 +108,19 @@ features:
             - /etc/firewalld/zones.d/public
     provides:
       file-exports:
-        - description: Drop-in XML fragment for firewalld's HTTP & HTTPS services
+        - description: Drop-in XML fragment for firewalld's HTTP service
           target: overlays/etc/firewalld/zones.d/public/60-service-http.xml
+  firewall-allow-public-https:
+    description:
+      Firewall configuration to allow public access to the reverse proxy via HTTPS
+    requires:
+      filesets:
+        - description: Drop-in directory for XML fragment files to generate the public zone definition
+          tags:
+            - drop-in-assembly
+          paths:
+            - /etc/firewalld/zones.d/public
+    provides:
+      file-exports:
+        - description: Drop-in XML fragment for firewalld's HTTPS service
+          target: overlays/etc/firewalld/zones.d/public/60-service-https.xml

@@ -4,15 +4,21 @@ package:
   maintainers:
     - name: Ethan Li
       email: lietk12@gmail.com
-  license: Apache-2.0
+  license: MIT
   sources:
-    - https://github.com/openUC2/rpi-imswitch-os
+    - https://github.com/openUC2/rpi-imswitch-os # Apache-2.0
+    - https://github.com/itchyny/gojq # MIT
 
 deployment:
   provides:
     file-exports:
       - description: Shell script to string-interpolate a templated stdin to stdout
         target: overlays/usr/libexec/render-templated-config
+      - description: gojq binary
+        source-type: oci-image
+        url: ghcr.io/itchyny/gojq:0.12.18
+        source: gojq
+        target: overlays/usr/bin/gojq
     filesets:
       - description: Shell script to string-interpolate a templated stdin to stdout
         paths:

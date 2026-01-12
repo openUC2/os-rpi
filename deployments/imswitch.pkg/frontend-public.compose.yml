@@ -3,7 +3,7 @@ services:
     networks:
       - caddy-ingress-public
     labels:
-      caddy: :80
+      caddy: http://
       caddy.redir: /imswitch /imswitch/
       caddy.handle_0: /imswitch/*
       caddy.handle_0.reverse_proxy: "{{upstreams 8001}}"

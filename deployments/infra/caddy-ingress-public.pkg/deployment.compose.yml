@@ -10,11 +10,25 @@ services:
           create_host_path: false
       - server-data:/data
       - server-config:/config
+    ports:
+      - 8001:80
+    networks:
+      - proxied
     extra_hosts:
       - host.docker.internal:host-gateway
     environment:
       - CADDY_DOCKER_SCAN_STOPPED_CONTAINERS=1
+      - CADDY_INGRESS_NETWORKS=caddy-ingress-public
+    labels:
+      caddy.auto_https: disable_redirects
 
 volumes:
   server-data: null
   server-config: null
+
+networks:
+  default:
+    name: none
+    external: true
+  proxied:
+    name: caddy-ingress-public

@@ -5,7 +5,7 @@ services:
     environment:
       - DOZZLE_BASE=/admin/dozzle
     labels:
-      caddy: :80
+      caddy: http://
       caddy.redir: /admin/dozzle /admin/dozzle/
       caddy.handle: /admin/dozzle/*
       caddy.handle.reverse_proxy: "{{upstreams 8080}}"

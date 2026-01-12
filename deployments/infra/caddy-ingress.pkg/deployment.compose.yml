@@ -1,5 +1,5 @@
 services:
-  server:
+  http:
     image: docker.io/lucaslorentz/caddy-docker-proxy:2.10.0@sha256:a255f6712f0e576f90d2a1919fc930783121e0ac5c7767a562ad12c480c5ac20
     volumes:
       - type: bind
@@ -8,13 +8,24 @@ services:
         read_only: true
         bind:
           create_host_path: false
-      - server-data:/data
-      - server-config:/config
+      - http-data:/data
+      - http-config:/config
+    ports:
+      - 80:80
+    networks:
+      - proxied
     extra_hosts:
       - host.docker.internal:host-gateway
     environment:
       - CADDY_DOCKER_SCAN_STOPPED_CONTAINERS=1
+      - CADDY_INGRESS_NETWORKS=caddy-ingress
+    labels:
+      caddy.auto_https: disable_redirects
 
 volumes:
-  server-data: null
-  server-config: null
+  http-data: null
+  http-config: null
+
+networks:
+  proxied:
+    name: caddy-ingress

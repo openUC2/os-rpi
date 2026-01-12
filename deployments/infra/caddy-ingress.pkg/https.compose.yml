@@ -1,0 +1,22 @@
+services:
+  https:
+    image: docker.io/library/caddy:2.10.2
+    ports:
+      - 443:443/tcp
+      - 443:443/udp
+    volumes:
+      - type: bind
+        source: /run/caddy-ingress/https
+        target: /etc/caddy
+      - https-data:/data
+      - https-config:/config
+      - type: bind
+        source: /run/tailscale/tailscaled.sock
+        target: /var/run/tailscale/tailscaled.sock
+    extra_hosts:
+      - host.docker.internal:host-gateway
+    command: caddy run --config /etc/caddy/Caddyfile --adapter caddyfile --watch
+
+volumes:
+  https-data: null
+  https-config: null
