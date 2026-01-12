@@ -29,7 +29,7 @@ if [ -f /etc/custom-domain ]; then
   custom_domain_8="${custom_domain:0:8}"
 fi
 if which tailscale && which gojq; then
-  tailscale_dns_name="$(tailscale status --peers=false --json | gojq ".Self.DNSName" | sed's~\.$~~')"
+  tailscale_dns_name="$(tailscale status --peers=false --json | gojq ".Self.DNSName" | sed 's~\.$~~')"
   echo "Tailscale DNS name: $tailscale_dns_name" >&2
 fi
 
