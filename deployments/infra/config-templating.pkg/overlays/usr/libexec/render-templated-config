@@ -87,7 +87,6 @@ fi
 if [ "$tailscale_dns_name" = "" ]; then
   echo "Note: Tailscale DNS name was not set! Falling back to localhost" >&2
   tailscale_dns_name="localhost"
-else
   config="$(
     echo "$config" | sed \
       -e "/^[^#]/ s~{tailscale-dns-name}~${tailscale_dns_name}~g"
