@@ -3,6 +3,7 @@
 hostname=""
 machine_name=""
 custom_domain=""
+tailscale_dns_name=""
 
 # Load values of interpolated variables:
 if [ -f /etc/hostname ]; then
@@ -26,6 +27,10 @@ if [ -f /etc/custom-domain ]; then
   echo "Custom domain: $custom_domain" >&2
   custom_domain_16="${custom_domain:0:16}"
   custom_domain_8="${custom_domain:0:8}"
+fi
+if [ which tailscale ]; then
+  tailscale_dns_name="$(tailscale status --peers=false --json | gojq ".Self.DNSName" | sed's~\.$~~')"
+  echo "Tailscale DNS name: $tailscale_dns_name" >&2
 fi
 
 # Load and string-interpolate templates:
@@ -76,6 +81,19 @@ else
       -e "/^[^#]/ s~{custom-domain}~${custom_domain}~g" \
       -e "/^[^#]/ s~{custom-domain-16}~${custom_domain_16}~g" \
       -e "/^[^#]/ s~{custom-domain-8}~${custom_domain_8}~g"
+  )"
+fi
+
+if [ "$tailscale_dns_name" = "" ]; then
+  echo "Note: Tailscale DNS name was not set!" >&2
+  config="$(
+    echo "$config" |
+      sed '/^[^#]/ s~\(.*{tailscale-dns-name}.*\)~# Disabled because {tailscale-dns-name} is unset: \1~'
+  )"
+else
+  config="$(
+    echo "$config" | sed \
+      -e "/^[^#]/ s~{tailscale-dns-name}~${custom_domain}~g"
   )"
 fi
 

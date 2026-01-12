@@ -1,0 +1,20 @@
+[Unit]
+Description=Generate (with string interpolation) a Caddyfile template into a Caddyfile for HTTPS ingress proxying with Tailscale
+Requires=tailscaled.service
+After=tailscaled.service
+Before=forklift-apply.service
+ConditionFileIsExecutable=/usr/libexec/render-templated-config
+ConditionFileNotEmpty=/etc/caddy-ingress/https/Caddyfile.template
+
+[Service]
+Type=oneshot
+ExecStartPre=mkdir -p /run/caddy-ingress/https
+ExecStart=sh -c "\
+  cat /etc/caddy-ingress/https/Caddyfile.template | \
+    /usr/libexec/render-templated-config \
+      >/run/caddy-ingress/https/Caddyfile \
+"
+RemainAfterExit=yes
+
+[Install]
+WantedBy=forklift-apply.service

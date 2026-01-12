@@ -6,8 +6,8 @@ services:
       - 443:443/udp
     volumes:
       - type: bind
-        source: ./https.Caddyfile
-        target: /etc/caddy/Caddyfile
+        source: /run/caddy-ingress/https
+        target: /etc/caddy
       - https-data:/data
       - https-config:/config
       - type: bind

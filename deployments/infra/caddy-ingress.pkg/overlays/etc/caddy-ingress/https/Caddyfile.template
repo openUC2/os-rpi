@@ -8,6 +8,7 @@
   }
 }
 
-openuc2-sweet-lead-1137.queue-macaroni.ts.net {
+{tailscale-dns-name} {
   import reverse-proxy
 }
+

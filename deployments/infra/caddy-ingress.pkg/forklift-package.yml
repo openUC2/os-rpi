@@ -35,7 +35,26 @@ features:
     description: TLS termination for reverse-proxy access over HTTPS over Tailscale
     compose-files:
       - https.compose.yml
+    requires:
+      filesets:
+        - description: Shell script to string-interpolate a templated stdin to stdout
+          paths:
+            - /usr/libexec/render-templated-config
     provides:
+      file-exports:
+        - description: Caddyfile template for ingress proxying HTTPS over Tailscale
+          target: overlays/etc/caddy-ingress/https/Caddyfile.template
+        - description:
+            systemd service to generate a Caddyfile for HTTPS ingress proxying from a Caddyfile
+            template
+          target: overlays/usr/lib/systemd/system/generate-caddy-ingress-https-config.service
+        - description: systemd service enablement for generate-caddy-ingress-https-config.service
+          target: overlays/etc/systemd/system/forklift-apply.service.wants/generate-caddy-ingress-https-config.service
+        - description:
+            systemd timer to periodically regenerate the Caddyfile for HTTPS ingress proxying
+          target: overlays/usr/lib/systemd/system/generate-caddy-ingress-https-config.timer
+        - description: systemd timer enablement for generate-caddy-ingress-https-config.timer
+          target: overlays/etc/systemd/system/multi-user.target.wants/generate-caddy-ingress-https-config.timer
       listeners:
         - description: Web server for all HTTPS requests
           port: 443
