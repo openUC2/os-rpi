@@ -12,6 +12,8 @@ services:
       - server-config:/config
     ports:
       - 80:80
+    networks:
+      - proxied
     extra_hosts:
       - host.docker.internal:host-gateway
     environment:
@@ -26,4 +28,7 @@ volumes:
 
 networks:
   default:
+    name: none
+    external: true
+  proxied:
     name: caddy-ingress

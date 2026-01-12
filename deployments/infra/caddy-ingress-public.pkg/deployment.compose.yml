@@ -13,7 +13,7 @@ services:
     ports:
       - 8001:80
     networks:
-      - caddy-ingress-public
+      - proxied
     extra_hosts:
       - host.docker.internal:host-gateway
     environment:
@@ -30,4 +30,5 @@ networks:
   default:
     name: none
     external: true
-  caddy-ingress-public:
+  proxied:
+    name: caddy-ingress-public
