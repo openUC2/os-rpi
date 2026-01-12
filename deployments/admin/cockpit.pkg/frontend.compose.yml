@@ -3,7 +3,7 @@ services:
     networks:
       - caddy-ingress
     labels:
-      caddy: http://, https://, openuc2-sweet-lead-1137.queue-macaroni.ts.net
+      caddy: http://
       caddy.redir: /admin/cockpit /admin/cockpit/
       caddy.handle: /admin/cockpit/*
       caddy.handle.reverse_proxy: host.docker.internal:9090

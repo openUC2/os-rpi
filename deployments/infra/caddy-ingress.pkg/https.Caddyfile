@@ -1,0 +1,5 @@
+https:// {
+  handle * {
+    reverse_proxy host.docker.internal:80
+  }
+}

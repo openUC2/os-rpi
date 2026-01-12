@@ -1,6 +1,7 @@
 package: /deployments/infra/caddy-ingress.pkg
 features:
-  - service-proxy
+  - https
   - tailscale-certs
-  - firewall-allow-direct
+  - firewall-allow-direct-http
+  - firewall-allow-direct-https
 disabled: false

@@ -1,0 +1,16 @@
+services:
+  server-https:
+    image: docker.io/library/caddy:2.10.2
+    ports:
+      - 443:443/tcp
+      - 443:443/udp
+    volumes:
+      - type: bind
+        source: ./https.Caddyfile
+        target: /etc/caddy/Caddyfile
+      - server-https-data:/data
+      - server-https-config:/config
+
+volumes:
+  server-https-data: null
+  server-https-config: null

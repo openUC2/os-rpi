@@ -3,7 +3,7 @@ services:
     networks:
       - caddy-ingress-public
     labels:
-      caddy: http://, https://, openuc2-sweet-lead-1137.queue-macaroni.ts.net
+      caddy: http://
       caddy.handle_0: /
       caddy.handle_0.reverse_proxy: "{{upstreams 3000}}"
       caddy.handle_1: /favicon.ico
