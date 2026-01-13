@@ -123,9 +123,26 @@ if [[ "$build_variant" == "dx" ]]; then
 
   description="set up developer mode"
   report_starting "$description"
+
+  # Note: we need to adjust update-initramfs's behavior to make apt-get finish successfully when
+  # installing things like python3-picamera2; see
+  # https://github.com/PlanktoScope/PlanktoScope/pull/596 and
+  # https://github.com/RPi-Distro/repo/issues/382 for details.
+  adjust_initramfs_scope=false
+  if grep -q 'MODULES=dep' /etc/initramfs-tools/initramfs.conf; then
+    adjust_initramfs_scope=true
+    sudo sed -i 's~MODULES=dep~MODULES=most~' /etc/initramfs-tools/initramfs.conf
+  fi
+
   if "$pallet_root"/dx/setup.sh; then
+    if [ "$adjust_initramfs_scope" = true ]; then
+      sudo sed -i 's~MODULES=most~MODULES=dep~' /etc/initramfs-tools/initramfs.conf
+    fi
     report_finished "$description"
   else
+    if [ "$adjust_initramfs_scope" = true ]; then
+      sudo sed -i 's~MODULES=most~MODULES=dep~' /etc/initramfs-tools/initramfs.conf
+    fi
     panic "$description"
   fi
 
