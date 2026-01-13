@@ -14,11 +14,11 @@ deployment:
     - deployment.compose.yml
   provides:
     listeners:
-      - description: "FIXME: Unknown functionality for ESP32 OTA firmware updates"
-        port: 3333
-        protocol: tcp
-      - description: "FIXME: Unknown functionality for ESP32 OTA firmware updates"
+      - description: Firmware update authentication service
         port: 3232
+        protocol: udp # FIXME: the firewall rule for this is currently incorrect, since it's only for TCP
+      - description: Firmware binary transfer service
+        port: 3333
         protocol: tcp
 
 features:
