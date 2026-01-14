@@ -13,7 +13,7 @@ on:
     paths:
       - '**'
       - '!README.md'
-  merge_group:
+  # merge_group:
   workflow_dispatch:
     inputs:
       git-ref:
@@ -23,15 +23,6 @@ on:
 jobs:
   build:
     name: build
-    strategy:
-      fail-fast: false
-      matrix:
-        build_variant:
-          - ''
-          # Note(ethanjli): dx builds are disabled because the CI runner runs out of disk space!
-          # Once we are a bit less wasteful with disk usage (e.g. with the docs site), we can
-          # re-enable dx builds.
-          # - 'dx'
     permissions:
       contents: read
       packages: write
@@ -40,7 +31,7 @@ jobs:
     secrets: inherit
     with:
       name: rpi-imswitch-os
-      build_variant: ${{ matrix.build_variant }}
+      build_variant: ''
       base_release_name: trixie
       base_image_variant: lite
       base_release_date: 2025-11-24

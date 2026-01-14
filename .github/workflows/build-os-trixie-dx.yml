@@ -1,5 +1,5 @@
 ---
-name: build-os-bookworm
+name: build-os-trixie
 on:
   workflow_dispatch:
     inputs:
@@ -10,12 +10,6 @@ on:
 jobs:
   build:
     name: build
-    strategy:
-      fail-fast: false
-      matrix:
-        build_variant:
-          - ''
-          - 'dx'
     permissions:
       contents: read
       packages: write
@@ -24,8 +18,8 @@ jobs:
     secrets: inherit
     with:
       name: rpi-imswitch-os
-      build_variant: ${{ matrix.build_variant }}
-      base_release_name: bookworm
+      build_variant: dx
+      base_release_name: trixie
       base_image_variant: lite
       base_release_date: 2025-11-24
       base_file_release_date: 2025-11-24
