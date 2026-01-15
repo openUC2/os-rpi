@@ -38,22 +38,22 @@ same OS installation, things might break in weird ways.
 2. Wait for GitHub Actions to finish automatically building a new Docker container image from your
    commit.
 
-3. Open <https://github.com/orgs/openUC2/packages/container/package/imswitch-noqt> and find the
+3. Open <https://github.com/orgs/openUC2/packages/container/package/imswitch> and find the
    tagged image version (e.g.
-   [sha-0c335c4](https://github.com/orgs/openUC2/packages/container/imswitch-noqt/557815319?tag=sha-0c335c4))
+   [sha-d57b561](https://github.com/orgs/openUC2/packages/container/imswitch/642900285?tag=sha-d57b561))
    corresponding to the commit you just pushed (e.g.
-   [0c335c4](https://github.com/openUC2/ImSwitch/commit/0c335c4a0383a7feb75dff531706de7397402140))
+   [d57b561](https://github.com/openUC2/ImSwitch/commit/d57b561bc46a3fd353ea3e44f681b147e578ec4c))
 
 4. In this repo, manually edit the
    [deployments/imswitch.pkg/compose.yml](./deployments/imswitch.pkg/compose.yml)
-   file's `services.imswitch-noqt.image` value.
+   file's `services.imswitch.image` value.
 
-   It should be of format `ghcr.io/openuc2/imswitch-noqt:{something}`, and you should replace the
-   `{something}` (which may look like `sha-0c335c4` or like `sha-0c335c4@sha256:{a very long hash}`)
-   with the tagged image version (e.g. `sha:0c335c4`). The result should look something like:
+   It should be of format `ghcr.io/openuc2/imswitch:{something}`, and you should replace the
+   `{something}` (which may look like `sha-7b9de3d` or like `sha-0c335c4@sha256:{a very long hash}`)
+   with the tagged image version (e.g. `sha:d57b561`). The result should look something like:
 
    ```
-   image: ghcr.io/openuc2/imswitch-noqt:sha-0c335c4
+   image: ghcr.io/openuc2/imswitch:sha-d57b561
    ```
 
    If the ImSwitch container image you want to use is the most-recently-built container image in any
