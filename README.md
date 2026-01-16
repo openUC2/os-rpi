@@ -45,7 +45,7 @@ same OS installation, things might break in weird ways.
    [d57b561](https://github.com/openUC2/ImSwitch/commit/d57b561bc46a3fd353ea3e44f681b147e578ec4c))
 
 4. In this repo, manually edit the
-   [deployments/imswitch.pkg/compose.yml](./deployments/imswitch.pkg/compose.yml)
+   [deployments/imswitch.pkg/deployment.compose.yml](./deployments/imswitch.pkg/deployment.compose.yml)
    file's `services.imswitch.image` value.
 
    It should be of format `ghcr.io/openuc2/imswitch:{something}`, and you should replace the
