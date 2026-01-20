@@ -124,7 +124,13 @@ features:
     provides:
       file-exports:
         - description: Drop-in NetworkManager connection fragment with an IPv4 subnet for connected devices
-          target: overlays/etc/NetworkManager/system-connections.d/wlan0-hotspot/61-ipv4-address.nmconnection
+          target: overlays/etc/NetworkManager/system-connections.d/wlan0-hotspot/62-ipv4-address.nmconnection
+  wlan0-link-local-ip-address:
+    description: Enable acquisition of link-local IP address on wlan0
+    provides:
+      file-exports:
+        - description: Drop-in NetworkManager connection fragment with enabelement of link-local IPv4 address
+          target: overlays/etc/NetworkManager/system-connections.d/wlan0-hotspot/63-ipv4-link-local.nmconnection
   wlan1:
     description: Provide a Wi-Fi hotspot on an external Wi-Fi module (wlan1)
     requires:
@@ -219,4 +225,10 @@ features:
     provides:
       file-exports:
         - description: Drop-in NetworkManager connection fragment with an IPv4 subnet for connected devices
-          target: overlays/etc/NetworkManager/system-connections.d/wlan1-hotspot/61-ipv4-address.nmconnection
+          target: overlays/etc/NetworkManager/system-connections.d/wlan1-hotspot/62-ipv4-address.nmconnection
+  wlan1-link-local-ip-address:
+    description: Enable acquisition of link-local IP address on wlan0
+    provides:
+      file-exports:
+        - description: Drop-in NetworkManager connection fragment with enabelement of link-local IPv4 address
+          target: overlays/etc/NetworkManager/system-connections.d/wlan1-hotspot/63-ipv4-link-local.nmconnection

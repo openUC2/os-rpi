@@ -45,7 +45,7 @@ deployment:
       - description: Basic IPv4 settings
         target: overlays/etc/NetworkManager/system-connections.d/eth0-default/60-ipv4.nmconnection
       - description: IPv4 DHCP timeout settings
-        target: overlays/etc/NetworkManager/system-connections.d/eth0-default/62-ipv4-timeout.nmconnection
+        target: overlays/etc/NetworkManager/system-connections.d/eth0-default/61-ipv4-timeout.nmconnection
       - description: Basic IPv6 settings
         target: overlays/etc/NetworkManager/system-connections.d/eth0-default/70-ipv6.nmconnection
 
@@ -79,7 +79,7 @@ deployment:
       - description: Basic IPv4 settings
         target: overlays/etc/NetworkManager/system-connections.d/eth1-default/60-ipv4.nmconnection
       - description: IPv4 DHCP timeout settings
-        target: overlays/etc/NetworkManager/system-connections.d/eth1-default/62-ipv4-timeout.nmconnection
+        target: overlays/etc/NetworkManager/system-connections.d/eth1-default/61-ipv4-timeout.nmconnection
       - description: Basic IPv6 settings
         target: overlays/etc/NetworkManager/system-connections.d/eth1-default/70-ipv6.nmconnection
 
@@ -113,7 +113,7 @@ deployment:
       - description: Basic IPv4 settings
         target: overlays/etc/NetworkManager/system-connections.d/usb0-default/60-ipv4.nmconnection
       - description: IPv4 DHCP timeout settings
-        target: overlays/etc/NetworkManager/system-connections.d/usb0-default/62-ipv4-timeout.nmconnection
+        target: overlays/etc/NetworkManager/system-connections.d/usb0-default/61-ipv4-timeout.nmconnection
       - description: Basic IPv6 settings
         target: overlays/etc/NetworkManager/system-connections.d/usb0-default/70-ipv6.nmconnection
 
@@ -130,16 +130,24 @@ features:
     description: IP addresses for direct connections
     provides:
       file-exports:
-        - description: IPv4 address settings
-          target: overlays/etc/NetworkManager/system-connections.d/eth0-default/61-ipv4-address.nmconnection
         - description: Static IPv4 address settings
-          target: overlays/etc/NetworkManager/system-connections.d/eth0-static/61-ipv4-address.nmconnection
-        - description: IPv4 address settings
-          target: overlays/etc/NetworkManager/system-connections.d/eth1-default/61-ipv4-address.nmconnection
+          target: overlays/etc/NetworkManager/system-connections.d/eth0-static/62-ipv4-address.nmconnection
         - description: Static IPv4 address settings
-          target: overlays/etc/NetworkManager/system-connections.d/eth1-static/61-ipv4-address.nmconnection
-        - description: IPv4 address settings
-          target: overlays/etc/NetworkManager/system-connections.d/usb0-default/61-ipv4-address.nmconnection
+          target: overlays/etc/NetworkManager/system-connections.d/eth1-static/62-ipv4-address.nmconnection
+  link-local-ip-addresses:
+    description: Link-local IP addresses for direct connections
+    provides:
+      file-exports:
+        - description: Link-local IPv4 address settings
+          target: overlays/etc/NetworkManager/system-connections.d/eth0-default/63-ipv4-link-local.nmconnection
+        - description: Link-local IPv4 address settings
+          target: overlays/etc/NetworkManager/system-connections.d/eth0-static/63-ipv4-link-local.nmconnection
+        - description: Link-local IPv4 address settings
+          target: overlays/etc/NetworkManager/system-connections.d/eth1-default/63-ipv4-link-local.nmconnection
+        - description: Link-local IPv4 address settings
+          target: overlays/etc/NetworkManager/system-connections.d/eth1-static/63-ipv4-link-local.nmconnection
+        - description: Link-local IPv4 address settings
+          target: overlays/etc/NetworkManager/system-connections.d/usb0-default/63-ipv4-link-local.nmconnection
   firewall-allow-direct:
     description:
       Firewall configuration to allow ICMP, DHCP, and DNS traffic from directly-connected devices

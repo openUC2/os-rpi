@@ -1,4 +1,0 @@
-# self-assign a static IP address so that it's available for interface forwarding of inbound packets
-# even if the upstream network router dynamically assigns an IP address via DHCP (also refer to
-# https://www.notion.so/DN-11-Supported-network-topologies-in-FRAME-machines-2864e612c78a80619450da67068bba34?source=copy_link#2864e612c78a801096fdefddc4cf54c2):
-address1=192.168.5.1/24
