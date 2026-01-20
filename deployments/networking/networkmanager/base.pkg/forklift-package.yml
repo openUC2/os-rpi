@@ -130,16 +130,16 @@ features:
     description: IP addresses for direct connections
     provides:
       file-exports:
-        - description: IPv4 address settings
-          target: overlays/etc/NetworkManager/system-connections.d/eth0-default/62-ipv4-address.nmconnection
+        # - description: IPv4 address settings
+        #   target: overlays/etc/NetworkManager/system-connections.d/eth0-default/62-ipv4-address.nmconnection
         - description: Static IPv4 address settings
           target: overlays/etc/NetworkManager/system-connections.d/eth0-static/62-ipv4-address.nmconnection
-        - description: IPv4 address settings
-          target: overlays/etc/NetworkManager/system-connections.d/eth1-default/62-ipv4-address.nmconnection
+        # - description: IPv4 address settings
+        #   target: overlays/etc/NetworkManager/system-connections.d/eth1-default/62-ipv4-address.nmconnection
         - description: Static IPv4 address settings
           target: overlays/etc/NetworkManager/system-connections.d/eth1-static/62-ipv4-address.nmconnection
-        - description: IPv4 address settings
-          target: overlays/etc/NetworkManager/system-connections.d/usb0-default/62-ipv4-address.nmconnection
+        # - description: IPv4 address settings
+        #   target: overlays/etc/NetworkManager/system-connections.d/usb0-default/62-ipv4-address.nmconnection
   link-local-ip-addresses:
     description: Link-local IP addresses for direct connections
     provides:
