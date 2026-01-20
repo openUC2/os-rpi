@@ -6,6 +6,7 @@ features:
   - wlan0-randomized-bg-channel
   - wlan0-branded-password
   - wlan0-direct-ip-address
+  - wlan0-link-local-ip-address
   - wlan1
   - wlan1-autoconnect-off
   - wlan1-hostname-ssid
@@ -13,5 +14,6 @@ features:
   - wlan1-randomized-bg-channel
   - wlan1-branded-password
   - wlan1-direct-ip-address
+  - wlan0-link-local-ip-address
   - dhcp-default-route
 disabled: false
