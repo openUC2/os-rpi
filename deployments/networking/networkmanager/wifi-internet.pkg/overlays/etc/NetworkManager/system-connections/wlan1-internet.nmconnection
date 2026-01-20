@@ -14,7 +14,6 @@ psk=Please change me!
 
 [ipv4]
 method=auto
-link-local=3
 dhcp-timeout=120
 may-fail=false
 
