@@ -48,12 +48,12 @@ features:
           name: caddy-ingress
       services:
         - tags: [caddy-docker-proxy]
-          port: 8001
+          port: 8002
           protocol: http
     provides:
       services:
         - description: Landing page for the machine's network services
-          port: 8001
+          port: 8002
           protocol: http
           paths:
             - /

@@ -3,4 +3,5 @@ features:
   - frontend
   - frontend-public
   - firewall-allow-direct
+  - firewall-allow-public
 disabled: false
