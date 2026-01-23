@@ -134,7 +134,7 @@ forklift plt upgrade --force @main
 #       Error response from daemon:
 #         error from registry: denied
 
-forklift stage add-bundle-name rollback next
+forklift stage set-next-result success
 # This command will prevent your current pallet from being used as a rollback. Warning: if the
 # version you're upgrading to is broken, things will be very broken and there won't be any automatic
 # rollback to a fully-working version!
