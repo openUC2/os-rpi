@@ -23,7 +23,7 @@ You should flash the OS image to an SD card using
 
 If you downloaded the basic variant of our OS images instead of the `dx` variant, you can enable
 `dx` mode by running:
-```
+```bash
 bash "$(forklift plt locate-file dx/setup.sh)"
 ```
 
@@ -52,7 +52,7 @@ same OS installation, things might break in weird ways.
    `{something}` (which may look like `sha-7b9de3d` or like `sha-0c335c4@sha256:{a very long hash}`)
    with the tagged image version (e.g. `sha:d57b561`). The result should look something like:
 
-   ```
+   ```bash
    image: ghcr.io/openuc2/imswitch:sha-d57b561
    ```
 
@@ -67,7 +67,7 @@ same OS installation, things might break in weird ways.
    edited files inside `/home/pi/.local/share/forklift/pallet`), then before publishing your edits
    you can test them directly on the device by running:
 
-   ```
+   ```bash
    forklift plt apply
    ```
 
@@ -82,7 +82,7 @@ Now you are ready to deploy these changes as an OS update to a machine running I
    an SSH remote session) you can run the following command to upgrade the local pallet to the
    latest commit on the main branch:
 
-   ```
+   ```bash
    forklift plt upgrade
    ```
 
@@ -90,7 +90,7 @@ Now you are ready to deploy these changes as an OS update to a machine running I
    committed/pushed up to GitHub, but you're sure that you won't lose any important changes by
    wiping your local pallet, then you should run:
 
-   ```
+   ```bash
    forklift plt upgrade --force
    ```
 
@@ -99,34 +99,53 @@ Now you are ready to deploy these changes as an OS update to a machine running I
 
    To immediately apply changes to Docker apps before you reboot, you can run:
 
-   ```
+   ```bash
    sudo systemctl restart forklift-apply
    ```
 
    If you are in an SSH session or you are in a GNU screen or byobu session in the Cockpit terminal,
    the following command will also work instead as an equivalent substitute to the above command:
 
-   ```
+   ```bash
    forklift stage apply
    ```
 
-### Migrating from github.com/openUC2/pallet
+### Working around openUC2's accidental deletion of imswitch-noqt
 
-The pallet in this repo used to be called `github.com/openUC2/pallet`. On machines deployed with
-older versions of this OS built before November 2025 (i.e. versions of the OS built by the
-now-archived [openUC2/imswitch-os](https://github.com/openUC2/imswitch-os) repo), you
-will need to run the following command (instead of `forklift plt upgrade`) for your next upgrade:
+Machines running versions of rpi-imswitch-os built before late January 2026 may be running a version
+of this repo's pallet which uses the `ghcr.io/openuc2/imswitch-noqt` Docker container image. Trying
+to upgrade the pallet from that version will now result an error, because the
+`ghcr.io/openuc2/imswitch-noqt` Docker container image was prematurely deleted, and upgrading the
+pallet will require the current pallet to ensure it has a copy of `ghcr.io/openuc2/imswitch-noqt`
+(which will fail) so that the current pallet can be used as a rollback in case the next pallet turns
+out to be invalid. To recover from this problem, run the following commands:
 
-```
-forklift plt switch github.com/openUC2/rpi-imswitch-os@main
-```
+```bash
+forklift plt upgrade --force @main
+# This command will result in output which looks something like:
+# Downloading Docker container images specified by the last successfully-applied staged pallet bundle,
+# in case the next to be applied fails to be applied...
+#   {...}
+#   Downloading ghcr.io/openuc2/imswitch-noqt:{...}...
+#   {...}
+# 2026/01/23 07:53:26 couldn't prepare staged pallet bundle {...} to be applied next:
+#   couldn't cache Docker container images required by staged pallet:
+#     couldn't download ghcr.io/openuc2/imswitch-noqt:{...}:
+#       Error response from daemon:
+#         error from registry: denied
 
-If it gives you a warning that you may have changes in your local pallet which have not been
-committed/pushed up to GitHub, but you're sure that you won't lose any important changes by
-wiping your local pallet, then you should run:
+forklift stage add-bundle-name rollback next
+# This command will prevent your current pallet from being used as a rollback. Warning: if the
+# version you're upgrading to is broken, things will be very broken and there won't be any automatic
+# rollback to a fully-working version!
 
-```
-forklift plt switch --force github.com/openUC2/rpi-imswitch-os@main
+forklift stage set-next next
+# This command will download the Docker container images for the version you're upgrading to.
+
+forklift stage apply && sudo reboot
+# Just to be safe, we should test whether the Docker Compose apps all load correctly before we
+# reboot to fully apply the Forklift pallet. If an error occurs here, more troubleshooting will be
+# needed before it's safe to reboot!
 ```
 
 ### Disabling/enabling functionalities
