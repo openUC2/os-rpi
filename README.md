@@ -110,15 +110,15 @@ Now you are ready to deploy these changes as an OS update to a machine running I
    forklift stage apply
    ```
 
-### Working around openUC2's accidental deletion of imswitch-noqt
+### Working around openUC2's premature deletion of imswitch-noqt
 
-Machines running versions of rpi-imswitch-os built before late January 2026 may be running a version
+Machines running versions of rpi-imswitch-os built before late-January 2026 may be running a version
 of this repo's pallet which uses the `ghcr.io/openuc2/imswitch-noqt` Docker container image. Trying
 to upgrade the pallet from that version will now result an error, because the
 `ghcr.io/openuc2/imswitch-noqt` Docker container image was prematurely deleted, and upgrading the
 pallet will require the current pallet to ensure it has a copy of `ghcr.io/openuc2/imswitch-noqt`
 (which will fail) so that the current pallet can be used as a rollback in case the next pallet turns
-out to be invalid. To recover from this problem, run the following commands:
+out to be invalid. To restore the ability to upgrade the pallet, please run the following commands:
 
 ```bash
 forklift plt upgrade --force @main
