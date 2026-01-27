@@ -8,6 +8,7 @@ Wants=generate-machine-name.service
 After=generate-machine-name.service
 Wants=generate-hostname-templated.service
 After=generate-hostname-templated.service
+Wants=tailscaled.service
 After=tailscaled.service
 
 [Service]
@@ -18,4 +19,3 @@ ExecStart=sh -c "\
     /usr/libexec/render-templated-config \
       >/run/overlays/generated/etc/cockpit/origins.d/60-generated-templated-names \
 "
-RemainAfterExit=yes

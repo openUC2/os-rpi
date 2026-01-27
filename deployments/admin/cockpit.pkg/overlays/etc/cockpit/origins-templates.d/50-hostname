@@ -1,3 +1,4 @@
+# These hostnames are for local access:
 http://{hostname}
 http://{hostname}:9090
 

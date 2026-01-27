@@ -8,4 +8,3 @@ After=assemble-cockpit-origins-templated.service
 [Service]
 Type=oneshot
 ExecStart=/usr/libexec/assemble-cockpit-origins
-RemainAfterExit=yes
