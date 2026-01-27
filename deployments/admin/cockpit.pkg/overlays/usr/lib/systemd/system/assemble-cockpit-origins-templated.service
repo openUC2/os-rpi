@@ -8,6 +8,7 @@ Wants=generate-machine-name.service
 After=generate-machine-name.service
 Wants=generate-hostname-templated.service
 After=generate-hostname-templated.service
+After=tailscaled.service
 
 [Service]
 Type=oneshot

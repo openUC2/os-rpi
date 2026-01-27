@@ -1,0 +1,2 @@
+https://{tailscale-dns-name}:8443
+https://{tailscale-dns-name}:10000

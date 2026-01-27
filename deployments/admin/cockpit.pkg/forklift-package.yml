@@ -159,6 +159,20 @@ features:
       file-exports:
         - description: Drop-in Cockpit origins list
           target: overlays/etc/cockpit/origins-templates.d/50-hostname
+  allow-origins-templated-tailscale-magicdns:
+    provides:
+      description:
+        "Allow accessing Cockpit via the Tailscale MagicDNS name, e.g. 'openuc2-metal-slope-23501.{tailnet}.ts.net'"
+      file-exports:
+        - description: Drop-in Cockpit origins list
+          target: overlays/etc/cockpit/origins-templates.d/60-tailscale-magicdns
+  allow-origins-templated-tailscale-funnel:
+    provides:
+      description:
+        "Allow accessing Cockpit via Tailscale Funnel, e.g. 'openuc2-metal-slope-23501.{tailnet}.ts.net'"
+      file-exports:
+        - description: Drop-in Cockpit origins list
+          target: overlays/etc/cockpit/origins-templates.d/61-tailscale-funnel
   firewall-allow-direct:
     description:
       Firewall configuration to allow accessing Cockpit from directly-connected devices

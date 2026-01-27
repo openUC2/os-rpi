@@ -6,6 +6,7 @@ features:
   - allow-origins-templated-custom-domain-home
   - allow-origins-templated-mdns-hostname
   - allow-origins-templated-hostname
+  - allow-origins-templated-tailscale-magicdns
   - firewall-allow-direct
   - firewall-allow-public
   - frontend
