@@ -159,10 +159,10 @@ features:
       file-exports:
         - description: Drop-in Cockpit origins list
           target: overlays/etc/cockpit/origins-templates.d/50-hostname
-  allow-origins-templated-tailscale-ip:
+  allow-origins-templated-tailscale:
     provides:
       description:
-        "Allow accessing Cockpit via the Tailscale IP addresses"
+        "Allow accessing Cockpit via Tailscale IP addresses, MagicDNS, and Funnel"
       file-exports:
         - description: Drop-in Cockpit origins list
           target: overlays/etc/cockpit/origins-templates.d/60-tailscale-ip
@@ -170,28 +170,10 @@ features:
           target: overlays/usr/lib/systemd/system/assemble-cockpit-config.timer
         - description: systemd timer enablement for assemble-cockpit-config.timer
           target: overlays/etc/systemd/system/multi-user.target.wants/assemble-cockpit-config.timer
-  allow-origins-templated-tailscale-magicdns:
-    provides:
-      description:
-        "Allow accessing Cockpit via the Tailscale MagicDNS name, e.g. 'openuc2-metal-slope-23501.{tailnet}.ts.net'"
-      file-exports:
         - description: Drop-in Cockpit origins list
           target: overlays/etc/cockpit/origins-templates.d/61-tailscale-magicdns
-        - description: systemd timer to periodically regenerate the Cockpit config
-          target: overlays/usr/lib/systemd/system/assemble-cockpit-config.timer
-        - description: systemd timer enablement for assemble-cockpit-config.timer
-          target: overlays/etc/systemd/system/multi-user.target.wants/assemble-cockpit-config.timer
-  allow-origins-templated-tailscale-funnel:
-    provides:
-      description:
-        "Allow accessing Cockpit via Tailscale Funnel, e.g. 'openuc2-metal-slope-23501.{tailnet}.ts.net'"
-      file-exports:
         - description: Drop-in Cockpit origins list
           target: overlays/etc/cockpit/origins-templates.d/62-tailscale-funnel
-        - description: systemd timer to periodically regenerate the Cockpit config
-          target: overlays/usr/lib/systemd/system/assemble-cockpit-config.timer
-        - description: systemd timer enablement for assemble-cockpit-config.timer
-          target: overlays/etc/systemd/system/multi-user.target.wants/assemble-cockpit-config.timer
   firewall-allow-direct:
     description:
       Firewall configuration to allow accessing Cockpit from directly-connected devices
