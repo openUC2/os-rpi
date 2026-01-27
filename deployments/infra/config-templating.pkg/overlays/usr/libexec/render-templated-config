@@ -96,7 +96,7 @@ if [ "$tailscale_ip_1" = "" ] || [ "$tailscale_ip_1" = "null" ]; then
   echo "Note: Tailscale IP address 1! Falling back to localhost" >&2
   tailscale_ip_1="localhost"
 fi
-if [ "$tailscale_ip_2" = "" ] || ["$tailscale_ip_2" = "null" ]; then
+if [ "$tailscale_ip_2" = "" ] || [ "$tailscale_ip_2" = "null" ]; then
   echo "Note: Tailscale IP address 2! Falling back to localhost" >&2
   tailscale_ip_2="localhost"
 fi
