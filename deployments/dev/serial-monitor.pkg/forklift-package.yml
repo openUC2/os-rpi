@@ -1,0 +1,34 @@
+package:
+  description: Web interface for debugging serial devices
+  maintainers:
+    - name: Ethan Li
+      email: lietk12@gmail.com
+  license: Apache-2.0
+  sources:
+    - https://github.com/openUC2/serial-monitor
+
+deployment:
+  compose-files:
+    - deployment.compose.yml
+
+features:
+  frontend:
+    description: Provides access to the GUI
+    compose-files:
+      - frontend.compose.yml
+    requires:
+      networks:
+        - description: Overlay network for Caddy to connect to upstream services
+          name: caddy-ingress
+      services:
+        - tags: [caddy-docker-proxy]
+          port: 80
+          protocol: http
+    provides:
+      services:
+        - description: Web interface for debugging serial devices
+          port: 80
+          protocol: http
+          paths:
+            - /dev/serial-monitor
+            - /dev/serial-monitor/*

@@ -1,0 +1,16 @@
+services:
+  server:
+    networks:
+      - caddy-ingress
+    labels:
+      caddy: http://
+      caddy.redir: /dev/serial-monitor /dev/serial-monitor/
+      caddy.handle_path: /dev/serial-monitor/*
+      caddy.handle_path.reverse_proxy: "{{upstreams 3010}}"
+
+networks:
+  default:
+    name: none
+    external: true
+  caddy-ingress:
+    external: true
