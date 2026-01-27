@@ -1,6 +1,6 @@
 services:
   server:
-    image: ghcr.io/openuc2/serial-monitor:sha-bda6220@sha256:caa146c276124a25cb972f82b8e6cb174e68da2cca24d816c81d64a491c3c661
+    image: ghcr.io/openuc2/serial-monitor:sha-d879d44@sha256:57d242328907d0fa3df0aa8da5a00f570b323cde2f88074c5370c94874994f25
     privileged: true
     ports:
       - 3010:3010

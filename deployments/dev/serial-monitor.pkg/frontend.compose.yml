@@ -5,8 +5,8 @@ services:
     labels:
       caddy: http://
       caddy.redir: /dev/serial-monitor /dev/serial-monitor/
-      caddy.handle: /dev/serial-monitor/*
-      caddy.handle.reverse_proxy: "{{upstreams 3010}}"
+      caddy.handle_path: /dev/serial-monitor/*
+      caddy.handle_path.reverse_proxy: "{{upstreams 3010}}"
 
 networks:
   default:
