@@ -58,18 +58,18 @@ features:
           name: caddy-ingress-public
       services:
         - tags: [caddy-docker-proxy]
-          port: 8002
+          port: 8000
           protocol: http
     provides:
       services:
         - description: ImSwitch graphical user interface and API
-          port: 8002
+          port: 8000
           protocol: http
           paths:
             - /imswitch
             - /imswitch/*
         # - description: Jupyter Lab server
-        #   port: 8002
+        #   port: 8000
         #   protocol: http
         #   paths:
         #     - /jupyter

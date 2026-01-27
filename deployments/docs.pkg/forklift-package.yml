@@ -44,12 +44,12 @@ features:
           name: caddy-ingress-public
       services:
         - tags: [caddy-docker-proxy]
-          port: 8002
+          port: 8000
           protocol: http
     provides:
       services:
         - description: openUC2 documentation site
-          port: 8002
+          port: 8000
           protocol: http
           paths:
             - /openUC2
