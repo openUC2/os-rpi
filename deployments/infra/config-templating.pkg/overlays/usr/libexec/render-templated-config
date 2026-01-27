@@ -4,6 +4,8 @@ hostname=""
 machine_name=""
 custom_domain=""
 tailscale_dns_name=""
+tailscale_ip_1=""
+tailscale_ip_2=""
 
 # Load values of interpolated variables:
 if [ -f /etc/hostname ]; then
