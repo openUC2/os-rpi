@@ -1,0 +1,24 @@
+services:
+  server:
+    image: ghcr.io/openuc2/serial-monitor:sha-03fb9dc@sha256:624f02f527e9fdd3160701dd9d90b1bb0cba544a60777e1bc19911b844971542
+    privileged: true
+    ports:
+      - 3000:3000
+    volumes:
+      - type: bind
+        source: /dev
+        target: /dev
+        bind:
+          create_host_path: false
+      - type: bind
+        source: /sys
+        target: /sys
+        read_only: true
+        bind:
+          create_host_path: false
+      - type: bind
+        source: /run/udev
+        target: /run/udev
+        read_only: true
+        bind:
+          create_host_path: false
