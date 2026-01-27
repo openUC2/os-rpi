@@ -159,6 +159,21 @@ features:
       file-exports:
         - description: Drop-in Cockpit origins list
           target: overlays/etc/cockpit/origins-templates.d/50-hostname
+  allow-origins-templated-tailscale:
+    provides:
+      description:
+        "Allow accessing Cockpit via Tailscale IP addresses, MagicDNS, and Funnel"
+      file-exports:
+        - description: Drop-in Cockpit origins list
+          target: overlays/etc/cockpit/origins-templates.d/60-tailscale-ip
+        - description: systemd timer to periodically regenerate the Cockpit config
+          target: overlays/usr/lib/systemd/system/assemble-cockpit-config.timer
+        - description: systemd timer enablement for assemble-cockpit-config.timer
+          target: overlays/etc/systemd/system/multi-user.target.wants/assemble-cockpit-config.timer
+        - description: Drop-in Cockpit origins list
+          target: overlays/etc/cockpit/origins-templates.d/61-tailscale-magicdns
+        - description: Drop-in Cockpit origins list
+          target: overlays/etc/cockpit/origins-templates.d/62-tailscale-funnel
   firewall-allow-direct:
     description:
       Firewall configuration to allow accessing Cockpit from directly-connected devices

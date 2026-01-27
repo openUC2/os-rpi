@@ -1,0 +1,7 @@
+# These Tailscale MagicDNS names are provided when the machine is on a Tailscale tailnet with
+# MagicDNS enabled (with localhost as a fallback):
+http://{tailscale-dns-name}
+http://{tailscale-dns-name}:9090
+https://{tailscale-dns-name}
+https://{tailscale-dns-name}:9090
+
