@@ -1,0 +1,6 @@
+# These Tailscale IP addresses are provided when the machine is on a Tailscale tailnet (with
+# localhost as a fallback):
+http://{tailscale-ip-1}
+http://{tailscale-ip-1}:9090
+http://{tailscale-ip-2}
+http://{tailscale-ip-2}:9090

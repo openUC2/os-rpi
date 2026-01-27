@@ -1,0 +1,4 @@
+# These Tailscale Funnel ports are allowed when Tailscale Funnel is enabled (with localhost as a
+# fallback):
+https://{tailscale-dns-name}:8443
+https://{tailscale-dns-name}:10000
