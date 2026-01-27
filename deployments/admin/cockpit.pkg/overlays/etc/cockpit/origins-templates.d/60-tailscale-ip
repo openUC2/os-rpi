@@ -4,3 +4,4 @@ http://{tailscale-ip-1}
 http://{tailscale-ip-1}:9090
 http://{tailscale-ip-2}
 http://{tailscale-ip-2}:9090
+

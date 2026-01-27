@@ -4,3 +4,4 @@ http://{tailscale-dns-name}
 http://{tailscale-dns-name}:9090
 https://{tailscale-dns-name}
 https://{tailscale-dns-name}:9090
+
