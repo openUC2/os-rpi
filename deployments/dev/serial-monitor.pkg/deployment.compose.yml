@@ -1,9 +1,9 @@
 services:
   server:
-    image: ghcr.io/openuc2/serial-monitor:sha-03fb9dc@sha256:624f02f527e9fdd3160701dd9d90b1bb0cba544a60777e1bc19911b844971542
+    image: ghcr.io/openuc2/serial-monitor:sha-018a8cc@sha256:c12ae4e40cc1809fc8b39847304974b9ad2450030eb2aa3bfd78cea78c73d633
     privileged: true
     ports:
-      - 3000:3000
+      - 3010:3010
     volumes:
       - type: bind
         source: /dev
