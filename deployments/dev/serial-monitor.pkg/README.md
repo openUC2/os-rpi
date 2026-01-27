@@ -1,6 +1,6 @@
 # serial-monitor
 
-This brings up a web service on port 3010 for serial debugging.
+This brings up a web service at URL path `/dev/serial-monitor` for serial debugging.
 
 ## Usage
 
@@ -16,4 +16,4 @@ Then apply your changes:
 forklift plt apply
 ```
 
-Then open port 3010 in your web browser (e.g. <http://openuc2.local:3010>).
+Then open `/dev/serial-monitor` in your web browser (e.g. <http://openuc2.local/dev/serial-monitor>).
