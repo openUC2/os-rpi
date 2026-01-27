@@ -11,7 +11,7 @@ services:
       - server-data:/data
       - server-config:/config
     ports:
-      - 8002:80
+      - 8000:80
     networks:
       - proxied
     extra_hosts:

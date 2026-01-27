@@ -22,12 +22,12 @@ deployment:
         name: caddy-ingress-public
     listeners:
       - description: Web server for all HTTP requests
-        port: 8002
+        port: 8000
         protocol: tcp
     services:
       - description: Web server which reverse-proxies web services on the machine
         tags: [caddy-docker-proxy]
-        port: 8002
+        port: 8000
         protocol: http
 
 features:
