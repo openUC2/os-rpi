@@ -28,12 +28,13 @@ if [ -f /etc/custom-domain ]; then
   custom_domain_16="${custom_domain:0:16}"
   custom_domain_8="${custom_domain:0:8}"
 fi
-if which tailscale >/dev/null && which gojq >/dev/null; then
-  tailscale_dns_name="$(tailscale status --peers=false --json | gojq ".Self.DNSName" -r | sed 's~\.$~~')"
+if which tailscale >/dev/null && which gojq >/dev/null && systemctl is-active --quiet tailscaled.service; then
+  tailscale_status = "$(tailscale status --peers=false --json)"
+  tailscale_dns_name="$(echo "$tailscale_status" | gojq ".Self.DNSName" -r | sed 's~\.$~~')"
   echo "Tailscale DNS name: $tailscale_dns_name" >&2
-  tailscale_ip_1="$(tailscale status --peers=false --json | gojq ".Self.TailscaleIPs[0]" -r)"
+  tailscale_ip_1="$(echo "$tailscale_status" | gojq ".Self.TailscaleIPs[0]" -r)"
   echo "Tailscale IP address 1 (probably IPv4): $tailscale_ip_1" >&2
-  tailscale_ip_2="$(tailscale status --peers=false --json | gojq ".Self.TailscaleIPs[1]" -r)"
+  tailscale_ip_2="$(echo "$tailscale_status" | gojq ".Self.TailscaleIPs[1]" -r)"
   echo "Tailscale IP address 2 (probably IPv6): $tailscale_ip_2" >&2
 fi
 
