@@ -1,4 +1,4 @@
 package: /deployments/dev/serial-monitor.pkg
 features:
   - frontend
-disabled: false
+disabled: true

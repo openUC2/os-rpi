@@ -1,19 +1,16 @@
 # serial-monitor
 
-This brings up a web service at URL path `/dev/serial-monitor` for serial debugging.
+A web service at URL path `/dev/serial-monitor` for debugging serial devices.
 
 ## Usage
 
 To enable the deployment for this package, run:
 
 ```
-forklift plt enable-depl dev/serial-monitor
-```
-
-Then apply your changes:
-
-```
-forklift plt apply
+forklift plt enable-depl --apply dev/serial-monitor
 ```
 
 Then open `/dev/serial-monitor` in your web browser (e.g. <http://openuc2.local/dev/serial-monitor>).
+
+Note: if in the future you run `forklift plt upgrade --force`, the deployment for this package will
+be reset to disabled; then you'll need to run the above command again.
