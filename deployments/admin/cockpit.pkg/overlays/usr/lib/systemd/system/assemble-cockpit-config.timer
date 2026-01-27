@@ -1,0 +1,10 @@
+[Unit]
+Description=Update Cockpit config from Cockpit config file fragments
+
+[Timer]
+Unit=assemble-cockpit-config.service
+OnActiveSec=0
+OnUnitActiveSec=30
+
+[Install]
+WantedBy=multi-user.target
