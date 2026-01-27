@@ -1,2 +1,2 @@
 package: /deployments/dev/serial-monitor.pkg
-disabled: true
+disabled: false
