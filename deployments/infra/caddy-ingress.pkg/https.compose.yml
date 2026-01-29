@@ -1,6 +1,6 @@
 services:
   https:
-    image: docker.io/library/caddy:2.10.2@sha256:2adb640cdc0ce1d8870887c30af1e21edfb3cdfd8433431b2a15f40119a7d654
+    image: docker.io/library/caddy:2.10.2@sha256:70e816c44fb79071fc4cd939ffda76e3b629642309efe31a4fb0ed45873be464
     ports:
       - 443:443/tcp
       - 443:443/udp
