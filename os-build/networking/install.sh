@@ -21,7 +21,6 @@ fi
 # Set up USB gadget mode
 sudo -E apt-get install -y -o Dpkg::Progress-Fancy=0 \
   rpi-usb-gadget
-sudo rpi-usb-gadget on
 
 # Install tailscale
 sudo -E apt-get install -y -o Dpkg::Progress-Fancy=0 \
