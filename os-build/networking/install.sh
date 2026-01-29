@@ -11,14 +11,17 @@ sudo -E apt-get install -y -o Dpkg::Progress-Fancy=0 \
 sudo systemctl enable NetworkManager.service
 
 # Set the wifi country
-# FIXME: instead have the user set the wifi country via a first-launch setup wizard, and do it
-# without using raspi-config. It should also be updated if the user changes the wifi country.
-# Or maybe we don't need to set the wifi country?
+# FIXME: instead have the user set the wifi country via device-admin
 if command -v raspi-config &>/dev/null; then
   sudo raspi-config nonint do_wifi_country DE
 else
   echo "Warning: raspi-config is not available, so we can't set the wifi country!"
 fi
+
+# Set up USB gadget mode
+sudo -E apt-get install -y -o Dpkg::Progress-Fancy=0 \
+  rpi-usb-gadget
+sudo rpi-usb-gadget on
 
 # Install tailscale
 sudo -E apt-get install -y -o Dpkg::Progress-Fancy=0 \
