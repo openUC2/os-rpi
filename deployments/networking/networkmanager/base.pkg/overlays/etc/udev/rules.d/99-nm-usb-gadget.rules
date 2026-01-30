@@ -1,2 +1,7 @@
+SUBSYSTEM!="net", GOTO="nm_unmanaged_end"
+ACTION!="add|change|move", GOTO="nm_unmanaged_end"
+
 # USB gadget device. We want NetworkManager to manage it via usb0-default and usb-static.
-ENV{DEVTYPE}=="gadget", ENV{NM_UNMANAGED}="1
+ENV{DEVTYPE}=="gadget", ENV{NM_UNMANAGED}="0"
+
+LABEL="nm_unmanaged_end"
