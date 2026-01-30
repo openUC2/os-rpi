@@ -21,6 +21,6 @@ jobs:
       build_variant: dx
       base_release_name: trixie
       base_image_variant: lite
-      base_release_date: 2025-11-24
-      base_file_release_date: 2025-11-24
+      base_release_date: 2025-12-04
+      base_file_release_date: 2025-12-04
       arch: arm64
