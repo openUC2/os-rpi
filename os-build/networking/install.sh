@@ -21,12 +21,7 @@ fi
 # Set up USB gadget mode
 sudo -E apt-get install -y -o Dpkg::Progress-Fancy=0 \
   rpi-usb-gadget
-mkdir -p /tmp/proc/device-tree
-echo "Raspberry Pi 5 Model B Rev 1.1" >/tmp/proc/device-tree/model
-sudo mount -o ro,bind /tmp/proc /proc
-sudo cat /proc/device-tree/model
-sudo rpi-usb-gadget on
-sudo umount /proc
+sudo cp "$config_files_root"/etc/modules-load.d/usb-gadget.conf /etc/modules-load.d/
 
 # Install tailscale
 sudo -E apt-get install -y -o Dpkg::Progress-Fancy=0 \

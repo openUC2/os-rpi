@@ -10,7 +10,7 @@ config_files_root=$(dirname "$(realpath "$BASH_SOURCE")")
 # Install Forklift
 "$config_files_root/download-forklift.sh" "/usr/bin"
 
-# Add the necessary systemd units (but we don't enable them until booted setup):
+# Add the necessary systemd units
 sudo cp "$config_files_root"/usr/lib/systemd/system/* /usr/lib/systemd/system/
 sudo cp "$config_files_root"/usr/lib/systemd/system-preset/* /usr/lib/systemd/system-preset/
 
