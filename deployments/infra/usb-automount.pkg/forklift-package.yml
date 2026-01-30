@@ -8,6 +8,12 @@ package:
     - https://github.com/openUC2/rpi-imswitch-os
 
 deployment:
+  requires:
+    services:
+      - description: systemd service for reloading udev rules
+        protocol: systemd
+        paths:
+          - udev-readd.service
   provides:
     file-exports:
       - description: shell script to sleep until a block device is available for management by UDisks2
@@ -16,10 +22,6 @@ deployment:
         target: overlays/usr/lib/systemd/system/usb-mount@.service
       - description: udev rules to run the systemd service to mount a USB drive upon being plugged in
         target: overlays/usr/lib/udev/rules.d/99-usb-automount.rules
-      - description: systemd service to trigger automount USB drives already plugged in during boot
-        target: overlays/usr/lib/systemd/system/udev-readd.service
-      - description: systemd service enablement for udev-readd.service
-        target: overlays/etc/systemd/system/multi-user.target.wants/udev-readd.service
       - description: polkit rules for using UDisks2 to mount drives as users in `storage` group
         target: overlays/usr/share/polkit-1/rules.d/50-usb-automount.rules
 

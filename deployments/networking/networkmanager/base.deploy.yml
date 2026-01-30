@@ -4,4 +4,5 @@ features:
   - link-local-ip-addresses
   - firewall-allow-direct
   - firewall-allow-public
+  - manage-usb-gadget
 disabled: false

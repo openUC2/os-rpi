@@ -204,3 +204,15 @@ features:
           target: overlays/etc/firewalld/zones.d/public/30-service-dhcp.xml
         - description: Drop-in XML fragment for firewalld's DNS service
           target: overlays/etc/firewalld/zones.d/public/40-service-dns.xml
+  manage-usb-gadget:
+    description: udev rule to allow NetworkManager to manage the USB gadget port
+    requires:
+      services:
+        - description: systemd service for reloading udev rules
+          protocol: systemd
+          paths:
+            - udev-readd.service
+    provides:
+      file-exports:
+        - description: Drop-in udev rule for enabling NetworkManager on USB gadget devices
+          target: overlays/etc/udev/rules.d/99-nm-usb-gadget.rules

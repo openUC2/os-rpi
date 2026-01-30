@@ -1,0 +1,2 @@
+# USB gadget device. We want NetworkManager to manage it via usb0-default and usb-static.
+ENV{DEVTYPE}=="gadget", ENV{NM_UNMANAGED}="1

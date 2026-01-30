@@ -1,0 +1,2 @@
+package: /deployments/infra/udev.pkg
+disabled: false
