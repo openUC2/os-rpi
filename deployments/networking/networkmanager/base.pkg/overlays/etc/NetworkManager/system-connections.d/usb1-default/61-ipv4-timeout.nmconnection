@@ -1,0 +1,2 @@
+dhcp-timeout=5
+may-fail=false

@@ -1,0 +1,5 @@
+
+[connection]
+id=usb1-static
+type=ethernet
+interface-name=usb1
