@@ -16,6 +16,19 @@ services:
     extra_hosts:
       - host.docker.internal:host-gateway
     command: caddy run --config /etc/caddy/Caddyfile --adapter caddyfile --watch
+    depends_on:
+      ensure-caddyfile:
+        condition: service_completed_successfully
+
+  ensure-caddyfile:
+  # This service ensures that a valid Caddyfile exists as a fallback even if
+  # /run/caddy-ingress/https doesn't exist, so that the container can start successfully
+    image: docker.io/library/alpine:3.23.3@sha256:25109184c71bdad752c8312a8623239686a9a2071e8825f20acb8f2198c3f659
+    volumes:
+      - /run/caddy-ingress/https:/etc/caddy
+      - ./https.Caddyfile-fallback:/run/caddy/Caddyfile-fallback
+    command: 'sh -c "cat /etc/caddy/Caddyfile || cp /run/caddy/Caddyfile-fallback /etc/caddy/Caddyfile"'
+
 
 volumes:
   https-data: null
