@@ -22,6 +22,8 @@ fi
 sudo -E apt-get install -y -o Dpkg::Progress-Fancy=0 \
   rpi-usb-gadget
 sudo cp "$config_files_root"/etc/modules-load.d/usb-gadget.conf /etc/modules-load.d/
+file="/boot/firmware/config.txt"
+sudo bash -c "cat \"$config_files_root$file.snippet\" >> \"$file\""
 
 # Install tailscale
 sudo -E apt-get install -y -o Dpkg::Progress-Fancy=0 \
