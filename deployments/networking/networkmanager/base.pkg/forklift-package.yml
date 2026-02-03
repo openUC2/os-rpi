@@ -117,6 +117,56 @@ deployment:
       - description: Basic IPv6 settings
         target: overlays/etc/NetworkManager/system-connections.d/usb0-default/70-ipv6.nmconnection
 
+      # usb0-static:
+      - description: systemd service enablement for assemble-networkmanager-connection@usb0-static.service
+        target: overlays/etc/systemd/system/NetworkManager.service.wants/assemble-networkmanager-connection@usb0-static.service
+      - description: Symlink redirecting /etc/NetworkManager/system-connections/usb0-static.nmconnection to an auto-generated file
+        target: overlays/etc/NetworkManager/system-connections/usb0-static.nmconnection
+      - description: Comment describing NetworkManager connection fragments drop-in directory
+        target: overlays/etc/NetworkManager/system-connections.d/usb0-static/10-README.nmconnection
+      - description: Basic connection settings
+        target: overlays/etc/NetworkManager/system-connections.d/usb0-static/20-connection.nmconnection
+      - description: Connection auto-selection settings
+        target: overlays/etc/NetworkManager/system-connections.d/usb0-static/21-connection-autoconnect.nmconnection
+      - description: Basic IPv4 settings
+        target: overlays/etc/NetworkManager/system-connections.d/usb0-static/60-ipv4.nmconnection
+      - description: Basic IPv6 settings
+        target: overlays/etc/NetworkManager/system-connections.d/usb0-static/70-ipv6.nmconnection
+
+      # usb1-default:
+      - description: systemd service enablement for assemble-networkmanager-connection@usb1-default.service
+        target: overlays/etc/systemd/system/NetworkManager.service.wants/assemble-networkmanager-connection@usb1-default.service
+      - description: Symlink redirecting /etc/NetworkManager/system-connections/usb1-default.nmconnection to an auto-generated file
+        target: overlays/etc/NetworkManager/system-connections/usb1-default.nmconnection
+      - description: Comment describing NetworkManager connection fragments drop-in directory
+        target: overlays/etc/NetworkManager/system-connections.d/usb1-default/10-README.nmconnection
+      - description: Basic connection settings
+        target: overlays/etc/NetworkManager/system-connections.d/usb1-default/20-connection.nmconnection
+      - description: Connection auto-selection settings
+        target: overlays/etc/NetworkManager/system-connections.d/usb1-default/21-connection-autoconnect.nmconnection
+      - description: Basic IPv4 settings
+        target: overlays/etc/NetworkManager/system-connections.d/usb1-default/60-ipv4.nmconnection
+      - description: IPv4 DHCP timeout settings
+        target: overlays/etc/NetworkManager/system-connections.d/usb1-default/61-ipv4-timeout.nmconnection
+      - description: Basic IPv6 settings
+        target: overlays/etc/NetworkManager/system-connections.d/usb1-default/70-ipv6.nmconnection
+
+      # usb1-static:
+      - description: systemd service enablement for assemble-networkmanager-connection@usb1-static.service
+        target: overlays/etc/systemd/system/NetworkManager.service.wants/assemble-networkmanager-connection@usb1-static.service
+      - description: Symlink redirecting /etc/NetworkManager/system-connections/usb1-static.nmconnection to an auto-generated file
+        target: overlays/etc/NetworkManager/system-connections/usb1-static.nmconnection
+      - description: Comment describing NetworkManager connection fragments drop-in directory
+        target: overlays/etc/NetworkManager/system-connections.d/usb1-static/10-README.nmconnection
+      - description: Basic connection settings
+        target: overlays/etc/NetworkManager/system-connections.d/usb1-static/20-connection.nmconnection
+      - description: Connection auto-selection settings
+        target: overlays/etc/NetworkManager/system-connections.d/usb1-static/21-connection-autoconnect.nmconnection
+      - description: Basic IPv4 settings
+        target: overlays/etc/NetworkManager/system-connections.d/usb1-static/60-ipv4.nmconnection
+      - description: Basic IPv6 settings
+        target: overlays/etc/NetworkManager/system-connections.d/usb1-static/70-ipv6.nmconnection
+
     filesets:
       - description: systemd service to assemble a NetworkManager connection file during boot
         paths:
@@ -134,6 +184,10 @@ features:
           target: overlays/etc/NetworkManager/system-connections.d/eth0-static/62-ipv4-address.nmconnection
         - description: Static IPv4 address settings
           target: overlays/etc/NetworkManager/system-connections.d/eth1-static/62-ipv4-address.nmconnection
+        - description: Static IPv4 address settings
+          target: overlays/etc/NetworkManager/system-connections.d/usb0-static/62-ipv4-address.nmconnection
+        - description: Static IPv4 address settings
+          target: overlays/etc/NetworkManager/system-connections.d/usb1-static/62-ipv4-address.nmconnection
   link-local-ip-addresses:
     description: Link-local IP addresses for direct connections
     provides:
@@ -148,6 +202,12 @@ features:
           target: overlays/etc/NetworkManager/system-connections.d/eth1-static/63-ipv4-link-local.nmconnection
         - description: Link-local IPv4 address settings
           target: overlays/etc/NetworkManager/system-connections.d/usb0-default/63-ipv4-link-local.nmconnection
+        - description: Link-local IPv4 address settings
+          target: overlays/etc/NetworkManager/system-connections.d/usb0-static/63-ipv4-link-local.nmconnection
+        - description: Link-local IPv4 address settings
+          target: overlays/etc/NetworkManager/system-connections.d/usb1-default/63-ipv4-link-local.nmconnection
+        - description: Link-local IPv4 address settings
+          target: overlays/etc/NetworkManager/system-connections.d/usb1-static/63-ipv4-link-local.nmconnection
   firewall-allow-direct:
     description:
       Firewall configuration to allow ICMP, DHCP, and DNS traffic from directly-connected devices
@@ -184,3 +244,15 @@ features:
           target: overlays/etc/firewalld/zones.d/public/30-service-dhcp.xml
         - description: Drop-in XML fragment for firewalld's DNS service
           target: overlays/etc/firewalld/zones.d/public/40-service-dns.xml
+  manage-usb-gadget:
+    description: udev rule to allow NetworkManager to manage the USB gadget port
+    requires:
+      services:
+        - description: systemd service for reloading udev rules
+          protocol: systemd
+          paths:
+            - udev-readd.service
+    provides:
+      file-exports:
+        - description: Drop-in udev rule for enabling NetworkManager on USB gadget devices
+          target: overlays/etc/udev/rules.d/99-nm-usb-gadget.rules

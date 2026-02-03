@@ -1,0 +1,21 @@
+package:
+  description: Automatically mounts USB devices when they're attached
+  maintainers:
+    - name: Ethan Li
+      email: lietk12@gmail.com
+  license: Apache-2.0
+  sources:
+    - https://github.com/openUC2/rpi-imswitch-os
+
+deployment:
+  provides:
+    services:
+      - description: systemd service for reloading udev rules
+        protocol: systemd
+        paths:
+          - udev-readd.service
+    file-exports:
+      - description: systemd service to trigger automount USB drives already plugged in during boot
+        target: overlays/usr/lib/systemd/system/udev-readd.service
+      - description: systemd service enablement for udev-readd.service
+        target: overlays/etc/systemd/system/multi-user.target.wants/udev-readd.service
