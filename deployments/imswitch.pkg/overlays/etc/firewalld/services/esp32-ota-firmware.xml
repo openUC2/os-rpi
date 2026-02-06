@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <service>
   <port port="3333" protocol="tcp" />
-  <port port="3232" protocol="tcp" />
+  <port port="3232" protocol="udp" />
 </service>

@@ -16,7 +16,7 @@ deployment:
     listeners:
       - description: Firmware update authentication service
         port: 3232
-        protocol: udp # FIXME: the firewall rule for this is currently incorrect, since it's only for TCP
+        protocol: udp
       - description: Firmware binary transfer service
         port: 3333
         protocol: tcp
