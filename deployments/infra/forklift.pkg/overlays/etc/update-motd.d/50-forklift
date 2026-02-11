@@ -99,7 +99,7 @@ elif [ "$next_bun" != "$current_bun" ]; then
     echo 'You can try the pending version again on the next boot, by running: forklift stage set-next-result pending'
   fi
 fi
-echo "Local pallet:            $local_plt_dir"
+echo "Local pallet:            git -C $local_plt_dir symbolic-ref -q --short HEAD"
 echo "Local pallet:            $local_plt_path@$local_plt_version"
 if [ "$local_plt_changes" != "" ]; then
   echo "$local_plt_changes"
