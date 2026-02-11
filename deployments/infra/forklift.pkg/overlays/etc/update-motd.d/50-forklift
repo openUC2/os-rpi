@@ -6,10 +6,12 @@ export FORKLIFT_WORKSPACE=/home/pi
 forklift_version=""
 local_plt_dir=""
 upgrade_query=""
+upgrade_available=""
 if which forklift >/dev/null; then
   forklift_version="$(forklift --version | sed 's~^forklift version ~~')"
   local_plt_dir="$(forklift plt locate-file /)"
   upgrade_query="$(forklift plt show-upgrade-query)"
+  upgrade_available="$(forklift plt check-upgrade)" # TODO: cache this in the filesystem for faster MOTD generation!
 fi
 
 factory_reset_bun=""
@@ -110,4 +112,7 @@ if [ "$upgrade_query" == "" ]; then
   echo "Couldn't determine the upgrade query to check for upgrades!"
 else
   echo "Upgrade source:        $upgrade_query"
+fi
+if [ "$upgrade_available" != "" ]; then
+  echo "$upgrade_available"
 fi
