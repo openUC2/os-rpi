@@ -108,8 +108,8 @@ if [ "$next_bun" == "" ]; then
 elif [ "$next_bun" != "$current_bun" ]; then
   echo -e "${green_color}Pending for next boot: $(assemble_pallet_identifier "$next_bun")$reset_color"
   if [ "$next_failed" == "true" ]; then
-    echo "${purple_color}Warning:$reset_color because the pending version had already failed during a past boot attempt, future boots will instead fall back to the currently-booted version: $(assemble_pallet_identifier "$current_bun")"
-    echo 'You can try the pending version again on the next boot, by running: forklift stage set-next-result pending'
+    echo -e "${purple_color}Warning:$reset_color because the pending version had already failed during a past boot attempt, future boots will instead fall back to the currently-booted version."
+    echo "You can try the pending version again on the next boot, by running: forklift stage set-next-result pending"
   fi
 fi
 echo "Local pallet:          $local_plt_path@$local_plt_version"
