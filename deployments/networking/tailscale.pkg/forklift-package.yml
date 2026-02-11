@@ -20,4 +20,4 @@ features:
     provides:
       file-exports:
         - description: MOTD message reporting the Tailscale DNS name, if available
-          target: overlays/etc/update-motd.d/99-tailscale
+          target: overlays/etc/update-motd.d/50-tailscale

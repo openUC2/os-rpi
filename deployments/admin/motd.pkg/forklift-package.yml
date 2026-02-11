@@ -12,5 +12,7 @@ deployment:
     file-exports:
       - description: Empty main MOTD message
         target: overlays/etc/motd
+      - description: No USB gadget MOTD message
+        target: overlays/etc/update-motd.d/99-rpi-usb-gadget
       - description: OS-specific MOTD message
         target: overlays/etc/update-motd.d/1-os
