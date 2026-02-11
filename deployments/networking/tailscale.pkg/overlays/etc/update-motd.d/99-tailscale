@@ -10,5 +10,6 @@ fi
 
 # Load and string-interpolate templates:
 if [ "$tailscale_dns_name" != "" ]; then
+  echo
   echo "Tailscale DNS name: $tailscale_dns_name"
 fi
