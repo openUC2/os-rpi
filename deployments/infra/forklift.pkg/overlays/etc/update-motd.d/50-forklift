@@ -11,8 +11,8 @@ if which forklift >/dev/null; then
   forklift_version="$(forklift --version | sed 's~^forklift version ~~')"
   local_plt_dir="$(forklift plt locate-file /)"
   upgrade_query="$(forklift plt show-upgrade-query)"
-  forklift plt check-upgrade 2>&1 >/dev/null        # FIXME: this is a workaround for spurious printing to stdout in Forklift v0.8.0
-  upgrade_available="$(forklift plt check-upgrade)" # TODO: cache this in the filesystem for faster MOTD generation!
+  sudo -u pi forklift plt check-upgrade 2>&1 >/dev/null        # FIXME: this is a workaround for spurious printing to stdout in Forklift v0.8.0
+  upgrade_available="$(sudo -u pi forklift plt check-upgrade)" # TODO: cache this in the filesystem for faster MOTD generation!
 fi
 
 factory_reset_bun=""
