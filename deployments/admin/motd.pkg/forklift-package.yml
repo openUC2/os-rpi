@@ -10,5 +10,7 @@ package:
 deployment:
   provides:
     file-exports:
-      - description: Core MOTD message
+      - description: Empty main MOTD message
         target: overlays/etc/motd
+      - description: OS-specific MOTD message
+        target: overlays/etc/update-motd.d/1-os
