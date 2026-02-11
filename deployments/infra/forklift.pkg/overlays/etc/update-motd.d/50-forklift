@@ -38,12 +38,12 @@ if [ "$local_plt_dir" != "" ] && which forklift >/dev/null && which git >/dev/nu
     local_plt_version="$local_plt_tag"
   else
     local_plt_branch="$(git -C "$local_plt_dir" symbolic-ref -q --short HEAD)"
-    if [ "$local_plt_branch" != ""]; then
+    if [ "$local_plt_branch" != "" ]; then
       local_plt_version="($local_plt_branch) → "
     fi
 
     local_plt_tag="$(git -C "$local_plt_dir" describe --tags --abbrev=0 || echo "v0.0.0")"
-    if [ "$local_plt_tag" != ""]; then
+    if [ "$local_plt_tag" != "" ]; then
       local_plt_version="$local_plt_version($local_plt_tag) + "
     fi
 
@@ -54,7 +54,7 @@ if [ "$local_plt_dir" != "" ] && which forklift >/dev/null && which git >/dev/nu
   fi
 
   local_plt_changes="$(git status --porcelain)"
-  if test "$local_plt_changes" != ""; then
+  if [ "$local_plt_changes" != "" ]; then
     local_plt_version="$local_plt_version (with uncommitted changes)"
   fi
 fi
