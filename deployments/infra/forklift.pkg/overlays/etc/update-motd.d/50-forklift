@@ -2,10 +2,14 @@
 
 export FORKLIFT_STAGE_STORE=/var/lib/forklift/stages
 
+forklift_version=""
 factory_reset_bun=""
 current_bun=""
 next_bun=""
 next_failed="" # null, true, or false
+if which forklift >/dev/null; then
+  forklift_version="$(forklift --version | sed 's~^forklift version ~~')"
+fi
 if which forklift >/dev/null && which gojq >/dev/null; then
   factory_reset_bun="$(forklift stage locate-bun factory-reset)"
   current_bun="$(forklift stage locate-bun current)"
@@ -33,6 +37,11 @@ assemble_pallet_identifier() {
 
 echo
 if [ "$factory_reset_bun" == "" ]; then
+  echo "Couldn't determine the active version of Forklift!"
+else
+  echo "Forklift: $forklift_version"
+fi
+if [ "$factory_reset_bun" == "" ]; then
   echo "Couldn't determine the originally-installed version of the OS!"
 else
   echo "Originally-installed OS:          $(assemble_pallet_identifier "$factory_reset_bun")"
@@ -51,4 +60,3 @@ elif [ "$next_bun" != "$current_bun" ]; then
     echo 'You can try to boot into the next pallet again by running: forklift stage set-next-result pending'
   fi
 fi
-echo
