@@ -11,8 +11,11 @@ if which forklift >/dev/null; then
   forklift_version="$(forklift --version | sed 's~^forklift version ~~')"
   local_plt_dir="$(forklift plt locate-file /)"
   upgrade_query="$(forklift plt show-upgrade-query)"
-  sudo -u pi forklift plt check-upgrade 1>&2                   # FIXME: this is a workaround for spurious printing to stdout in Forklift v0.8.0
-  upgrade_available="$(sudo -u pi forklift plt check-upgrade)" # TODO: cache this in the filesystem for faster MOTD generation!
+  sudo -u pi forklift plt check-upgrade 1>&2 # FIXME: this is a workaround for spurious printing to stdout in Forklift v0.8.0
+  upgrade_available="$(
+    sudo -u pi forklift plt check-upgrade |
+      sed 's~^.* -> ~~'
+  )" # TODO: cache this in the filesystem for faster MOTD generation!
 fi
 
 factory_reset_bun=""
@@ -116,6 +119,7 @@ else
 fi
 if [ "$upgrade_available" != "" ]; then
   green_color="\e[0;32m"
-  echo -e "$green_color$upgrade_available"
+  reset_color="\033[0m"
+  echo -e "Upgrade available:       $green_color$upgrade_available$reset_color"
   echo "To upgrade, run: forklift plt upgrade && sudo reboot"
 fi
