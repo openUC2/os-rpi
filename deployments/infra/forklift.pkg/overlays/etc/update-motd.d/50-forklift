@@ -114,7 +114,7 @@ elif [ "$next_bun" != "$current_bun" ]; then
 fi
 echo -e "Local pallet:          $local_plt_path@$local_plt_version"
 if [ "$local_plt_changes" != "" ]; then
-  echo "$local_plt_changes"
+  echo -e "${purple_color}$local_plt_changes$reset_color"
 fi
 if [ "$upgrade_query" == "" ]; then
   echo "Couldn't determine the upgrade query to check for upgrades!"
