@@ -1,6 +1,7 @@
 #!/bin/bash
 
 export FORKLIFT_STAGE_STORE=/var/lib/forklift/stages
+export FORKLIFT_WORKSPACE=/home/pi
 
 forklift_version=""
 local_plt_dir=""
