@@ -116,6 +116,6 @@ else
 fi
 if [ "$upgrade_available" != "" ]; then
   green_color="\e[0;32m"
-  echo "$green_color$upgrade_available"
+  echo -e "$green_color$upgrade_available"
   echo "To upgrade, run: forklift plt upgrade && sudo reboot"
 fi
