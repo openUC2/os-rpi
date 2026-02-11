@@ -5,9 +5,11 @@ export FORKLIFT_WORKSPACE=/home/pi
 
 forklift_version=""
 local_plt_dir=""
+upgrade_query=""
 if which forklift >/dev/null; then
   forklift_version="$(forklift --version | sed 's~^forklift version ~~')"
   local_plt_dir="$(forklift plt locate-file /)"
+  upgrade_query="$(forklift plt show-upgrade-query)"
 fi
 
 factory_reset_bun=""
@@ -56,7 +58,7 @@ if [ "$local_plt_dir" != "" ] && which forklift >/dev/null && which git >/dev/nu
 
   local_plt_changes="$(sudo -u pi git -C "$local_plt_dir" status --porcelain)"
   if [ "$local_plt_changes" != "" ]; then
-    local_plt_version="$local_plt_version (with uncommitted changes)"
+    local_plt_version="$local_plt_version with uncommitted changes:"
   fi
 fi
 
@@ -69,7 +71,7 @@ assemble_pallet_identifier() {
   is_clean="$(echo "$bundle_manifest" | gojq --yaml-input ".pallet.clean" -r)"
   result="$pallet_path@$pallet_version"
   if [ "$is_clean" != "true" ]; then
-    result="$result (with uncommitted changes)"
+    result="$result with uncommitted changes"
   fi
 
   echo "$result"
@@ -103,4 +105,9 @@ fi
 echo "Local pallet:            $local_plt_path@$local_plt_version"
 if [ "$local_plt_changes" != "" ]; then
   echo "$local_plt_changes"
+fi
+if [ "$upgrade_query" == "" ]; then
+  echo "Couldn't determine the upgrade query to check for upgrades!"
+else
+  echo "Upgrade source:        $upgrade_query"
 fi
