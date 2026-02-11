@@ -239,6 +239,7 @@ jobs:
             sed -i \
               -e "s~^XKBLAYOUT=.*~XKBLAYOUT=\"${{ env.DEFAULT_KEYBOARD_LAYOUT }}\"~" \
               /etc/default/keyboard
+            rm -f /etc/ssh/sshd_config.d/rename_user.conf
             systemctl disable userconfig.service
 
             # This is needed to have the login prompt on tty1 (so that a user with a keyboard can

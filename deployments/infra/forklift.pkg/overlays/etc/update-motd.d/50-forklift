@@ -1,0 +1,127 @@
+#!/bin/bash
+
+export FORKLIFT_STAGE_STORE=/var/lib/forklift/stages
+export FORKLIFT_WORKSPACE=/home/pi
+
+green_color="\e[0;32m"
+purple_color="\e[0;35m"
+reset_color="\033[0m"
+
+forklift_version=""
+local_plt_dir=""
+upgrade_query=""
+upgrade_available=""
+if which forklift >/dev/null; then
+  forklift_version="$(forklift --version | sed 's~^forklift version ~~')"
+  local_plt_dir="$(forklift plt locate-file /)"
+  upgrade_query="$(forklift plt show-upgrade-query)"
+  sudo -u pi forklift plt check-upgrade 1>&2 # FIXME: this is a workaround for spurious printing to stdout in Forklift v0.8.0
+  upgrade_available="$(
+    sudo -u pi forklift plt check-upgrade |
+      sed 's~^.* -> ~~'
+  )" # TODO: cache this in the filesystem for faster MOTD generation! Otherwise, connecting by SSH is a bit slower.
+fi
+
+factory_reset_bun=""
+current_bun=""
+next_bun=""
+next_failed="" # null, true, or false
+local_plt_path=""
+if which forklift >/dev/null && which gojq >/dev/null; then
+  factory_reset_bun="$(forklift stage locate-bun factory-reset)"
+  current_bun="$(forklift stage locate-bun current)"
+  next_bun="$(forklift stage locate-bun next)"
+  next_failed="$(
+    cat "$FORKLIFT_STAGE_STORE/forklift-stage-store.yml" |
+      gojq --yaml-input '.staged."next-failed"' -r
+  )"
+  local_plt_path="$(
+    cat "$(forklift plt locate-file forklift-pallet.yml)" |
+      gojq --yaml-input '.pallet.path' -r
+  )"
+fi
+
+local_plt_version=""
+local_plt_changes=""
+# TODO: move the version string-building logic to a Forklift subcommand!
+if [ "$local_plt_dir" != "" ] && which forklift >/dev/null && which git >/dev/null; then
+  local_plt_tag="$(sudo -u pi git -C "$local_plt_dir" describe --tags --exact-match)"
+  if [ "$local_plt_tag" != "" ]; then
+    local_plt_version="$local_plt_tag"
+  else
+    local_plt_branch="$(sudo -u pi git -C "$local_plt_dir" symbolic-ref -q --short HEAD)"
+
+    local_plt_tag="$(sudo -u pi git -C "$local_plt_dir" describe --tags --abbrev=0 || echo "v0.0.0")"
+    if [ "$local_plt_tag" != "" ]; then
+      local_plt_version="$local_plt_version$local_plt_tag + "
+    fi
+
+    local_plt_commit="$(sudo -u pi git -C "$local_plt_dir" rev-parse --short=12 HEAD)"
+    local_plt_time_unix="$(sudo -u pi git -C "$local_plt_dir" show --no-patch --format=%ct HEAD)"
+    local_plt_time="$(date --date="@$local_plt_time_unix" --utc "+%Y%m%d%H%M%S")"
+    local_plt_version="$local_plt_version$local_plt_time-$local_plt_commit"
+
+    if [ "$local_plt_branch" != "" ]; then
+      local_plt_version="$local_plt_version (branch: $local_plt_branch)"
+    fi
+  fi
+
+  local_plt_changes="$(sudo -u pi git -C "$local_plt_dir" status --porcelain)"
+  if [ "$local_plt_changes" != "" ]; then
+    local_plt_version="$local_plt_version ${purple_color}with uncommitted changes$reset_color:"
+  fi
+fi
+
+assemble_pallet_identifier() {
+  local bundle_path="$1"
+
+  bundle_manifest="$(cat "$bundle_path/forklift-bundle.yml")"
+  pallet_path="$(echo "$bundle_manifest" | gojq --yaml-input ".pallet.path" -r)"
+  pallet_version="$(echo "$bundle_manifest" | gojq --yaml-input ".pallet.version" -r)"
+  is_clean="$(echo "$bundle_manifest" | gojq --yaml-input ".pallet.clean" -r)"
+  result="$pallet_path@$pallet_version"
+  if [ "$is_clean" != "true" ]; then
+    result="$result ${purple_color}with uncommitted changes$reset_color"
+  fi
+
+  echo "$result"
+}
+
+echo
+if [ "$factory_reset_bun" == "" ]; then
+  echo "Couldn't determine the active version of Forklift!"
+else
+  echo "Forklift: $forklift_version"
+fi
+if [ "$factory_reset_bun" == "" ]; then
+  echo "Couldn't determine the originally-installed version of the OS!"
+else
+  echo -e "Originally installed:  $(assemble_pallet_identifier "$factory_reset_bun")"
+fi
+if [ "$current_bun" == "" ]; then
+  echo "Couldn't determine the currently-booted Forklift pallet!"
+else
+  echo -e "Currently booted:      $(assemble_pallet_identifier "$current_bun")"
+fi
+if [ "$next_bun" == "" ]; then
+  echo "Couldn't determine the next Forklift pallet to boot into!"
+elif [ "$next_bun" != "$current_bun" ]; then
+  echo -e "${green_color}Pending for next boot: $(assemble_pallet_identifier "$next_bun")$reset_color"
+  if [ "$next_failed" == "true" ]; then
+    echo -e "${purple_color}Warning:$reset_color because the pending version had already failed during a past boot attempt, future boots will instead fall back to the currently-booted version."
+    echo "You can try the pending version again on the next boot, by running: forklift stage set-next-result pending"
+  fi
+fi
+echo -e "Local pallet:          $local_plt_path@$local_plt_version"
+if [ "$local_plt_changes" != "" ]; then
+  echo -e "${purple_color}$local_plt_changes$reset_color"
+fi
+if [ "$upgrade_query" == "" ]; then
+  echo "Couldn't determine the upgrade query to check for upgrades!"
+else
+  echo "Upgrade source:        $upgrade_query"
+fi
+if [ "$upgrade_available" != "" ]; then
+  echo -e "${green_color}Upgrade available:     $upgrade_available$reset_color"
+  echo "To upgrade, run: forklift plt upgrade && sudo reboot"
+fi
