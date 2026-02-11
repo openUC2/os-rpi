@@ -33,27 +33,27 @@ local_plt_version=""
 local_plt_changes=""
 # TODO: move the version string-building logic to a Forklift subcommand!
 if [ "$local_plt_dir" != "" ] && which forklift >/dev/null && which git >/dev/null; then
-  local_plt_tag="$(git -C "$local_plt_dir" describe --tags --exact-match)"
+  local_plt_tag="$(sudo -u pi git -C "$local_plt_dir" describe --tags --exact-match)"
   if [ "$local_plt_tag" != "" ]; then
     local_plt_version="$local_plt_tag"
   else
-    local_plt_branch="$(git -C "$local_plt_dir" symbolic-ref -q --short HEAD)"
+    local_plt_branch="$(sudo -u pi git -C "$local_plt_dir" symbolic-ref -q --short HEAD)"
     if [ "$local_plt_branch" != "" ]; then
       local_plt_version="($local_plt_branch) → "
     fi
 
-    local_plt_tag="$(git -C "$local_plt_dir" describe --tags --abbrev=0 || echo "v0.0.0")"
+    local_plt_tag="$(sudo -u pi git -C "$local_plt_dir" describe --tags --abbrev=0 || echo "v0.0.0")"
     if [ "$local_plt_tag" != "" ]; then
       local_plt_version="$local_plt_version$local_plt_tag + "
     fi
 
-    local_plt_commit="$(git -C "$local_plt_dir" rev-parse --short=12 HEAD)"
-    local_plt_time_unix="$(git -C "$local_plt_dir" show --no-patch --format=%ct HEAD)"
+    local_plt_commit="$(sudo -u pi git -C "$local_plt_dir" rev-parse --short=12 HEAD)"
+    local_plt_time_unix="$(sudo -u pi git -C "$local_plt_dir" show --no-patch --format=%ct HEAD)"
     local_plt_time="$(date --date="@$local_plt_time_unix" --utc "+%Y%m%d%H%M%")"
     local_plt_version="$local_plt_version$local_plt_time-$local_plt_commit"
   fi
 
-  local_plt_changes="$(git -C "$local_plt_dir" status --porcelain)"
+  local_plt_changes="$(sudo -u pi git -C "$local_plt_dir" status --porcelain)"
   if [ "$local_plt_changes" != "" ]; then
     local_plt_version="$local_plt_version (with uncommitted changes)"
   fi
@@ -99,7 +99,7 @@ elif [ "$next_bun" != "$current_bun" ]; then
     echo 'You can try the pending version again on the next boot, by running: forklift stage set-next-result pending'
   fi
 fi
-echo "Local pallet:            $(GIT_TRACE=1 GIT_TRACE_SETUP=1 git -C "$local_plt_dir" rev-parse --show-toplevel 2>&1)"
+echo "Local pallet:            $(sudo -u pi GIT_TRACE=1 GIT_TRACE_SETUP=1 git -C "$local_plt_dir" rev-parse --show-toplevel 2>&1)"
 echo "Local pallet:            $local_plt_path@$local_plt_version"
 if [ "$local_plt_changes" != "" ]; then
   echo "$local_plt_changes"
