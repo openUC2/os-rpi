@@ -1,0 +1,4 @@
+package: /deployments/infra/forklift.pkg
+features:
+  - motd
+disabled: false

@@ -1,0 +1,15 @@
+package:
+  description: Forklift tool ambiently provided by the OS
+  maintainers:
+    - name: Ethan Li
+      email: lietk12@gmail.com
+  license: Apache-2.0
+  sources:
+    - https://github.com/forklift-run/forklift
+
+features:
+  motd:
+    provides:
+      file-exports:
+        - description: MOTD message reporting information about the OS via Forklift
+          target: overlays/etc/update-motd.d/50-forklift
