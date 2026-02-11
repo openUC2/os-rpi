@@ -44,7 +44,7 @@ if [ "$local_plt_dir" != "" ] && which forklift >/dev/null && which git >/dev/nu
 
     local_plt_tag="$(git -C "$local_plt_dir" describe --tags --abbrev=0 || echo "v0.0.0")"
     if [ "$local_plt_tag" != "" ]; then
-      local_plt_version="$local_plt_version($local_plt_tag) + "
+      local_plt_version="$local_plt_version$local_plt_tag + "
     fi
 
     local_plt_commit="$(git -C "$local_plt_dir" rev-parse --short=12 HEAD)"
@@ -99,6 +99,7 @@ elif [ "$next_bun" != "$current_bun" ]; then
     echo 'You can try the pending version again on the next boot, by running: forklift stage set-next-result pending'
   fi
 fi
+echo "Local pallet:            $local_plt_dir"
 echo "Local pallet:            $local_plt_path@$local_plt_version"
 if [ "$local_plt_changes" != "" ]; then
   echo "$local_plt_changes"
