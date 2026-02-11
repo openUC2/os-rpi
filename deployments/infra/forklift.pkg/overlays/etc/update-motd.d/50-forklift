@@ -3,13 +3,17 @@
 export FORKLIFT_STAGE_STORE=/var/lib/forklift/stages
 
 forklift_version=""
+local_plt_dir=""
+if which forklift >/dev/null; then
+  forklift_version="$(forklift --version | sed 's~^forklift version ~~')"
+  local_plt_dir="$(forklift plt locate-file /)"
+fi
+
 factory_reset_bun=""
 current_bun=""
 next_bun=""
 next_failed="" # null, true, or false
-if which forklift >/dev/null; then
-  forklift_version="$(forklift --version | sed 's~^forklift version ~~')"
-fi
+local_plt_path=""
 if which forklift >/dev/null && which gojq >/dev/null; then
   factory_reset_bun="$(forklift stage locate-bun factory-reset)"
   current_bun="$(forklift stage locate-bun current)"
@@ -18,6 +22,40 @@ if which forklift >/dev/null && which gojq >/dev/null; then
     cat "$FORKLIFT_STAGE_STORE/forklift-stage-store.yml" |
       gojq --yaml-input '.staged."next-failed"' -r
   )"
+  local_plt_path="$(
+    cat "$(forklift plt locate-file forklift-pallet.yml)" |
+      gojq --yaml-input '.pallet.path' -r
+  )"
+fi
+
+local_plt_version=""
+local_plt_changes=""
+# TODO: move the version string-building logic to a Forklift subcommand!
+if [ "$local_plt_dir" != "" ] && which forklift >/dev/null && which git >/dev/null; then
+  local_plt_tag="$(git -C "$local_plt_dir" describe --tags --exact-match)"
+  if [ "$local_plt_tag" != "" ]; then
+    local_plt_version="$local_plt_tag"
+  else
+    local_plt_branch="$(git -C "$local_plt_dir" symbolic-ref -q --short HEAD)"
+    if [ "$local_plt_branch" != ""]; then
+      local_plt_version="($local_plt_branch) → "
+    fi
+
+    local_plt_tag="$(git -C "$local_plt_dir" describe --tags --abbrev=0 || echo "v0.0.0")"
+    if [ "$local_plt_tag" != ""]; then
+      local_plt_version="$local_plt_version($local_plt_tag) + "
+    fi
+
+    local_plt_commit="$(git -C "$local_plt_dir" rev-parse --short=12 HEAD)"
+    local_plt_time_unix="$(git -C "$local_plt_dir" show --no-patch --format=%ct HEAD)"
+    local_plt_time="$(date --date="@$local_plt_time_unix" --utc "+%Y%m%d%H%M%")"
+    local_plt_version="$local_plt_version$local_plt_time-$local_plt_commit"
+  fi
+
+  local_plt_changes="$(git status --porcelain)"
+  if test "$local_plt_changes" != ""; then
+    local_plt_version="$local_plt_version (with uncommitted changes)"
+  fi
 fi
 
 assemble_pallet_identifier() {
@@ -27,12 +65,12 @@ assemble_pallet_identifier() {
   pallet_path="$(echo "$bundle_manifest" | gojq --yaml-input ".pallet.path" -r)"
   pallet_version="$(echo "$bundle_manifest" | gojq --yaml-input ".pallet.version" -r)"
   is_clean="$(echo "$bundle_manifest" | gojq --yaml-input ".pallet.clean" -r)"
-  clean_string=""
+  result="$pallet_path@$pallet_version"
   if [ "$is_clean" != "true" ]; then
-    clean_string=" (with uncommitted changes)"
+    result="$result (with uncommitted changes)"
   fi
 
-  echo "$pallet_path@$pallet_version$clean_string"
+  echo "$result"
 }
 
 echo
@@ -44,19 +82,23 @@ fi
 if [ "$factory_reset_bun" == "" ]; then
   echo "Couldn't determine the originally-installed version of the OS!"
 else
-  echo "Originally-installed OS:          $(assemble_pallet_identifier "$factory_reset_bun")"
+  echo "Originally-installed OS: $(assemble_pallet_identifier "$factory_reset_bun")"
 fi
 if [ "$current_bun" == "" ]; then
   echo "Couldn't determine the currently-booted Forklift pallet!"
 else
-  echo "Currently-booted Forklift pallet: $(assemble_pallet_identifier "$current_bun")"
+  echo "Currently booted:        $(assemble_pallet_identifier "$current_bun")"
 fi
 if [ "$next_bun" == "" ]; then
   echo "Couldn't determine the next Forklift pallet to boot into!"
 elif [ "$next_bun" != "$current_bun" ]; then
-  echo "Next Forklift pallet to boot as:  $(assemble_pallet_identifier "$current_bun")"
+  echo "Pending for next boot:   $(assemble_pallet_identifier "$current_bun")"
   if [ "$next_failed" == "true" ]; then
-    echo "Warning: because the next pallet already failed during a previous boot attempt, future boots will instead fall back to the currently-booted pallet: $(assemble_pallet_identifier "$current_bun")"
-    echo 'You can try to boot into the next pallet again by running: forklift stage set-next-result pending'
+    echo "Warning: because the pending version had already failed during a past boot attempt, future boots will instead fall back to the currently-booted version: $(assemble_pallet_identifier "$current_bun")"
+    echo 'You can try the pending version again on the next boot, by running: forklift stage set-next-result pending'
   fi
+fi
+echo "Local pallet:            $local_plt_path@$local_plt_version"
+if [ "$local_plt_changes" != "" ]; then
+  echo "$local_plt_changes"
 fi
