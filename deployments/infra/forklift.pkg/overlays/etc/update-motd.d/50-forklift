@@ -89,12 +89,12 @@ fi
 if [ "$factory_reset_bun" == "" ]; then
   echo "Couldn't determine the originally-installed version of the OS!"
 else
-  echo "Originally-installed OS: $(assemble_pallet_identifier "$factory_reset_bun")"
+  echo "Originally installed: $(assemble_pallet_identifier "$factory_reset_bun")"
 fi
 if [ "$current_bun" == "" ]; then
   echo "Couldn't determine the currently-booted Forklift pallet!"
 else
-  echo "Currently booted:        $(assemble_pallet_identifier "$current_bun")"
+  echo "Currently booted:     $(assemble_pallet_identifier "$current_bun")"
 fi
 if [ "$next_bun" == "" ]; then
   echo "Couldn't determine the next Forklift pallet to boot into!"
@@ -105,14 +105,14 @@ elif [ "$next_bun" != "$current_bun" ]; then
     echo 'You can try the pending version again on the next boot, by running: forklift stage set-next-result pending'
   fi
 fi
-echo "Local pallet:            $local_plt_path@$local_plt_version"
+echo "Local pallet:         $local_plt_path@$local_plt_version"
 if [ "$local_plt_changes" != "" ]; then
   echo "$local_plt_changes"
 fi
 if [ "$upgrade_query" == "" ]; then
   echo "Couldn't determine the upgrade query to check for upgrades!"
 else
-  echo "Upgrade source:          $upgrade_query"
+  echo "Upgrade source:       $upgrade_query"
 fi
 if [ "$upgrade_available" != "" ]; then
   green_color="\e[0;32m"
