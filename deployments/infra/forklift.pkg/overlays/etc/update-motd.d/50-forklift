@@ -15,7 +15,7 @@ if which forklift >/dev/null; then
   upgrade_available="$(
     sudo -u pi forklift plt check-upgrade |
       sed 's~^.* -> ~~'
-  )" # TODO: cache this in the filesystem for faster MOTD generation!
+  )" # TODO: cache this in the filesystem for faster MOTD generation! Otherwise, connecting by SSH is a bit slower.
 fi
 
 factory_reset_bun=""
