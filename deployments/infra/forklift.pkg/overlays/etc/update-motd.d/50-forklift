@@ -102,7 +102,7 @@ fi
 if [ "$next_bun" == "" ]; then
   echo "Couldn't determine the next Forklift pallet to boot into!"
 elif [ "$next_bun" != "$current_bun" ]; then
-  echo "Pending for next boot: $(assemble_pallet_identifier "$current_bun")"
+  echo "Pending for next boot: $(assemble_pallet_identifier "$next_bun")"
   if [ "$next_failed" == "true" ]; then
     echo "Warning: because the pending version had already failed during a past boot attempt, future boots will instead fall back to the currently-booted version: $(assemble_pallet_identifier "$current_bun")"
     echo 'You can try the pending version again on the next boot, by running: forklift stage set-next-result pending'
