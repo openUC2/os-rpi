@@ -49,7 +49,7 @@ if [ "$local_plt_dir" != "" ] && which forklift >/dev/null && which git >/dev/nu
 
     local_plt_commit="$(sudo -u pi git -C "$local_plt_dir" rev-parse --short=12 HEAD)"
     local_plt_time_unix="$(sudo -u pi git -C "$local_plt_dir" show --no-patch --format=%ct HEAD)"
-    local_plt_time="$(date --date="@$local_plt_time_unix" --utc "+%Y%m%d%H%M%")"
+    local_plt_time="$(date --date="@$local_plt_time_unix" --utc "+%Y%m%d%H%M%s")"
     local_plt_version="$local_plt_version$local_plt_time-$local_plt_commit"
   fi
 
@@ -99,7 +99,6 @@ elif [ "$next_bun" != "$current_bun" ]; then
     echo 'You can try the pending version again on the next boot, by running: forklift stage set-next-result pending'
   fi
 fi
-echo "Local pallet:            $(sudo -u pi GIT_TRACE=1 GIT_TRACE_SETUP=1 git -C "$local_plt_dir" rev-parse --show-toplevel 2>&1)"
 echo "Local pallet:            $local_plt_path@$local_plt_version"
 if [ "$local_plt_changes" != "" ]; then
   echo "$local_plt_changes"
