@@ -38,9 +38,6 @@ if [ "$local_plt_dir" != "" ] && which forklift >/dev/null && which git >/dev/nu
     local_plt_version="$local_plt_tag"
   else
     local_plt_branch="$(sudo -u pi git -C "$local_plt_dir" symbolic-ref -q --short HEAD)"
-    if [ "$local_plt_branch" != "" ]; then
-      local_plt_version="($local_plt_branch) → "
-    fi
 
     local_plt_tag="$(sudo -u pi git -C "$local_plt_dir" describe --tags --abbrev=0 || echo "v0.0.0")"
     if [ "$local_plt_tag" != "" ]; then
@@ -51,6 +48,10 @@ if [ "$local_plt_dir" != "" ] && which forklift >/dev/null && which git >/dev/nu
     local_plt_time_unix="$(sudo -u pi git -C "$local_plt_dir" show --no-patch --format=%ct HEAD)"
     local_plt_time="$(date --date="@$local_plt_time_unix" --utc "+%Y%m%d%H%M%S")"
     local_plt_version="$local_plt_version$local_plt_time-$local_plt_commit"
+
+    if [ "$local_plt_branch" != "" ]; then
+      local_plt_version="$local_plt_version (branch: $local_plt_branch)"
+    fi
   fi
 
   local_plt_changes="$(sudo -u pi git -C "$local_plt_dir" status --porcelain)"
