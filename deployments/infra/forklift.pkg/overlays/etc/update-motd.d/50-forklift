@@ -49,7 +49,7 @@ if [ "$local_plt_dir" != "" ] && which forklift >/dev/null && which git >/dev/nu
 
     local_plt_commit="$(sudo -u pi git -C "$local_plt_dir" rev-parse --short=12 HEAD)"
     local_plt_time_unix="$(sudo -u pi git -C "$local_plt_dir" show --no-patch --format=%ct HEAD)"
-    local_plt_time="$(date --date="@$local_plt_time_unix" --utc "+%Y%m%d%H%M%s")"
+    local_plt_time="$(date --date="@$local_plt_time_unix" --utc "+%Y%m%d%H%M%S")"
     local_plt_version="$local_plt_version$local_plt_time-$local_plt_commit"
   fi
 
