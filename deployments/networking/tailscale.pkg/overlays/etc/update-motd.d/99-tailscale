@@ -13,11 +13,5 @@ fi
 if [ "$tailscale_dns_name" != "" ]; then
   echo
   echo "Tailscale DNS name: $tailscale_dns_name"
-  if [ "$tailscale_dns_name" == "$tailscale_cert_domain" ]; then
-    echo "Tailscale HTTPS URL: https://$tailscale_cert_domain"
-  else
-    echo "Tailscale HTTP URL: http://$tailscale_cert_domain"
-  fi
-
   echo
 fi
