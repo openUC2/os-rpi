@@ -120,6 +120,6 @@ fi
 if [ "$upgrade_available" != "" ]; then
   green_color="\e[0;32m"
   reset_color="\033[0m"
-  echo -e "Upgrade available:       $green_color$upgrade_available$reset_color"
+  echo -e "${green_color}Upgrade available:       $upgrade_available$reset_color"
   echo "To upgrade, run: forklift plt upgrade && sudo reboot"
 fi
