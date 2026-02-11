@@ -3,6 +3,10 @@
 export FORKLIFT_STAGE_STORE=/var/lib/forklift/stages
 export FORKLIFT_WORKSPACE=/home/pi
 
+green_color="\e[0;32m"
+purple_color="\e[0;35m"
+reset_color="\033[0m"
+
 forklift_version=""
 local_plt_dir=""
 upgrade_query=""
@@ -102,9 +106,9 @@ fi
 if [ "$next_bun" == "" ]; then
   echo "Couldn't determine the next Forklift pallet to boot into!"
 elif [ "$next_bun" != "$current_bun" ]; then
-  echo "Pending for next boot: $(assemble_pallet_identifier "$next_bun")"
+  echo -e "${green_color}Pending for next boot: $(assemble_pallet_identifier "$next_bun")$reset_color"
   if [ "$next_failed" == "true" ]; then
-    echo "Warning: because the pending version had already failed during a past boot attempt, future boots will instead fall back to the currently-booted version: $(assemble_pallet_identifier "$current_bun")"
+    echo "${purple_color}Warning:$reset_color because the pending version had already failed during a past boot attempt, future boots will instead fall back to the currently-booted version: $(assemble_pallet_identifier "$current_bun")"
     echo 'You can try the pending version again on the next boot, by running: forklift stage set-next-result pending'
   fi
 fi
@@ -118,8 +122,6 @@ else
   echo "Upgrade source:        $upgrade_query"
 fi
 if [ "$upgrade_available" != "" ]; then
-  green_color="\e[0;32m"
-  reset_color="\033[0m"
   echo -e "${green_color}Upgrade available:     $upgrade_available$reset_color"
   echo "To upgrade, run: forklift plt upgrade && sudo reboot"
 fi
