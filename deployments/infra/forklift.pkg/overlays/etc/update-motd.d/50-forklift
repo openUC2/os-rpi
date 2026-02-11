@@ -100,6 +100,7 @@ elif [ "$next_bun" != "$current_bun" ]; then
   fi
 fi
 echo "Local pallet:            git -C $local_plt_dir symbolic-ref -q --short HEAD"
+echo "Local pallet:            $(git -C "$local_plt_dir" symbolic-ref -q --short HEAD)"
 echo "Local pallet:            $local_plt_path@$local_plt_version"
 if [ "$local_plt_changes" != "" ]; then
   echo "$local_plt_changes"
