@@ -6,10 +6,16 @@ tailscale_dns_name=""
 if which tailscale >/dev/null && which gojq >/dev/null && systemctl is-active --quiet tailscaled.service; then
   tailscale_status="$(tailscale status --peers=false --json)"
   tailscale_dns_name="$(echo "$tailscale_status" | gojq ".Self.DNSName" -r | sed 's~\.$~~')"
+  tailscale_cert_domain="$(echo "$tailscale_status" | gojq ".CertDomains[0]" -r)"
 fi
 
 # Load and string-interpolate templates:
 if [ "$tailscale_dns_name" != "" ]; then
   echo
   echo "Tailscale DNS name: $tailscale_dns_name"
+  if [ "$tailscale_dns_name" == "$tailscale_cert_domain" ]; then
+    echo "Tailscale HTTPS URL: https://$tailscale_cert_domain"
+  fi
+
+  echo
 fi
