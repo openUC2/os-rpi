@@ -119,7 +119,7 @@ fi
 if [ "$upgrade_query" == "" ]; then
   echo "Couldn't determine the upgrade query to check for upgrades!"
 else
-  echo "Upgrade source:        $upgrade_query"
+  echo "Update  source:        $upgrade_query"
 fi
 if [ "$upgrade_available" != "" ]; then
   echo -e "${green_color}Upgrade available:     $upgrade_available$reset_color"
