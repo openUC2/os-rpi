@@ -1,0 +1,17 @@
+package:
+  description: Automatically sets the Wi-Fi country to match the kernel boot cmdline setting
+  maintainers:
+    - name: Ethan Li
+      email: lietk12@gmail.com
+  license: Apache-2.0
+  sources:
+    # Auto-generation scripts (Apache-2.0):
+    - https://github.com/openUC2/rpi-imswitch-os
+
+deployment:
+  provides:
+    file-exports:
+      - description: systemd service to set the kernal Wi-Fi country during boot
+        target: overlays/usr/lib/systemd/system/set-wifi-country.service
+      - description: systemd service enablement for set-wifi-country.service
+        target: overlays/etc/systemd/system/multi-user.target.wants/set-wifi-country.service
