@@ -5,7 +5,7 @@ After=boot-init-root.service
 
 [Service]
 Type=oneshot
-ExecStart=sh -c 'iw reg set "$(sed -n \'s~.*cfg80211.ieee80211_regdom=\(\S*\).*~\1~p\' /boot/firmware/cmdline.txt)"'
+ExecStart=sh -c 'iw reg set "$(sed -n \'s~.*cfg80211.ieee80211_regdom=\\(\\S*\\).*~\\1~p\' /boot/firmware/cmdline.txt)"'
 ExecStartPost=iw reg get
 RemainAfterExit=yes
 
