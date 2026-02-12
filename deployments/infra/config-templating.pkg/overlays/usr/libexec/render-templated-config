@@ -4,8 +4,8 @@ hostname=""
 machine_name=""
 custom_domain=""
 tailscale_dns_name=""
-tailscale_ip_1=""
-tailscale_ip_2=""
+tailscale_ipv4=""
+tailscale_ipv6=""
 
 # Load values of interpolated variables:
 if [ -f /etc/hostname ]; then
@@ -35,9 +35,22 @@ if which tailscale >/dev/null && which gojq >/dev/null && systemctl is-active --
   tailscale_dns_name="$(echo "$tailscale_status" | gojq ".Self.DNSName" -r | sed 's~\.$~~')"
   echo "Tailscale DNS name: $tailscale_dns_name" >&2
   tailscale_ip_1="$(echo "$tailscale_status" | gojq ".Self.TailscaleIPs[0]" -r)"
-  echo "Tailscale IP address 1 (probably IPv4): $tailscale_ip_1" >&2
+  echo "Tailscale IP address 1: $tailscale_ip_1" >&2
   tailscale_ip_2="$(echo "$tailscale_status" | gojq ".Self.TailscaleIPs[1]" -r)"
-  echo "Tailscale IP address 2 (probably IPv6): $tailscale_ip_2" >&2
+  echo "Tailscale IP address 2: $tailscale_ip_2" >&2
+  if [[ "$tailscale_ip_1" =~ "." ]]; then
+    tailscale_ipv4="$tailscale_ip_1"
+  elif [[ "$tailscale_ip_2" =~ "." ]]; then
+    tailscale_ipv4="$tailscale_ip_2"
+  fi
+  if [[ "$tailscale_ip_1" =~ ":" ]]; then
+    tailscale_ipv6="$tailscale_ip_1"
+  elif [[ "$tailscale_ip_2" =~ ":" ]]; then
+    tailscale_ipv6="$tailscale_ip_2"
+  fi
+  echo "Tailscale IPv4 address: $tailscale_ipv4" >&2
+  echo "Tailscale IPv6 address: $tailscale_ipv6" >&2
+
 fi
 
 # Load and string-interpolate templates:
@@ -95,19 +108,19 @@ if [ "$tailscale_dns_name" = "" ]; then
   echo "Note: Tailscale DNS name was not set! Falling back to localhost" >&2
   tailscale_dns_name="localhost"
 fi
-if [ "$tailscale_ip_1" = "" ] || [ "$tailscale_ip_1" = "null" ]; then
-  echo "Note: Tailscale IP address 1 was not set! Falling back to localhost" >&2
-  tailscale_ip_1="localhost"
+if [ "$tailscale_ipv4" = "" ] || [ "$tailscale_ipv4" = "null" ]; then
+  echo "Note: Tailscale IPv4 address was not set! Falling back to localhost" >&2
+  tailscale_ipv4="localhost"
 fi
-if [ "$tailscale_ip_2" = "" ] || [ "$tailscale_ip_2" = "null" ]; then
-  echo "Note: Tailscale IP address 2 was not set! Falling back to localhost" >&2
-  tailscale_ip_2="localhost"
+if [ "$tailscale_ipv6" = "" ] || [ "$tailscale_ipv6" = "null" ]; then
+  echo "Note: Tailscale IPv6 address was not set! Falling back to localhost" >&2
+  tailscale_ipv6="localhost"
 fi
 config="$(
   echo "$config" | sed \
     -e "/^[^#]/ s~{tailscale-dns-name}~${tailscale_dns_name}~g" \
-    -e "/^[^#]/ s~{tailscale-ip-1}~${tailscale_ip_1}~g" \
-    -e "/^[^#]/ s~{tailscale-ip-2}~${tailscale_ip_2}~g"
+    -e "/^[^#]/ s~{tailscale-ipv4}~${tailscale_ipv4}~g" \
+    -e "/^[^#]/ s~{tailscale-ipv6}~${tailscale_ipv6}~g"
 )"
 
 echo "$config"
