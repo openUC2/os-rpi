@@ -6,12 +6,7 @@ Before=basic.target
 
 [Service]
 Type=oneshot
-ExecStartPre=rm -rf /run/init-root/as-%i/
-ExecStartPre=mkdir -p /run/init-root/
-ExecStart=cp -rT /boot/firmware/init-root/as-%i/ /run/init-root/as-%i/
-ExecStart=chown -R %i:%i /run/init-root/as-%i/
-ExecStart=cp -rTp /run/init-root/as-%i/ /
-ExecStartPost=find /boot/firmware/init-root/as-%i/ -type f -exec rm {} +
+ExecStart=bash -c '/usr/libexec/boot-init-root-from-dir %i'
 ExecStartPost=systemctl daemon-reload
 ExecStartPost=systemctl restart --no-block sockets.target timers.target multi-user.target default.target
 ExecStop=rm -rf /run/init-root/as-%i/

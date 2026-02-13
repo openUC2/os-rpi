@@ -12,16 +12,18 @@ deployment:
     file-exports:
       # `init-root-*.tar.gz` archives:
       - description: Shell script to extract init-root archives in the boot partition
-        target: overlays/usr/libexec/boot-init-root-extract-archives
+        target: overlays/usr/libexec/boot-init-root-from-archives
       - description: systemd service to extract init-root archives in the boot partition during boot
-        target: overlays/usr/lib/systemd/system/boot-init-root-extract-archives.service
-      - description: systemd service enablement for boot-init-root-extract-archives.service
-        target: overlays/etc/systemd/system/multi-user.target.wants/boot-init-root-extract-archives.service
+        target: overlays/usr/lib/systemd/system/boot-init-root-from-archives.service
+      - description: systemd service enablement for boot-init-root-from-archives.service
+        target: overlays/etc/systemd/system/multi-user.target.wants/boot-init-root-from-archives.service
       # `/boot/firmware/init-root` directory tree:
+      - description: Shell script to move the contents of init-root directory from the boot partition
+        target: overlays/usr/libexec/boot-init-root-from-dir
       - description:
           systemd service to move the contents of `/boot/firmware/init-root/as-{user}` into the root FS during boot with {user} ownership
-        target: overlays/usr/lib/systemd/system/boot-init-root@.service
+        target: overlays/usr/lib/systemd/system/boot-init-root-from-dir@.service
       - description: systemd service enablement for boot-init-root.service for root ownership
-        target: overlays/etc/systemd/system/multi-user.target.wants/boot-init-root@root.service
+        target: overlays/etc/systemd/system/multi-user.target.wants/boot-init-root-from-dir@root.service
       - description: systemd service enablement for boot-init-root.service for pi ownership
-        target: overlays/etc/systemd/system/multi-user.target.wants/boot-init-root@pi.service
+        target: overlays/etc/systemd/system/multi-user.target.wants/boot-init-root-from-dir@pi.service
