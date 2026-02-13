@@ -8,7 +8,9 @@ for archive in /boot/firmware/init-root-*.tar.gz; do
   echo
   tar \
     -C / \
-    -xzfp "$archive"
+    --no-overwrite-dir \
+    --preserve-permissions \
+    -xzf "$archive"
   rm "$archive"
   echo
 done
