@@ -8,7 +8,7 @@ mkdir -p "/run/init-root/as-$user/"
 cp -rT "/boot/firmware/init-root/as-$user/" "/run/init-root/as-$user/"
 chown -R "$user:$user" "/run/init-root/as-$user/"
 
-# FIXME: don't overwrite any directories which already exist!
+find . -type d -empty -delete # don't copy empty directories into the root fs
 cp -r /run/init-root/as-"$user"/* /
 
 find "/boot/firmware/init-root/as-$user/" -type f -exec rm {} +
