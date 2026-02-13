@@ -1,0 +1,23 @@
+#!/bin/bash -eu
+shopt -s nullglob
+
+# Extract all init-root archives in lexicographical order:
+rm -rf /run/init-root/from-archives
+mkdir -p /run/init-root/from-archives
+for archive in /boot/firmware/init-root-*.tar.gz; do
+  echo "$archive:"
+  tar -tzf "$archive"
+  echo
+  tar \
+    -C /run/init-root/from-archives \
+    --no-overwrite-dir \
+    --preserve-permissions \
+    -xzf "$archive"
+  echo
+done
+
+cp -rTp /run/init-root/from-archives/ /
+
+for archive in /boot/firmware/init-root-*.tar.gz; do
+  rm "$archive"
+done

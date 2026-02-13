@@ -1,0 +1,17 @@
+[Unit]
+Description=Move files from /boot/firmware/init-root/as-%i into the root filesystem with ownership by user and group %i
+ConditionPathExistsGlob=/boot/firmware/init-root/as-%i/*
+DefaultDependencies=no
+Before=basic.target
+
+[Service]
+Type=oneshot
+ExecStart=bash -c '/usr/libexec/boot-init-root-from-dir %i'
+ExecStartPost=systemctl daemon-reload
+ExecStartPost=systemctl restart --no-block sockets.target timers.target multi-user.target default.target
+ExecStop=rm -rf /run/init-root/as-%i/
+RemainAfterExit=yes
+Restart=no
+
+[Install]
+WantedBy=multi-user.target
