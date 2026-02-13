@@ -1,5 +1,5 @@
 [Unit]
-Description=Set the tailscale client's auth key from /run/tailscale-auth-key
+Description=Set the tailscale client's auth key from /var/lib/tailscale-auth-key
 ConditionPathExists=/var/lib/tailscale-auth-key
 Requires=tailscaled.service
 After=tailscaled.service
