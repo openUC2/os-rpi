@@ -1,0 +1,35 @@
+[Unit]
+Description=Set the Wi-Fi regulatory domain from /var/lib/wifi-country
+ConditionPathExists=/boot/firmware/cmdline.txt
+After=boot-init-root.service
+
+[Service]
+Type=oneshot
+ExecStart=:bash -c -e -u '\
+  if [ ! -f /var/lib/wifi-country ]; then \
+    echo "No need to update /boot/firmware/cmdline.txt!"; \
+    exit 0; \
+    echo "uh-oh!"; \
+  fi; \
+  export WIFI_COUNTRY="$(sed \'s~#.*$~~g\' /var/lib/wifi-country | tr -d \'[:space:]\')"; \
+  if ! grep -q "${WIFI_COUNTRY}[[:space:]]" /usr/share/zoneinfo/iso3166.tab; then \
+    echo "$WIFI_COUNTRY is not a valid ISO/IEC 3166-1 alpha2 code!" >2; \
+    exit 1; \
+  fi; \
+  echo "Setting Wi-Fi country to $WIFI_COUNTRY in /boot/firmware/cmdline.txt..."; \
+  sed -i \
+    -e "s~\\s*cfg80211.ieee80211_regdom=\\S*~~" \
+    -e "s~\\(.*\\)~\\1 cfg80211.ieee80211_regdom=$WIFI_COUNTRY~" \
+    /boot/firmware/cmdline.txt && \
+  rm /var/lib/wifi-country \
+'
+ExecStart=:bash -c -e -u '\
+  export WIFI_COUNTRY="$(sed -n \'s~.*cfg80211.ieee80211_regdom=\\(\\S*\\).*~\\1~p\' /boot/firmware/cmdline.txt)" && \
+  echo "Setting Wi-Fi country to $WIFI_COUNTRY as specified in /boot/firmware/cmdline.txt..." && \
+  iw reg set "$WIFI_COUNTRY" \
+'
+ExecStartPost=iw reg get
+RemainAfterExit=yes
+
+[Install]
+WantedBy=multi-user.target
