@@ -1,25 +1,24 @@
 [Unit]
-Description=Set the Wi-Fi regulatory domain from /var/lib/tailscale-auth-key
+Description=Set the Wi-Fi regulatory domain from /var/lib/wifi-country
 ConditionPathExists=/boot/firmware/cmdline.txt
 After=boot-init-root.service
 
 [Service]
 Type=oneshot
 ExecStart=bash -c -e -u '\
-  if [ ! -f /var/lib/wifi-country ]; then \
-    exit 0; \
-  fi; \
-  export WIFI_COUNTRY="$(sed \'s~#.*$~~g\' /var/lib/wifi-country | tr -d \'[:space:]\')"; \
-  if !grep -q "${WIFI_COUNTRY}[[:space:]]" /usr/share/zoneinfo/iso3166.tab; then \
-    echo "$WIFI_COUNTRY is not a valid ISO/IEC 3166-1 alpha2 code!" >2; \
-    exit 1; \
-  fi; \
-  echo "Setting Wi-Fi country to $WIFI_COUNTRY in /boot/firmware/cmdline.txt..."; \
-  sed -i \
-    -e "s~\\s*cfg80211.ieee80211_regdom=\\S*~~" \
-    -e "s~\\(.*\\)~\\1 cfg80211.ieee80211_regdom=$WIFI_COUNTRY~" \
-    /boot/firmware/cmdline.txt && \
-  rm /var/lib/wifi-country \
+  if [ -f /var/lib/wifi-country ]; then \
+    WIFI_COUNTRY="$(sed \'s~#.*$~~g\' /var/lib/wifi-country | tr -d \'[:space:]\')"; \
+    if ! grep -q "${WIFI_COUNTRY}[[:space:]]" /usr/share/zoneinfo/iso3166.tab; then \
+      echo "$WIFI_COUNTRY is not a valid ISO/IEC 3166-1 alpha2 code!" >2; \
+      exit 1; \
+    fi; \
+    echo "Setting Wi-Fi country to $WIFI_COUNTRY in /boot/firmware/cmdline.txt..."; \
+    sed -i \
+      -e "s~\\s*cfg80211.ieee80211_regdom=\\S*~~" \
+      -e "s~\\(.*\\)~\\1 cfg80211.ieee80211_regdom=$WIFI_COUNTRY~" \
+      /boot/firmware/cmdline.txt && \
+    rm /var/lib/wifi-country; \
+  fi \
 '
 ExecStart=bash -c -e -u '\
   WIFI_COUNTRY="$(sed -n \'s~.*cfg80211.ieee80211_regdom=\\(\\S*\\).*~\\1~p\' /boot/firmware/cmdline.txt)" && \
