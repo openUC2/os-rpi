@@ -9,6 +9,6 @@ cp -rT "/boot/firmware/init-root/as-$user/" "/run/init-root/as-$user/"
 chown -R "$user:$user" "/run/init-root/as-$user/"
 
 # FIXME: don't overwrite any directories which already exist!
-cp -rp /run/init-root/as-"$user"/* /
+cp -r /run/init-root/as-"$user"/* /
 
 find "/boot/firmware/init-root/as-$user/" -type f -exec rm {} +
