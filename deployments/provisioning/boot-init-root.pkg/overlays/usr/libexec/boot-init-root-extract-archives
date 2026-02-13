@@ -7,8 +7,8 @@ for archive in /boot/firmware/init-root-*.tar.gz; do
   tar -tzf "$archive"
   echo
   tar \
-    -xzf "$archive" \
-    -C /
+    -C / \
+    -xzfp "$archive"
   rm "$archive"
   echo
 done
