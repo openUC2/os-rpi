@@ -6,7 +6,7 @@ Before=basic.target
 
 [Service]
 Type=oneshot
-ExecStart=bash -c '/usr/libexec/boot-init-root-from'
+ExecStart=bash -c '/usr/libexec/boot-init-root-from-archives'
 ExecStartPost=systemctl daemon-reload
 ExecStartPost=systemctl restart --no-block sockets.target timers.target multi-user.target default.target
 RemainAfterExit=yes
