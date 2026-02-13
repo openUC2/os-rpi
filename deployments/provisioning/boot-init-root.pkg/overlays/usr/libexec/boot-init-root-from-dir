@@ -1,6 +1,7 @@
 #!/bin/bash -eu
 
 user="$1"
+echo "as-$user"
 
 # Extract all init-root archives in lexicographical order:
 rm -rf "/run/init-root/as-$user/"
