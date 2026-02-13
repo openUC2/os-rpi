@@ -2,8 +2,6 @@
 Description=Move files from /boot/firmware/init-root/as-%i into the root filesystem with ownership by user and group %i
 ConditionPathExistsGlob=/boot/firmware/init-root/as-%i/*
 DefaultDependencies=no
-Wants=boot-init-root-extract-archives.service
-After=boot-init-root-extract-archives.service
 Before=basic.target
 
 [Service]
@@ -15,7 +13,7 @@ ExecStart=chown -R %i:%i /run/init-root/as-%i/
 ExecStart=sh -c 'cp -r /run/init-root/as-%i/* /'
 ExecStartPost=find /boot/firmware/init-root/as-%i/ -type f -exec rm {} +
 ExecStartPost=systemctl daemon-reload
-ExecStart=systemctl restart --no-block sockets.target timers.target multi-user.target default.target
+ExecStartPost=systemctl restart --no-block sockets.target timers.target multi-user.target default.target
 ExecStop=rm -rf /run/init-root/as-%i/
 RemainAfterExit=yes
 Restart=no
