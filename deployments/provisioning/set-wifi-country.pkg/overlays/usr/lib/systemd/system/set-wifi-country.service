@@ -5,7 +5,7 @@ After=boot-init-root.service
 
 [Service]
 Type=oneshot
-ExecStart=bash -c -e -u '\
+ExecStart=:bash -c -e -u '\
   if [ ! -f /var/lib/wifi-country ]; then \
     echo "No need to update /boot/firmware/cmdline.txt!"; \
     exit 0; \
@@ -23,7 +23,7 @@ ExecStart=bash -c -e -u '\
     /boot/firmware/cmdline.txt && \
   rm /var/lib/wifi-country \
 '
-ExecStart=bash -c -e -u '\
+ExecStart=:bash -c -e -u '\
   export WIFI_COUNTRY="$(sed -n \'s~.*cfg80211.ieee80211_regdom=\\(\\S*\\).*~\\1~p\' /boot/firmware/cmdline.txt)" && \
   echo "Setting Wi-Fi country to $WIFI_COUNTRY as specified in /boot/firmware/cmdline.txt..." && \
   iw reg set "$WIFI_COUNTRY" \
