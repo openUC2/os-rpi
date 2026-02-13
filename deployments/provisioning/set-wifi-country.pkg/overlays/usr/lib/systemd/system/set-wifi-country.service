@@ -5,14 +5,14 @@ After=boot-init-root.service
 
 [Service]
 Type=oneshot
-ExecStart=bash -c -e '\
+ExecStart=bash -c -e -u '\
   if [ ! -f /var/lib/wifi-country ]; then \
-    return 0; \
+    exit 0; \
   fi; \
-  WIFI_COUNTRY="$(sed \'s~#.*$~~g\' /var/lib/wifi-country | tr -d \'[:space:]\')"; \
+  export WIFI_COUNTRY="$(sed \'s~#.*$~~g\' /var/lib/wifi-country | tr -d \'[:space:]\')"; \
   if !grep -q "${WIFI_COUNTRY}[[:space:]]" /usr/share/zoneinfo/iso3166.tab; then \
     echo "$WIFI_COUNTRY is not a valid ISO/IEC 3166-1 alpha2 code!" >2; \
-    return 1; \
+    exit 1; \
   fi; \
   echo "Setting Wi-Fi country to $WIFI_COUNTRY in /boot/firmware/cmdline.txt..."; \
   sed -i \
@@ -21,7 +21,7 @@ ExecStart=bash -c -e '\
     /boot/firmware/cmdline.txt && \
   rm /var/lib/wifi-country \
 '
-ExecStart=bash -c -e '\
+ExecStart=bash -c -e -u '\
   WIFI_COUNTRY="$(sed -n \'s~.*cfg80211.ieee80211_regdom=\\(\\S*\\).*~\\1~p\' /boot/firmware/cmdline.txt)" && \
   echo "Setting Wi-Fi country to $WIFI_COUNTRY as specified in /boot/firmware/cmdline.txt..." && \
   iw reg set "$WIFI_COUNTRY" \
