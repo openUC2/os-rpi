@@ -1,7 +1,6 @@
 #!/bin/bash -eu
 
 user="$1"
-echo "as-$user"
 
 # Extract all init-root archives in lexicographical order:
 rm -rf "/run/init-root/as-$user/"
@@ -10,6 +9,6 @@ cp -rT "/boot/firmware/init-root/as-$user/" "/run/init-root/as-$user/"
 chown -R "$user:$user" "/run/init-root/as-$user/"
 
 # FIXME: don't overwrite any directories which already exist!
-cp -rp /run/init-root/as-%i/* /
+cp -rp /run/init-root/as-"$user"/* /
 
-find /boot/firmware/init-root/as-%i/ -type f -exec rm {} +
+find "/boot/firmware/init-root/as-$user/" -type f -exec rm {} +
