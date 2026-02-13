@@ -1,5 +1,4 @@
 #!/bin/bash -eu
-shopt -s nullglob
 
 user="$1"
 
