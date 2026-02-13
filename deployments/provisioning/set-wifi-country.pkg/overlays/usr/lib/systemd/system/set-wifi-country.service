@@ -7,7 +7,9 @@ After=boot-init-root.service
 Type=oneshot
 ExecStart=bash -c -e -u '\
   if [ ! -f /var/lib/wifi-country ]; then \
+    echo "No need to update /boot/firmware/cmdline.txt!"; \
     exit 0; \
+    echo "uh-oh!"; \
   fi; \
   export WIFI_COUNTRY="$(sed \'s~#.*$~~g\' /var/lib/wifi-country | tr -d \'[:space:]\')"; \
   if ! grep -q "${WIFI_COUNTRY}[[:space:]]" /usr/share/zoneinfo/iso3166.tab; then \
