@@ -5,7 +5,11 @@ After=boot-init-root.service
 
 [Service]
 Type=oneshot
-ExecStart=sh -c 'iw reg set "$(sed -n \'s~.*cfg80211.ieee80211_regdom=\\(\\S*\\).*~\\1~p\' /boot/firmware/cmdline.txt)"'
+ExecStart=sh -c '\
+  WIFI_COUNTRY="$(sed -n \'s~.*cfg80211.ieee80211_regdom=\\(\\S*\\).*~\\1~p\' /boot/firmware/cmdline.txt)" && \
+  echo "Setting Wi-Fi country to $WIFI_COUNTRY..." && \
+  iw reg set "$WIFI_COUNTRY" \
+'
 ExecStartPost=iw reg get
 RemainAfterExit=yes
 
