@@ -3,7 +3,7 @@ shopt -s nullglob
 
 # Extract all init-root archives in lexicographical order:
 rm -rf /run/init-root/from-archives
-mkdir -p /run/init-root/
+mkdir -p /run/init-root/from-archives
 for archive in /boot/firmware/init-root-*.tar.gz; do
   echo "$archive:"
   tar -tzf "$archive"
