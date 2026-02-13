@@ -19,7 +19,7 @@ ExecStart=bash -c -e '\
     -e "s~\\s*cfg80211.ieee80211_regdom=\\S*~~" \
     -e "s~\\(.*\\)~\\1 cfg80211.ieee80211_regdom=$WIFI_COUNTRY~" \
     /boot/firmware/cmdline.txt && \
-  rm /var/lib/wifi-country
+  rm /var/lib/wifi-country \
 '
 ExecStart=bash -c -e '\
   WIFI_COUNTRY="$(sed -n \'s~.*cfg80211.ieee80211_regdom=\\(\\S*\\).*~\\1~p\' /boot/firmware/cmdline.txt)" && \
