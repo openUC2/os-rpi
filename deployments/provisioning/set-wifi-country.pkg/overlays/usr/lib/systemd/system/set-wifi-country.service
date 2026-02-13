@@ -6,11 +6,11 @@ After=boot-init-root.service
 [Service]
 Type=oneshot
 ExecStart=bash -c -e -u '\
-  if [ -f /var/lib/wifi-country ]; then \
+  if [ ! -f /var/lib/wifi-country ]; then \
     exit 0; \
   fi; \
   export WIFI_COUNTRY="$(sed \'s~#.*$~~g\' /var/lib/wifi-country | tr -d \'[:space:]\')"; \
-  if !grep -q "${WIFI_COUNTRY}[[:space:]]" /usr/share/zoneinfo/iso3166.tab; then \
+  if ! grep -q "${WIFI_COUNTRY}[[:space:]]" /usr/share/zoneinfo/iso3166.tab; then \
     echo "$WIFI_COUNTRY is not a valid ISO/IEC 3166-1 alpha2 code!" >2; \
     exit 1; \
   fi; \
