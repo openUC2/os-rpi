@@ -3,7 +3,7 @@ features:
   - allow-unencrypted
   - allow-origins-direct-static-ips
   - allow-origins-simplified-branded-mdns-names
-  - allow-origins-templated-custom-domain-home
+  - allow-origins-templated-custom-domain-branded
   - allow-origins-templated-mdns-hostname
   - allow-origins-templated-hostname
   - allow-origins-templated-tailscale

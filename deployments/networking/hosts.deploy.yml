@@ -1,5 +1,5 @@
 package: /deployments/networking/hosts.pkg
 features:
-  - direct-custom-domain-home
+  - direct-custom-domain-branded
   - direct-custom-domain-machine-name
 disabled: false

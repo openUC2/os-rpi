@@ -76,14 +76,14 @@ deployment:
           - /run/overlays/generated/etc/hosts.d/50-generated-templated
 
 features:
-  direct-custom-domain-home:
+  direct-custom-domain-branded:
     description:
-      "Use static IP addresses for direct connections for 'home' with a custom domain, e.g.
-      'home.uc2'"
+      "Use static IP addresses for direct connections for a branded custom domain, e.g.
+      'open.uc2'"
     provides:
       file-exports:
         - description: Drop-in hosts fragment template
-          target: overlays/etc/hosts-templates.d/30-direct-custom-domain-home
+          target: overlays/etc/hosts-templates.d/30-direct-custom-domain-branded
   direct-custom-domain-machine-name:
     description:
       "Use static IP addresses for direct connections for the machine name with a custom domain,
