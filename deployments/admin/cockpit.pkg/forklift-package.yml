@@ -139,12 +139,12 @@ features:
       file-exports:
         - description: Drop-in Cockpit origins list
           target: overlays/etc/cockpit/origins.d/40-simplified-branded-mdns-names
-  allow-origins-templated-custom-domain-home:
-    description: "Allow accessing Cockpit via 'home' with a custom domain, e.g. home.uc2"
+  allow-origins-templated-custom-domain-branded:
+    description: "Allow accessing Cockpit via a branded custom domain, e.g. open.uc2"
     provides:
       file-exports:
         - description: Drop-in Cockpit origins list
-          target: overlays/etc/cockpit/origins-templates.d/30-custom-domain-home
+          target: overlays/etc/cockpit/origins-templates.d/30-custom-domain-branded
   allow-origins-templated-mdns-hostname:
     provides:
       description:
