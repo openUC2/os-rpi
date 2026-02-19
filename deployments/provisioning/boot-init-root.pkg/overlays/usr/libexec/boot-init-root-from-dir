@@ -9,6 +9,8 @@ cp -rT "/boot/firmware/init-root/as-$user/" "/run/init-root/as-$user/"
 chown -R "$user:$user" "/run/init-root/as-$user/"
 
 find "/run/init-root/as-$user/" -type d -empty -delete # don't copy empty directories into the root fs
-cp -r /run/init-root/as-"$user"/* /
+if [ -d "/run/init-root/as-$user/" ]; then
+  cp -r /run/init-root/as-"$user"/* /
+fi
 
 find "/boot/firmware/init-root/as-$user/" -type f -exec rm {} +
