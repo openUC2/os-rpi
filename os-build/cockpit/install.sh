@@ -16,8 +16,11 @@ if [ "$adjust_initramfs_scope" = true ]; then
   sudo sed -i 's~MODULES=most~MODULES=dep~' /etc/initramfs-tools/initramfs.conf
 fi
 
-# install cockpit-navigator
+# Install cockpit-navigator
 wget -O /tmp/cockpit-navigator.deb https://github.com/45Drives/cockpit-navigator/releases/download/v0.5.10/cockpit-navigator_0.5.10-1focal_all.deb
 ls
 sudo apt-get install -y /tmp/cockpit-navigator.deb
 rm /tmp/cockpit-navigator.deb
+
+# Suppress Cockpit's MOTD message, since it displays HTTPS URLs which won't work for us:
+sudo rm /etc/motd.d/cockpit
