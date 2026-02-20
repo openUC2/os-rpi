@@ -4,8 +4,8 @@ services:
       - caddy-ingress-public
     labels:
       caddy: http://
-      caddy.redir: /openUC2 /openUC2/
-      caddy.handle: /openUC2/*
+      caddy.redir: /docs /docs/
+      caddy.handle: /docs/*
       caddy.handle.reverse_proxy: "{{upstreams 80}}"
 
 networks:
