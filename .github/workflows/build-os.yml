@@ -128,6 +128,8 @@ jobs:
         uses: actions/cache/restore@v4
         with:
           key: "container-images-${{ matrix.platform.arch }}-${{ steps.setup-precaching.outputs.container_list_hash }}"
+          restore-keys: |
+            "container-images-${{ matrix.platform.arch }}"
           path: ${{ steps.setup-precaching.outputs.path }}
 
       - name: Pre-download container images
