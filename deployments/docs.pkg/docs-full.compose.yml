@@ -1,0 +1,3 @@
+services:
+  server:
+    image: ghcr.io/openuc2/project-docs:sha-f248f2a-full@sha256:d41fec2d89ab9c5c35f5d1022cb2f94b38bf5957e9b9e811cf9673bdcfa574ec

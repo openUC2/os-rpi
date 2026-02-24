@@ -54,3 +54,7 @@ features:
           paths:
             - /openUC2
             - /openUC2/*
+  docs-full:
+    description: Provides a complete copy of the openUC2 project documentation
+    compose-files:
+      - docs-full.compose.yml
