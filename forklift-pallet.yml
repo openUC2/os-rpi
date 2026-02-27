@@ -1,7 +1,7 @@
 forklift-version: v0.8.0-alpha.7
 
 pallet:
-  path: github.com/openUC2/rpi-imswitch-os
+  path: github.com/openUC2/os-rpi
   description: >
     Standard pallet for OpenUC2's ImSwitch Operating System based on the Raspberry Pi Operating System
   readme-file: README.md

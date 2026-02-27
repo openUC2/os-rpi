@@ -1,5 +1,5 @@
 #!/bin/bash -eu
 
-echo "Welcome to ImSwitch OS!"
-echo "Documentation: https://openuc2.github.io/"
+echo "Welcome to openUC2 OS!"
+echo "Documentation: https://docs.openuc2.com/"
 echo

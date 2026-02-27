@@ -17,7 +17,7 @@ jobs:
     uses: ./.github/workflows/build-os.yml
     secrets: inherit
     with:
-      name: rpi-imswitch-os
+      name: os-rpi
       build_variant: dx
       base_release_name: trixie
       base_image_variant: lite
