@@ -1,7 +1,7 @@
-# rpi-imswitch-os
+# os-rpi
 
 This is the standard operating system used on Raspberry Pi computers in openUC2 devices; we call it
-"ImSwitch OS".
+"openUC2 OS".
 
 This repo is both the [Forklift](https://github.com/PlanktoScope/forklift) pallet for the OS, and
 the automated build system for creating OS images which can be flashed onto SD cards for booting
@@ -59,11 +59,11 @@ same OS installation, things might break in weird ways.
    If the ImSwitch container image you want to use is the most-recently-built container image in any
    branch of the openUC2/ImSwitch repo, then
    you could instead just manually trigger a run of this repo's
-   [updatecli-compose action](https://github.com/openUC2/rpi-imswitch-os/actions/workflows/updatecli-compose.yml)
+   [updatecli-compose action](https://github.com/openUC2/os-rpi/actions/workflows/updatecli-compose.yml)
    and then merge the pull request which that action should create. This way, you wouldn't have to
    manually edit any files.
 
-5. If you made your edits directly in the local pallet on a machine running ImSwitch OS (i.e. you
+5. If you made your edits directly in the local pallet on a machine running openUC2 OS (i.e. you
    edited files inside `/home/pi/.local/share/forklift/pallet`), then before publishing your edits
    you can test them directly on the device by running:
 
@@ -74,13 +74,13 @@ same OS installation, things might break in weird ways.
 6. To publish your edits as an update to be deployed on other machines, commit and push your changes
    to GitHub.
 
-Now you are ready to deploy these changes as an OS update to a machine running ImSwitch OS.
+Now you are ready to deploy these changes as an OS update to a machine running openUC2 OS.
 
 ### Deploying a published OS update to your machine
 
-1. Once you've booted your machine into ImSwitch OS, from a terminal (either the Cockpit terminal or
+1. Once you've booted your machine into openUC2 OS, from a terminal (either the Cockpit terminal or
    an SSH remote session) you can run the following command to upgrade the local pallet to the
-   latest commit on the main branch:
+   latest commit on the `edge` branch:
 
    ```bash
    forklift plt upgrade
@@ -110,9 +110,69 @@ Now you are ready to deploy these changes as an OS update to a machine running I
    forklift stage apply
    ```
 
+### Disabling/enabling functionalities
+
+To disable the deployment of ImSwitch on your RPi, you can change the configuration on your RPi by
+running:
+
+```bash
+forklift plt disable-depl imswitch
+```
+
+To apply your modified configuration, then you can either
+
+1) run `forklift plt apply`, or
+2) run `forklift plt stage` and then reboot (e.g. via `sudo reboot`).
+
+If you later want to re-enable ImSwitch, you can then run `forklift plt enable-depl imswitch` (and
+then apply your modified configuration using the command(s) you prefer).
+
+To see the full list of deployments you can disable or enable, run `forklift plt ls-depl`. Note that
+for some deployments, especially some deployments whose names begin with `provisioning/`,
+`networking/`, `infra/`, and `dev/`, you will have to reboot in order for changes to actually take
+effect.
+
+## Migrations for breaking changes
+
+### Migrating from github.com/openUC2/os-rpi
+
+The pallet in this repo used to be called `github.com/openUC2/os-rpi`, and the default
+branch in this repo used to be called `main`. On machines deployed with older versions of this OS
+built before March 2026, you will need to run the following command (instead of
+`forklift plt upgrade`) for your next upgrade:
+
+```
+forklift plt switch github.com/openUC2/os-rpi@edge
+```
+
+If it gives you a warning that you may have changes in your local pallet which have not been
+committed/pushed up to GitHub, but you're sure that you won't lose any important changes by wiping
+your local pallet, then you should run:
+
+```
+forklift plt switch --force github.com/openUC2/os-rpi@edge
+```
+
+### Updating local clones to migrate from `main` branch
+
+The default branch in this repo used to be called `main`. This was renamed to `edge` around the end
+of February 2026, to match the name of the `edge` release channel described in [DN 16](https://www.notion.so/DN-16-Software-release-process-2864e612c78a8068bce9f61adfc96963?source=copy_link)'s release branching model.
+
+As a result, local clones of this repo need to switch to using `edge` as the default branch:
+```
+git branch -m main edge
+git fetch origin
+git branch -u origin/edge edge
+git remote set-head origin -a
+git remote prune origin
+```
+
+If you don't do this, you'll get an error message from GitHub that you're not allowed to push up to
+the `main` branch.
+
 ### Working around openUC2's premature deletion of imswitch-noqt
 
-Machines running versions of rpi-imswitch-os built before late-January 2026 may be running a version
+Machines running versions of os-rpi built before late-January 2026 may be running a version
 of this repo's pallet which uses the `ghcr.io/openuc2/imswitch-noqt` Docker container image. Trying
 to upgrade the pallet from that version will now result an error, because the
 `ghcr.io/openuc2/imswitch-noqt` Docker container image was prematurely deleted, and upgrading the
@@ -147,28 +207,6 @@ forklift stage apply && sudo reboot
 # reboot to fully apply the Forklift pallet. If an error occurs here, more troubleshooting will be
 # needed before it's safe to reboot!
 ```
-
-### Disabling/enabling functionalities
-
-To disable the deployment of ImSwitch on your RPi, you can change the configuration on your RPi by
-running:
-
-```bash
-forklift plt disable-depl imswitch
-```
-
-To apply your modified configuration, then you can either
-
-1) run `forklift plt apply`, or
-2) run `forklift plt stage` and then reboot (e.g. via `sudo reboot`).
-
-If you later want to re-enable ImSwitch, you can then run `forklift plt enable-depl imswitch` (and
-then apply your modified configuration using the command(s) you prefer).
-
-To see the full list of deployments you can disable or enable, run `forklift plt ls-depl`. Note that
-for some deployments, especially some deployments whose names begin with `provisioning/`,
-`networking/`, `infra/`, and `dev/`, you will have to reboot in order for changes to actually take
-effect.
 
 ## Licensing
 

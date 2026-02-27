@@ -10,7 +10,7 @@ package:
     # Ambiently-provided software (GPL):
     - https://thekelleys.org.uk/dnsmasq/doc.html
     # Config templating & auto-generation scripts (Apache-2.0):
-    - https://github.com/openUC2/rpi-imswitch-os
+    - https://github.com/openUC2/os-rpi
 
 deployment:
   requires:

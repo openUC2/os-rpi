@@ -5,7 +5,7 @@ package:
       email: lietk12@gmail.com
   license: BSD-3-Clause
   sources:
-    - https://github.com/openUC2/rpi-imswitch-os
+    - https://github.com/openUC2/os-rpi
 
 deployment:
   provides:

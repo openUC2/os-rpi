@@ -8,7 +8,7 @@ package:
     # Forklift-deployed software (MIT):
     - https://github.com/openUC2/device-portal
     # Templates (Apache-2.0):
-    - https://github.com/openUC2/rpi-imswitch-os
+    - https://github.com/openUC2/os-rpi
 
 deployment:
   compose-files:
@@ -66,6 +66,6 @@ features:
     compose-files:
       - deploy-rpi.compose.yml
   dev-mock:
-    description: Provides a fake machine name, to enable development & testing outside ImSwitch OS
+    description: Provides a fake machine name, to enable development & testing outside openUC2 OS
     compose-files:
       - dev-mock.compose.yml

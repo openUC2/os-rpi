@@ -1,6 +1,6 @@
 # os-build
 
-OS image build scripts for ImSwitch OS
+OS image build scripts for openUC2 OS
 
 ## Development
 

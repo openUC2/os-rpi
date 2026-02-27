@@ -1,4 +1,4 @@
-description: ImSwitch OS usage help resources
+description: openUC2 OS usage help resources
 modifiers:
   - type: add-feature
     source: infra/http
