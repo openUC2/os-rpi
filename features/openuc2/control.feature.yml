@@ -1,4 +1,4 @@
-description: ImSwitch OS-specific control/operation apps
+description: openUC2 OS-specific control/operation apps
 modifiers:
   - type: add-feature
     source: infra/http

@@ -1,4 +1,4 @@
-description: All apps only useful for ImSwitch OS
+description: All apps only useful for openUC2 OS
 modifiers:
   - type: add-feature
     source: openuc2/files
