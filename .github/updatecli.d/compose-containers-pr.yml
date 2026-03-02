@@ -6,7 +6,7 @@ scms:
     spec:
       owner: '{{ requiredEnv "REPO_OWNER" }}'
       repository: '{{ requiredEnv "REPO_NAME" }}'
-      branch: main
+      branch: edge
       username: '{{ requiredEnv "GITHUB_ACTOR" }}'
       token: '{{ requiredEnv "GITHUB_TOKEN" }}'
       user: '{{ requiredEnv "COMMITTER_USERNAME" }}'
