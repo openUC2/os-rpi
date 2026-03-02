@@ -303,10 +303,11 @@ jobs:
           compress-parallel: true
 
       - name: Upload image to Job Artifacts
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: ${{ env.OUTPUT_IMAGE_NAME }}
           path: ${{ env.OUTPUT_IMAGE_NAME }}.img.xz
+          archive: false
           if-no-files-found: error
           retention-days: 0
           compression-level: 0
