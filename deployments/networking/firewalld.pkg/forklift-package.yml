@@ -28,7 +28,7 @@ deployment:
       # Drop-in config fragments to assemble by default:
       - description:
           Drop-in firewalld config fragment with comment describing firewalld config drop-in directory
-        target: overlays/etc/firewalld/firewalld.conf.d/10-header.conf
+        target: overlays/etc/firewalld/firewalld.conf.d/10-README.conf
       # Zone file assembly:
       - description:
           Shell script to generate a firewalld zone definition file from drop-in XML fragment files
