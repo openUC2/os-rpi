@@ -11,7 +11,8 @@ if grep -q 'MODULES=dep' /etc/initramfs-tools/initramfs.conf; then
   sudo sed -i 's~MODULES=dep~MODULES=most~' /etc/initramfs-tools/initramfs.conf
 fi
 sudo -E apt-get install -y --no-install-recommends -o Dpkg::Progress-Fancy=0 \
-  cockpit cockpit-networkmanager cockpit-storaged pcp
+  cockpit cockpit-networkmanager cockpit-storaged \
+  pcp cracklib-runtime
 if [ "$adjust_initramfs_scope" = true ]; then
   sudo sed -i 's~MODULES=most~MODULES=dep~' /etc/initramfs-tools/initramfs.conf
 fi
