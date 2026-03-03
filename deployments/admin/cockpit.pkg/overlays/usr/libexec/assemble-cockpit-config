@@ -1,3 +1,4 @@
 #!/bin/bash -eu
 
-cat /etc/cockpit/cockpit.conf.d/* > /run/overlays/generated/etc/cockpit/cockpit.conf
+mkdir -p /run/overlays/generated/etc/cockpit
+cat /etc/cockpit/cockpit.conf.d/* >/run/overlays/generated/etc/cockpit/cockpit.conf

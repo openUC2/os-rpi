@@ -1,3 +1,4 @@
 #!/bin/bash -eu
 
+mkdir -p /run/overlays/generated/etc/firewalld
 cat /etc/firewalld/firewalld.conf.d/* >/run/overlays/generated/etc/firewalld/firewalld.conf
