@@ -1,2 +1,2 @@
   <service name="http-ingress-public"/>
-  <forward-port port="8000" protocol="tcp"/>
+  <forward-port port="8000" protocol="tcp" to-port="8000"/>

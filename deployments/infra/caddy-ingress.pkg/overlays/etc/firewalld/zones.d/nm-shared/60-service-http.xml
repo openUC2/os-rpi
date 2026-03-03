@@ -1,2 +1,2 @@
   <service name="http"/>
-  <forward-port port="80" protocol="tcp"/>
+  <forward-port port="80" protocol="tcp" to-port="80"/>
