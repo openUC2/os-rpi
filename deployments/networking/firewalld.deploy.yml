@@ -2,4 +2,5 @@ package: /deployments/networking/firewalld.pkg
 features:
   - zone-nm-shared
   - zone-public
+  - govern-docker-ports
 disabled: false

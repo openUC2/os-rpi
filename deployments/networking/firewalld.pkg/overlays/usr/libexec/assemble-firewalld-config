@@ -1,0 +1,3 @@
+#!/bin/bash -eu
+
+cat /etc/firewalld/firewalld.conf.d/* >/run/overlays/generated/etc/firewalld/firewalld.conf

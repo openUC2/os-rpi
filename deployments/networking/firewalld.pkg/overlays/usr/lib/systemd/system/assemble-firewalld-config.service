@@ -1,0 +1,12 @@
+[Unit]
+Description=Assemble drop-in firewalld config file fragments into a firewalld config file
+ConditionFileIsExecutable=/usr/libexec/assemble-firewalld-config
+ConditionPathIsDirectory=/etc/firewalld/firewalld.conf.d
+Before=firewalld.service
+
+[Service]
+Type=oneshot
+ExecStart=/usr/libexec/assemble-firewalld-config
+
+[Install]
+WantedBy=firewalld.service

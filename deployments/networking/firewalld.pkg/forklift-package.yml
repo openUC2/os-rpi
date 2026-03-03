@@ -15,6 +15,21 @@ package:
 deployment:
   provides:
     file-exports:
+      # Config file assembly:
+      - description:
+          Shell script to generate a firewalld config file from drop-in config fragment files
+        target: overlays/usr/libexec/assemble-firewalld-config
+      - description: systemd service to run the assemble-firewalld-config script during boot
+        target: overlays/usr/lib/systemd/system/assemble-firewalld-config.service
+      - description: systemd service enablement for assemble-firewalld-config.service
+        target: overlays/etc/systemd/system/multi-user.target.wants/assemble-firewalld-config.service
+      - description: Symlink redirecting /etc/firewalld/firewalld.conf to an auto-generated file
+        target: overlays/etc/firewalld/firewalld.conf
+      # Drop-in config fragments to assemble by default:
+      - description:
+          Drop-in firewalld config fragment with comment describing firewalld config drop-in directory
+        target: overlays/etc/firewalld/firewalld.conf.d/10-header.conf
+      # Zone file assembly:
       - description:
           Shell script to generate a firewalld zone definition file from drop-in XML fragment files
         target: overlays/usr/libexec/assemble-firewalld-zone
@@ -78,3 +93,10 @@ features:
         - description: Auto-generated nm-shared zone definition
           paths:
             - /run/overlays/generated/etc/firewalld/zones/nm-shared.xml
+  govern-docker-ports:
+    description: Prevent Docker from bypassing firewall rules when publishing container ports
+    provides:
+      file-exports:
+        - description:
+            Drop-in firewalld config fragment to set StrictForwardPorts
+          target: overlays/etc/firewalld/firewalld.conf.d/20-strict-forward-ports.conf
