@@ -1,4 +1,5 @@
 package: /deployments/admin/filebrowser-rootfs.pkg
 features:
   - frontend
+  - frontend-public
 disabled: false
