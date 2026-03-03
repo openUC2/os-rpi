@@ -22,7 +22,7 @@ deployment:
       - description: systemd service to run the assemble-firewalld-config script during boot
         target: overlays/usr/lib/systemd/system/assemble-firewalld-config.service
       - description: systemd service enablement for assemble-firewalld-config.service
-        target: overlays/etc/systemd/system/multi-user.target.wants/assemble-firewalld-config.service
+        target: overlays/etc/systemd/system/firewalld.service.wants/assemble-firewalld-config.service
       - description: Symlink redirecting /etc/firewalld/firewalld.conf to an auto-generated file
         target: overlays/etc/firewalld/firewalld.conf
       # Drop-in config fragments to assemble by default:
