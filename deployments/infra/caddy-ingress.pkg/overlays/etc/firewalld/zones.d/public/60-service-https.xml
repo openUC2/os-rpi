@@ -1,1 +1,3 @@
   <service name="https"/>
+  <forward-port port="443" protocol="tcp"/>
+  <forward-port port="443" protocol="udp"/>

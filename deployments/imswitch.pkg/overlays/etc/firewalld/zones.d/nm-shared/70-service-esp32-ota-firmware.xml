@@ -1,1 +1,3 @@
   <service name="esp32-ota-firmware"/>
+  <forward-port port="3333" protocol="tcp"/>
+  <forward-port port="3232" protocol="udp"/>
