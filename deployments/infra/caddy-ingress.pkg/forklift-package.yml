@@ -47,19 +47,19 @@ deployment:
         port: 443
         protocol: https
     file-exports:
-      - description: Caddyfile template for ingress proxying HTTPS over Tailscale
-        target: overlays/etc/caddy-ingress/https/Caddyfile.template
+      - description: Caddyfile template for ingress proxying external peers
+        target: overlays/etc/caddy-ingress/external/Caddyfile.template
       - description:
-          systemd service to generate a Caddyfile for HTTPS ingress proxying from a Caddyfile
-          template
-        target: overlays/usr/lib/systemd/system/generate-caddy-ingress-https-config.service
-      - description: systemd service enablement for generate-caddy-ingress-https-config.service
-        target: overlays/etc/systemd/system/forklift-apply.service.wants/generate-caddy-ingress-https-config.service
+          systemd service to generate a Caddyfile for ingress proxying external peers from a
+          Caddyfile template
+        target: overlays/usr/lib/systemd/system/generate-caddy-ingress-external-config.service
+      - description: systemd service enablement for generate-caddy-ingress-external-config.service
+        target: overlays/etc/systemd/system/forklift-apply.service.wants/generate-caddy-ingress-external-config.service
       - description:
-          systemd timer to periodically regenerate the Caddyfile for HTTPS ingress proxying
-        target: overlays/usr/lib/systemd/system/generate-caddy-ingress-https-config.timer
-      - description: systemd timer enablement for generate-caddy-ingress-https-config.timer
-        target: overlays/etc/systemd/system/multi-user.target.wants/generate-caddy-ingress-https-config.timer
+          systemd timer to periodically regenerate the Caddyfile for ingress proxying external peers
+        target: overlays/usr/lib/systemd/system/generate-caddy-ingress-external-config.timer
+      - description: systemd timer enablement for generate-caddy-ingress-external-config.timer
+        target: overlays/etc/systemd/system/multi-user.target.wants/generate-caddy-ingress-external-config.timer
 
 features:
   firewall-allow-direct:
