@@ -4,7 +4,7 @@
 
 (reverse-proxy) {
   handle * {
-    reverse_proxy host.docker.internal:80
+    reverse_proxy localhost:8080
   }
 }
 
@@ -12,3 +12,10 @@
   import reverse-proxy
 }
 
+http:// {
+  import reverse-proxy
+}
+
+https:// {
+  import reverse-proxy
+}

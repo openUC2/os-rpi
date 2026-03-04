@@ -31,7 +31,7 @@ deployment:
         protocol: http
 
 features:
-  firewall-allow-direct-http:
+  firewall-allow-direct:
     description:
       Firewall configuration to allow accessing the reverse proxy over HTTP from directly-connected devices
     requires:
@@ -47,7 +47,7 @@ features:
           target: overlays/etc/firewalld/services/http-ingress-public.xml
         - description: Drop-in XML fragment for firewalld's http-ingress-public service
           target: overlays/etc/firewalld/zones.d/nm-shared/60-service-http-ingress-public.xml
-  firewall-allow-public-http:
+  firewall-allow-public:
     description:
       Firewall configuration to allow public access to the reverse proxy over HTTP
     requires:
