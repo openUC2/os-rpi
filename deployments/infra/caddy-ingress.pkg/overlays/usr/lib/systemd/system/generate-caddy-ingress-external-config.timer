@@ -2,7 +2,7 @@
 Description=Update Caddyfile for ingress proxying from external peers (including with Tailscale)
 
 [Timer]
-Unit=generate-caddy-ingress-external.service
+Unit=generate-caddy-ingress-external-config.service
 OnActiveSec=0
 OnUnitActiveSec=30
 
