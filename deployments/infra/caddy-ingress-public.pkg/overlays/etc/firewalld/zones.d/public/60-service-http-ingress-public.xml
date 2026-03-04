@@ -1,2 +1,1 @@
   <service name="http-ingress-public"/>
-  <forward-port port="8000" protocol="tcp" to-addr="127.0.0.1"/>
