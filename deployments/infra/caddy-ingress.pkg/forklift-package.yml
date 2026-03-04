@@ -36,6 +36,9 @@ deployment:
       - description: Web server for all HTTP/3 requests
         port: 443
         protocol: udp
+      - description: Caddy admin API endpoint
+        port: 2019
+        protocol: tcp
     services:
       - description: Web server which reverse-proxies web services on the machine
         tags: [caddy-docker-proxy]

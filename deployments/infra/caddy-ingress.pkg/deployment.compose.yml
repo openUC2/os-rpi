@@ -40,6 +40,8 @@ services:
     extra_hosts:
       - host.docker.internal:host-gateway
     command: caddy run --config /etc/caddy/Caddyfile --adapter caddyfile --watch
+    # TODO: use `caddy reload` or `docker kill --signal="SIGUSR1" {ctr name}` to the signal instead
+    # of using `--watch`, which is only meant for use in local dev envs!
     depends_on:
       ensure-external-caddyfile:
         condition: service_completed_successfully
