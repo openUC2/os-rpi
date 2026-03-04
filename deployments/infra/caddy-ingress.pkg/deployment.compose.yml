@@ -10,9 +10,8 @@ services:
           create_host_path: false
       - http-data:/data
       - http-config:/config
-    ports:
-      - 80:80
     networks:
+      - host
       - proxied
     extra_hosts:
       - host.docker.internal:host-gateway
@@ -20,7 +19,7 @@ services:
       - CADDY_DOCKER_SCAN_STOPPED_CONTAINERS=1
       - CADDY_INGRESS_NETWORKS=caddy-ingress
     labels:
-      caddy.auto_https: disable_redirects
+      caddy.auto_https: off
 
 volumes:
   http-data: null

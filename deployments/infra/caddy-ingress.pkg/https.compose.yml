@@ -1,9 +1,8 @@
 services:
   https:
     image: docker.io/library/caddy:2.11.1@sha256:9068f76202c0a03545036d32bf2d424d3b46c1174f254070f605002a2dbc9657
-    ports:
-      - 443:443/tcp
-      - 443:443/udp
+    networks:
+      - host
     volumes:
       - type: bind
         source: /run/caddy-ingress/https
