@@ -41,7 +41,7 @@ services:
       - host.docker.internal:host-gateway
     command: caddy run --config /etc/caddy/Caddyfile --adapter caddyfile --watch
     depends_on:
-      ensure-caddyfile:
+      ensure-external-caddyfile:
         condition: service_completed_successfully
 
   ensure-external-caddyfile:
