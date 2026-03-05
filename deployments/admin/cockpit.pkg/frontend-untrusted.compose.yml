@@ -1,0 +1,13 @@
+services:
+  reverse-proxy-config:
+    networks:
+      - caddy-ingress-untrusted
+    labels:
+      caddy: http://
+      caddy.redir: /admin/cockpit /admin/cockpit/
+      caddy.handle: /admin/cockpit/*
+      caddy.handle.reverse_proxy: host.docker.internal:9090
+
+networks:
+  caddy-ingress-untrusted:
+    external: true

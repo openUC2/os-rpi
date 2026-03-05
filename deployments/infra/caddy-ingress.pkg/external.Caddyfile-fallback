@@ -1,0 +1,21 @@
+{
+  auto_https disable_redirects
+}
+
+(reverse-proxy) {
+  handle * {
+    reverse_proxy localhost:8080
+  }
+}
+
+localhost {
+  import reverse-proxy
+}
+
+http:// {
+  import reverse-proxy
+}
+
+https:// {
+  import reverse-proxy
+}

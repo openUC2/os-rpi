@@ -1,0 +1,83 @@
+package:
+  description: >
+    Reverse proxy for public-access web services, and configuration of it using Docker container image labels
+  maintainers:
+    - name: Ethan Li
+      email: lietk12@gmail.com
+  license: MIT
+  sources:
+    - https://github.com/lucaslorentz/caddy-docker-proxy
+
+deployment:
+  compose-files:
+    - deployment.compose.yml
+  requires:
+    filesets:
+      - description: Docker socket
+        paths:
+          - /run/docker.sock
+  provides:
+    networks:
+      - description: Bridge network for Caddy to connect to upstream services
+        name: caddy-ingress-untrusted
+    listeners:
+      - description: Web server for all HTTP requests
+        port: 8000
+        protocol: tcp
+    services:
+      - description: Web server which reverse-proxies web services on the machine
+        tags: [caddy-docker-proxy]
+        port: 8000
+        protocol: http
+
+features:
+  firewall-allow-direct:
+    description:
+      Firewall configuration to allow accessing the reverse proxy over HTTP from directly-connected devices
+    requires:
+      filesets:
+        - description: Drop-in directory for XML fragment files to generate the nm-shared zone definition
+          tags:
+            - drop-in-assembly
+          paths:
+            - /etc/firewalld/zones.d/nm-shared
+    provides:
+      file-exports:
+        - description: Definition for firewalld's http-ingress-untrusted service
+          target: overlays/etc/firewalld/services/http-ingress-untrusted.xml
+        - description: Drop-in XML fragment for firewalld's http-ingress-untrusted service
+          target: overlays/etc/firewalld/zones.d/nm-shared/60-service-http-ingress-untrusted.xml
+  firewall-allow-public:
+    description:
+      Firewall configuration to allow public access to the reverse proxy over HTTP
+    requires:
+      filesets:
+        - description: Drop-in directory for XML fragment files to generate the public zone definition
+          tags:
+            - drop-in-assembly
+          paths:
+            - /etc/firewalld/zones.d/public
+    provides:
+      file-exports:
+        - description: Definition for firewalld's http-ingress-untrusted service
+          target: overlays/etc/firewalld/services/http-ingress-untrusted.xml
+        - description: Drop-in XML fragment for firewalld's http-ingress-untrusted service
+          target: overlays/etc/firewalld/zones.d/public/60-service-http-ingress-untrusted.xml
+  firewall-forward-http-public:
+    description:
+      Firewall configuration to forward public traffic from port 80 to the reverse proxy
+    requires:
+      filesets:
+        - description: Drop-in directory for XML fragment files to generate the public zone definition
+          tags:
+            - drop-in-assembly
+          paths:
+            - /etc/firewalld/zones.d/public
+    provides:
+      services:
+        - description: Port in the public firewall zone
+          port: 80
+          protocol: http-public
+      file-exports:
+        - description: Drop-in XML fragment for forwarding port 80 to firewalld's http-ingress-untrusted service
+          target: overlays/etc/firewalld/zones.d/public/70-forward-http-to-http-ingress-untrusted.xml

@@ -1,0 +1,16 @@
+services:
+  server:
+    networks:
+      - caddy-ingress-untrusted
+    labels:
+      caddy: http://
+      caddy.redir: /docs /docs/
+      caddy.handle: /docs/*
+      caddy.handle.reverse_proxy: "{{upstreams 80}}"
+
+networks:
+  default:
+    name: none
+    external: true
+  caddy-ingress-untrusted:
+    external: true

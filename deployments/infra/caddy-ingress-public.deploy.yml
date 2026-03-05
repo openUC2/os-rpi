@@ -1,5 +1,0 @@
-package: /deployments/infra/caddy-ingress-public.pkg
-features:
-  - firewall-allow-direct-http
-  - firewall-allow-public-http
-disabled: false

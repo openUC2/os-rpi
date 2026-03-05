@@ -1,5 +1,5 @@
 package: /deployments/docs.pkg
 features:
   - website
-  - website-public
+  - website-untrusted
 disabled: false

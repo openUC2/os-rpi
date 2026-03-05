@@ -1,0 +1,9 @@
+services:
+  server-untrusted:
+    environment:
+      - MACHINENAME_NAME=dev-machine
+    # volumes:
+    #   - type: bind
+    #     source: $FORKLIFT_STAGED/etc/device-portal/web/templates
+    #     target: /web/templates
+    #     read_only: true

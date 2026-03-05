@@ -51,6 +51,9 @@ jobs:
           # can be used without `--force`; if the CI run isn't a PR, we'll just use the default ref
           # via an empty string:
           ref: ${{ github.event.pull_request.head.sha }}
+          # We fetch tags so that the staged pallet bundle has a record of ancestral tags, for
+          # pseudoversion string generation:
+          fetch-tags: true
 
       # GET BASE IMAGE
 

@@ -28,7 +28,7 @@ features:
     provides:
       file-exports:
         - description: Drop-in XML fragment for firewalld's mDNS service
-          target: overlays/etc/firewalld/zones.d/nm-shared/41-service-mdns.xml
+          target: overlays/etc/firewalld/zones.d/nm-shared/40-service-mdns.xml
   firewall-allow-public:
     description:
       Firewall configuration to allow public mDNS traffic
@@ -42,4 +42,4 @@ features:
     provides:
       file-exports:
         - description: Drop-in XML fragment for firewalld's mDNS service
-          target: overlays/etc/firewalld/zones.d/public/41-service-mdns.xml
+          target: overlays/etc/firewalld/zones.d/public/40-service-mdns.xml

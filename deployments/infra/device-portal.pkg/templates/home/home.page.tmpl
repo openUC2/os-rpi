@@ -209,12 +209,12 @@
             machine
           </li>
           <li>
-            <strong><a href="/admin/fs/files/home/pi" target="_blank">System file manager</a></strong>:
+            <strong><a href="/admin/fs/files/home/pi" target="_blank">User file manager</a></strong>:
             A file browsing and management interface for the entire filesystem of the
             computer embedded in this machine
           </li>
           <li>
-            <strong><a href="/admin/fs-su/" target="_blank">System file manager (superuser)</a></strong>:
+            <strong><a href="/admin/fs-su/" target="_blank">System file manager</a></strong>:
             A file browsing and management interface for the entire filesystem of the
             computer embedded in this machine, with root/superuser access
           </li>
@@ -269,10 +269,11 @@
           <li>
             <strong>Ingress proxy</strong>:
             A Caddy reverse-proxy to make all browser applications and HTTP network APIs
-            uniformly available at different paths at <code>{{$hostname}}</code> on port 80
+            uniformly available at different paths at <code>{{$hostname}}</code> on ports 80 and
+            443.
           </li>
           <li>
-            <strong>Public ingress proxy</strong>:
+            <strong>Unprivileged ingress proxy</strong>:
             A Caddy reverse-proxy to make unprivileged browser applications and HTTP network APIs
             uniformly available at different paths at <code>{{$hostname}}</code> on port 8001,
             for public (unauthenticated) access.

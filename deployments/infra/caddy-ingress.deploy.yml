@@ -1,6 +1,4 @@
 package: /deployments/infra/caddy-ingress.pkg
 features:
-  - https
-  - firewall-allow-direct-http
-  - firewall-allow-direct-https
+  - firewall-allow-direct
 disabled: false

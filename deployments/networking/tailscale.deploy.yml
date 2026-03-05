@@ -1,4 +1,5 @@
 package: /deployments/networking/tailscale.pkg
 features:
   - motd
+  - firewall-zone-nm-shared
 disabled: false

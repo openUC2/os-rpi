@@ -1,0 +1,34 @@
+services:
+  server:
+    image: docker.io/lucaslorentz/caddy-docker-proxy:2.11.0@sha256:d72042c1b68d27faa70d9fe00e93ab938940a90a100065e220396b48027f881c
+    volumes:
+      - type: bind
+        source: /run/docker.sock
+        target: /var/run/docker.sock
+        read_only: true
+        bind:
+          create_host_path: false
+      - server-data:/data
+      - server-config:/config
+    ports:
+      - 8000:80
+    networks:
+      - proxied
+    extra_hosts:
+      - host.docker.internal:host-gateway
+    environment:
+      - CADDY_DOCKER_SCAN_STOPPED_CONTAINERS=1
+      - CADDY_INGRESS_NETWORKS=caddy-ingress-untrusted
+    labels:
+      caddy.auto_https: disable_redirects
+
+volumes:
+  server-data: null
+  server-config: null
+
+networks:
+  default:
+    name: none
+    external: true
+  proxied:
+    name: caddy-ingress-untrusted

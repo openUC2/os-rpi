@@ -1,0 +1,16 @@
+services:
+  server:
+    networks:
+      - caddy-ingress-untrusted
+    labels:
+      caddy: http://
+      caddy.redir: /imswitch /imswitch/
+      caddy.handle_0: /imswitch/*
+      caddy.handle_0.reverse_proxy: "{{upstreams 8001}}"
+      # Note: we don't expose Jupyter because it could probably be used for arbitrary code execution
+      # caddy.handle_1: /jupyter/*
+      # caddy.handle_1.reverse_proxy: "{{upstreams 8888}}"
+
+networks:
+  caddy-ingress-untrusted:
+    external: true

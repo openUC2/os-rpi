@@ -1,4 +1,5 @@
 # These custom domain names are provided for local access when mDNS is not supported:
 http://{machine-name}.{custom-domain}
 http://{machine-name}.{custom-domain}:9090
+http://{machine-name}.{custom-domain}:8000
 

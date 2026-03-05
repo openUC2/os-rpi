@@ -1,5 +1,5 @@
 services:
-  http:
+  internal:
     image: docker.io/lucaslorentz/caddy-docker-proxy:2.11.0@sha256:d72042c1b68d27faa70d9fe00e93ab938940a90a100065e220396b48027f881c
     volumes:
       - type: bind
@@ -8,10 +8,13 @@ services:
         read_only: true
         bind:
           create_host_path: false
-      - http-data:/data
-      - http-config:/config
+      - internal-data:/data
+      - internal-config:/config
     ports:
-      - 80:80
+      - name: internal
+        target: 80
+        host_ip: 127.0.0.1
+        published: 8080
     networks:
       - proxied
     extra_hosts:
@@ -22,9 +25,41 @@ services:
     labels:
       caddy.auto_https: disable_redirects
 
+  external:
+    image: docker.io/library/caddy:2.11.1@sha256:9068f76202c0a03545036d32bf2d424d3b46c1174f254070f605002a2dbc9657
+    network_mode: host
+    volumes:
+      - type: bind
+        source: /run/caddy-ingress/external
+        target: /etc/caddy
+      - external-data:/data
+      - external-config:/config
+      - type: bind
+        source: /run/tailscale/tailscaled.sock
+        target: /var/run/tailscale/tailscaled.sock
+    extra_hosts:
+      - host.docker.internal:host-gateway
+    command: caddy run --config /etc/caddy/Caddyfile --adapter caddyfile --watch
+    # TODO: use `caddy reload` or `docker kill --signal="SIGUSR1" {ctr name}` to the signal instead
+    # of using `--watch`, which is only meant for use in local dev envs!
+    depends_on:
+      ensure-external-caddyfile:
+        condition: service_completed_successfully
+
+  ensure-external-caddyfile:
+    # This service ensures that a valid Caddyfile exists as a fallback even if
+    # /run/caddy-ingress/external doesn't exist, so that the container can start successfully
+    image: docker.io/library/alpine:3.23.3@sha256:25109184c71bdad752c8312a8623239686a9a2071e8825f20acb8f2198c3f659
+    volumes:
+      - /run/caddy-ingress/external:/etc/caddy
+      - ./external.Caddyfile-fallback:/run/caddy/Caddyfile-fallback
+    command: 'sh -c "cat /etc/caddy/Caddyfile || cp /run/caddy/Caddyfile-fallback /etc/caddy/Caddyfile"'
+
 volumes:
-  http-data: null
-  http-config: null
+  internal-data: null
+  internal-config: null
+  external-data: null
+  external-config: null
 
 networks:
   proxied:
