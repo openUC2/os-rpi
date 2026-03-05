@@ -19,7 +19,7 @@ deployment:
   provides:
     networks:
       - description: Bridge network for Caddy to connect to upstream services
-        name: caddy-ingress-public
+        name: caddy-ingress-untrusted
     listeners:
       - description: Web server for all HTTP requests
         port: 8000
@@ -43,11 +43,11 @@ features:
             - /etc/firewalld/zones.d/nm-shared
     provides:
       file-exports:
-        - description: Definition for firewalld's http-ingress-public service
-          target: overlays/etc/firewalld/services/http-ingress-public.xml
-        - description: Drop-in XML fragment for firewalld's http-ingress-public service
-          target: overlays/etc/firewalld/zones.d/nm-shared/60-service-http-ingress-public.xml
-  firewall-allow-public:
+        - description: Definition for firewalld's http-ingress-untrusted service
+          target: overlays/etc/firewalld/services/http-ingress-untrusted.xml
+        - description: Drop-in XML fragment for firewalld's http-ingress-untrusted service
+          target: overlays/etc/firewalld/zones.d/nm-shared/60-service-http-ingress-untrusted.xml
+  firewall-allow-untrusted:
     description:
       Firewall configuration to allow public access to the reverse proxy over HTTP
     requires:
@@ -59,7 +59,7 @@ features:
             - /etc/firewalld/zones.d/public
     provides:
       file-exports:
-        - description: Definition for firewalld's http-ingress-public service
-          target: overlays/etc/firewalld/services/http-ingress-public.xml
-        - description: Drop-in XML fragment for firewalld's http-ingress-public service
-          target: overlays/etc/firewalld/zones.d/public/60-service-http-ingress-public.xml
+        - description: Definition for firewalld's http-ingress-untrusted service
+          target: overlays/etc/firewalld/services/http-ingress-untrusted.xml
+        - description: Drop-in XML fragment for firewalld's http-ingress-untrusted service
+          target: overlays/etc/firewalld/zones.d/public/60-service-http-ingress-untrusted.xml

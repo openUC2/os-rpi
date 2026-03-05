@@ -32,14 +32,14 @@ features:
           paths:
             - /admin/files
             - /admin/files/*
-  frontend-public:
-    description: Provides public access to the GUI
+  frontend-untrusted:
+    description: Provides untrusted access to the GUI
     compose-files:
-      - frontend-public.compose.yml
+      - frontend-untrusted.compose.yml
     requires:
       networks:
         - description: Overlay network for Caddy to connect to upstream services
-          name: caddy-ingress-public
+          name: caddy-ingress-untrusted
       services:
         - tags: [caddy-docker-proxy]
           port: 8000

@@ -1,4 +1,4 @@
-package: /deployments/infra/caddy-ingress-public.pkg
+package: /deployments/infra/caddy-ingress-untrusted.pkg
 features:
   - firewall-allow-direct
   - firewall-allow-public

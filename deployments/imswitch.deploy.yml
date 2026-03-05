@@ -1,7 +1,7 @@
 package: /deployments/imswitch.pkg
 features:
   - frontend
-  - frontend-public
+  - frontend-untrusted
   - firewall-allow-direct
   - firewall-allow-public
 disabled: false

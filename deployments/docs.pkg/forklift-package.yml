@@ -34,14 +34,14 @@ features:
           paths:
             - /openUC2
             - /openUC2/*
-  website-public:
-    description: Provides public access to the website
+  website-untrusted:
+    description: Provides untrusted access to the website
     compose-files:
-      - website-public.compose.yml
+      - website-untrusted.compose.yml
     requires:
       networks:
         - description: Overlay network for Caddy to connect to upstream services
-          name: caddy-ingress-public
+          name: caddy-ingress-untrusted
       services:
         - tags: [caddy-docker-proxy]
           port: 8000

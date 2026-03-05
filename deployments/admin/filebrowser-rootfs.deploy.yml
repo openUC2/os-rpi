@@ -1,5 +1,5 @@
 package: /deployments/admin/filebrowser-rootfs.pkg
 features:
   - frontend
-  - frontend-public
+  - frontend-untrusted
 disabled: false

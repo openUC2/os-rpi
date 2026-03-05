@@ -38,10 +38,10 @@ features:
             - /app/*
             - /static/*
             - /fonts/*
-  frontend-public:
-    description: Provides public access to a browser landing page
+  frontend-untrusted:
+    description: Provides untrusted access to a browser landing page
     compose-files:
-      - frontend-public.compose.yml
+      - frontend-untrusted.compose.yml
     requires:
       networks:
         - description: Overlay network for Caddy to connect to upstream services

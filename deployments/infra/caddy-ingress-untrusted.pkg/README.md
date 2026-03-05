@@ -1,4 +1,4 @@
-# caddy-ingress-public.pkg
+# caddy-ingress-untrusted.pkg
 
 An ingress proxy on port 8000 which only exposes unprivileged services.
 
@@ -16,7 +16,7 @@ To run Tailscale Funnel as a background service, run:
 tailscale funnel --https=8443 --bg 8000
 ```
 
-Then you can access the services from the public internet on port 8443 of the domain name assigned
+Then you can access the services from the untrusted internet on port 8443 of the domain name assigned
 by Tailscale Funnel.
 
 Warning: if you use `--https=443` or omit `--https=8443` in the above command, Tailscale Funnel will

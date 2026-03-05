@@ -1,7 +1,7 @@
 services:
   server:
     networks:
-      - caddy-ingress-public
+      - caddy-ingress-untrusted
     labels:
       caddy: http://
       caddy.handle_0: /
@@ -19,5 +19,5 @@ networks:
   default:
     name: none
     external: true
-  caddy-ingress-public:
+  caddy-ingress-untrusted:
     external: true

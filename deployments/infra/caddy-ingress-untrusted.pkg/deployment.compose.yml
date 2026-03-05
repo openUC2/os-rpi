@@ -18,7 +18,7 @@ services:
       - host.docker.internal:host-gateway
     environment:
       - CADDY_DOCKER_SCAN_STOPPED_CONTAINERS=1
-      - CADDY_INGRESS_NETWORKS=caddy-ingress-public
+      - CADDY_INGRESS_NETWORKS=caddy-ingress-untrusted
     labels:
       caddy.auto_https: disable_redirects
 
@@ -31,4 +31,4 @@ networks:
     name: none
     external: true
   proxied:
-    name: caddy-ingress-public
+    name: caddy-ingress-untrusted

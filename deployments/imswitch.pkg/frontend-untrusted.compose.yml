@@ -1,7 +1,7 @@
 services:
   server:
     networks:
-      - caddy-ingress-public
+      - caddy-ingress-untrusted
     labels:
       caddy: http://
       caddy.redir: /imswitch /imswitch/
@@ -12,5 +12,5 @@ services:
       # caddy.handle_1.reverse_proxy: "{{upstreams 8888}}"
 
 networks:
-  caddy-ingress-public:
+  caddy-ingress-untrusted:
     external: true

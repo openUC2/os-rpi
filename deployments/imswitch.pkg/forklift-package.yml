@@ -48,14 +48,14 @@ features:
           paths:
             - /jupyter
             - /jupyter/*
-  frontend-public:
-    description: Provides public access to the microscope control server
+  frontend-untrusted:
+    description: Provides untrusted access to the microscope control server
     compose-files:
-      - frontend-public.compose.yml
+      - frontend-untrusted.compose.yml
     requires:
       networks:
         - description: Overlay network for Caddy to connect to upstream services
-          name: caddy-ingress-public
+          name: caddy-ingress-untrusted
       services:
         - tags: [caddy-docker-proxy]
           port: 8000
