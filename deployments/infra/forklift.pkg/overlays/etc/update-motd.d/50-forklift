@@ -101,13 +101,17 @@ fi
 if [ "$current_bun" == "" ]; then
   echo "Couldn't determine the currently-booted Forklift pallet!"
 else
-  echo -e "Currently booted:      $(assemble_pallet_identifier "$current_bun")"
+  if [ "$(systemctl is-system-running)" == "starting" ]; then
+    echo -e "Previously booted:     $(assemble_pallet_identifier "$current_bun")"
+  else
+    echo -e "Currently booted:      $(assemble_pallet_identifier "$current_bun")"
+  fi
 fi
 if [ "$next_bun" == "" ]; then
   echo "Couldn't determine the next Forklift pallet to boot into!"
 elif [ "$next_bun" != "$current_bun" ]; then
   if [ "$(systemctl is-system-running)" == "starting" ]; then
-    echo -e "${green_color}Booting:               $(assemble_pallet_identifier "$next_bun")$reset_color"
+    echo -e "Currently booting:     $(assemble_pallet_identifier "$next_bun")"
   else
     echo -e "${green_color}Pending for next boot: $(assemble_pallet_identifier "$next_bun")$reset_color"
     if [ "$next_failed" == "true" ]; then
