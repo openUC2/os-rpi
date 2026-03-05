@@ -1,5 +1,5 @@
 services:
-  server:
+  server-untrusted:
     networks:
       - caddy-ingress-untrusted
     labels:

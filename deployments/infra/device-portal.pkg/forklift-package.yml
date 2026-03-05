@@ -38,14 +38,18 @@ features:
             - /app/*
             - /static/*
             - /fonts/*
+  untrusted:
+    description: Provides a browser landing page for untrusted users
+    compose-files:
+      - untrusted.compose.yml
   frontend-untrusted:
-    description: Provides untrusted access to a browser landing page
+    description: Provides untrusted access to the untrusted browser landing page
     compose-files:
       - frontend-untrusted.compose.yml
     requires:
       networks:
         - description: Overlay network for Caddy to connect to upstream services
-          name: caddy-ingress
+          name: caddy-ingress-untrusted
       services:
         - tags: [caddy-docker-proxy]
           port: 8000
