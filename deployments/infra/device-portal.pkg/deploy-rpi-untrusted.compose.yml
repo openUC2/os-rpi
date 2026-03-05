@@ -1,5 +1,5 @@
-services-untrusted:
-  server:
+services:
+  server-untrusted:
     volumes:
       - type: bind
         source: /run/machine-name
