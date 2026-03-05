@@ -1,5 +1,5 @@
 services:
-  server:
+  reverse-proxy-config:
     networks:
       - caddy-ingress-untrusted
     labels:
