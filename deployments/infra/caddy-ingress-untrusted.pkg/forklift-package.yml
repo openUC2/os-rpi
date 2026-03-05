@@ -47,7 +47,7 @@ features:
           target: overlays/etc/firewalld/services/http-ingress-untrusted.xml
         - description: Drop-in XML fragment for firewalld's http-ingress-untrusted service
           target: overlays/etc/firewalld/zones.d/nm-shared/60-service-http-ingress-untrusted.xml
-  firewall-allow-untrusted:
+  firewall-allow-public:
     description:
       Firewall configuration to allow public access to the reverse proxy over HTTP
     requires:
