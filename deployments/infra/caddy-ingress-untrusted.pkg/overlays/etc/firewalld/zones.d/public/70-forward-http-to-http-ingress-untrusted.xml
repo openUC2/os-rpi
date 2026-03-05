@@ -1,1 +1,1 @@
-  <forward-port port="80" protocol="tcp" to-addr="127.0.0.1"/>
+  <forward-port port="80" protocol="tcp" to-addr="127.0.0.1" to-port="8000"/>
