@@ -187,7 +187,7 @@ features:
     provides:
       file-exports:
         - description: Drop-in XML fragment for firewalld's Cockpit service
-          target: overlays/etc/firewalld/zones.d/nm-shared/51-service-cockpit.xml
+          target: overlays/etc/firewalld/zones.d/nm-shared/50-service-cockpit.xml
   firewall-allow-public:
     description:
       Firewall configuration to allow public access to Cockpit
@@ -201,7 +201,7 @@ features:
     provides:
       file-exports:
         - description: Drop-in XML fragment for firewalld's Cockpit service
-          target: overlays/etc/firewalld/zones.d/public/51-service-cockpit.xml
+          target: overlays/etc/firewalld/zones.d/public/50-service-cockpit.xml
   frontend:
     description: Provides access to the GUI
     compose-files:

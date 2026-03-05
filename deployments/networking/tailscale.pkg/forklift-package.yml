@@ -21,3 +21,17 @@ features:
       file-exports:
         - description: MOTD message reporting the Tailscale DNS name, if available
           target: overlays/etc/update-motd.d/50-tailscale
+  firewall-zone-nm-shared:
+    description:
+      Firewall configuration to attach the tailscale0 network interface to the nm-shared zone, instead of the global default zone (e.g. public)
+    requires:
+      filesets:
+        - description: Drop-in directory for XML fragment files to generate the nm-shared zone definition
+          tags:
+            - drop-in-assembly
+          paths:
+            - /etc/firewalld/zones.d/nm-shared
+    provides:
+      file-exports:
+        - description: Drop-in XML fragment for firewalld's tailscale0 interface attachment
+          target: overlays/etc/firewalld/zones.d/nm-shared/20-interface-tailscale0.xml
