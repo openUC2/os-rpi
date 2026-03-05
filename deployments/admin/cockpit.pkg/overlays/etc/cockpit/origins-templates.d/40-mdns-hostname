@@ -1,4 +1,5 @@
 # These mDNS names are provided as unique names on networks with multiple devices:
 http://{hostname}.local
 http://{hostname}.local:9090
+http://{hostname}.local:8000
 

@@ -1,4 +1,5 @@
 # These custom domain names are provided for easy local access when mDNS is not supported:
 http://open.{custom-domain}
 http://open.{custom-domain}:9090
+http://open.{custom-domain}:8000
 

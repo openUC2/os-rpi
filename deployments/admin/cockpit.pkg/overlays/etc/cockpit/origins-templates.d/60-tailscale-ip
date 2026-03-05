@@ -2,6 +2,8 @@
 # localhost as a fallback):
 http://{tailscale-ipv4}
 http://{tailscale-ipv4}:9090
+http://{tailscale-ipv4}:8000
 http://[{tailscale-ipv6}]
 http://[{tailscale-ipv6}]:9090
+http://[{tailscale-ipv6}]:8000
 

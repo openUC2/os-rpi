@@ -235,3 +235,36 @@ features:
       file-exports:
         - description: Drop-in config fragment to enable connection through a reverse-proxy
           target: overlays/etc/cockpit/cockpit.conf.d/20-webservice-20-reverse-proxy.conf
+  frontend-untrusted:
+    description: Provides untrusted access to the GUI
+    compose-files:
+      - frontend-untrusted.compose.yml
+    requires:
+      networks:
+        - description: Overlay network for Caddy to connect to upstream services
+          name: caddy-ingress-untrusted
+      services:
+        - tags: [caddy-docker-proxy]
+          port: 8000
+          protocol: http
+        - port: 9090
+          protocol: http
+          paths:
+            - /admin/cockpit/*
+      filesets:
+        - description: Drop-in directory for config file fragments to generate the Cockpit config file
+          tags:
+            - drop-in-assembly
+          paths:
+            - /etc/cockpit/cockpit.conf.d
+    provides:
+      services:
+        - description: The Cockpit system administration dashboard
+          port: 8000
+          protocol: http
+          paths:
+            - /admin/cockpit
+            - /admin/cockpit/*
+      file-exports:
+        - description: Drop-in config fragment to enable connection through a reverse-proxy
+          target: overlays/etc/cockpit/cockpit.conf.d/20-webservice-20-reverse-proxy.conf

@@ -10,4 +10,5 @@ features:
   - firewall-allow-direct
   - firewall-allow-public
   - frontend
+  - frontend-untrusted
 disabled: false
