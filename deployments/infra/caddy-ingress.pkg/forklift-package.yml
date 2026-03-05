@@ -92,6 +92,10 @@ features:
           paths:
             - /etc/firewalld/zones.d/public
     provides:
+      services:
+        - description: Port in the public firewall zone
+          port: 80
+          protocol: http-public
       file-exports:
         - description: Drop-in XML fragment for firewalld's HTTP service
           target: overlays/etc/firewalld/zones.d/public/60-service-http.xml
