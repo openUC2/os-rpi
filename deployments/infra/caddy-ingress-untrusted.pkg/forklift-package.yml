@@ -63,3 +63,17 @@ features:
           target: overlays/etc/firewalld/services/http-ingress-untrusted.xml
         - description: Drop-in XML fragment for firewalld's http-ingress-untrusted service
           target: overlays/etc/firewalld/zones.d/public/60-service-http-ingress-untrusted.xml
+  firewall-forward-from-public:
+    description:
+      Firewall configuration to allow public access to the reverse proxy over HTTP on port 80
+    requires:
+      filesets:
+        - description: Drop-in directory for XML fragment files to generate the public zone definition
+          tags:
+            - drop-in-assembly
+          paths:
+            - /etc/firewalld/zones.d/public
+    provides:
+      file-exports:
+        - description: Drop-in XML fragment for forwarding port 80 to firewalld's http-ingress-untrusted service
+          target: overlays/etc/firewalld/zones.d/nm-shared/70-forward-http-to-http-ingress-untrusted.xml
