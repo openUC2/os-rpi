@@ -38,6 +38,14 @@ features:
             - /app/*
             - /static/*
             - /fonts/*
+  deploy-rpi:
+    description: Integrates with Imswitch OS
+    compose-files:
+      - deploy-rpi.compose.yml
+  dev-mock:
+    description: Provides a fake machine name, to enable development & testing outside openUC2 OS
+    compose-files:
+      - dev-mock.compose.yml
   untrusted:
     description: Provides a browser landing page for untrusted users
     compose-files:
@@ -65,11 +73,11 @@ features:
             - /app/*
             - /static/*
             - /fonts/*
-  deploy-rpi:
-    description: Integrates with Imswitch OS
+  deploy-rpi-untrusted:
+    description: Integrates with Imswitch OS for untrusted access
     compose-files:
-      - deploy-rpi.compose.yml
-  dev-mock:
-    description: Provides a fake machine name, to enable development & testing outside openUC2 OS
+      - deploy-rpi-untrusted.compose.yml
+  dev-mock-untrusted:
+    description: Provides a fake machine name for untrusted access, to enable development & testing outside openUC2 OS
     compose-files:
-      - dev-mock.compose.yml
+      - dev-mock-untrusted.compose.yml

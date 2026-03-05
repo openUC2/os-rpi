@@ -1,6 +1,8 @@
 package: /deployments/infra/device-portal.pkg
 features:
   - frontend
-  - frontend-untrusted
   - deploy-rpi
+  - untrusted
+  - frontend-untrusted
+  - deploy-rpi-untrusted
 disabled: false
