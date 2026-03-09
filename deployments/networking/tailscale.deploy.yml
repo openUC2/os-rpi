@@ -1,5 +1,5 @@
 package: /deployments/networking/tailscale.pkg
 features:
   - motd
-  - firewall-zone-nm-shared
+  - firewall-as-direct
 disabled: false
