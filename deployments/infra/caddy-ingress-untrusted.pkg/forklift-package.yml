@@ -21,7 +21,7 @@ deployment:
       - description: Bridge network for Caddy to connect to upstream services
         name: caddy-ingress-untrusted
     listeners:
-      - description: Web server for all HTTP requests
+      - description: Web server for all HTTP requests from untrusted peers
         port: 8000
         protocol: tcp
     services:
