@@ -1,4 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <service>
+  <short>HTTP (untrusted ingress)</short>
+  <description>openUC2 OS ingress proxy for untrusted peers</description>
   <port port="8000" protocol="tcp" />
 </service>
