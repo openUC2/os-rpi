@@ -256,13 +256,6 @@ features:
       file-exports:
         - description: Drop-in udev rule for enabling NetworkManager on USB gadget devices
           target: overlays/etc/udev/rules.d/99-nm-usb-gadget.rules
-  eth0-default-firewall-block:
-    description: Bind eth0 in DHCP client mode to the "block" firewall zone instead of the "public" zone
-    provides:
-      file-exports:
-        - description: Drop-in NetworkManager connection fragment with firewall zone assignment
-          source: overlays/etc/NetworkManager/system-connections.d/eth0-default/22-connection-firewall@block.nmconnection
-          target: overlays/etc/NetworkManager/system-connections.d/eth0-default/22-connection-firewall.nmconnection
   eth0-default-firewall-direct:
     description: Bind eth0 in DHCP client mode to the "nm-shared" firewall zone instead of the "public" zone
     provides:
@@ -270,6 +263,20 @@ features:
         - description: Drop-in NetworkManager connection fragment with firewall zone assignment
           source: overlays/etc/NetworkManager/system-connections.d/eth0-default/22-connection-firewall@nm-shared.nmconnection
           target: overlays/etc/NetworkManager/system-connections.d/eth0-default/22-connection-firewall.nmconnection
+  eth0-default-firewall-block:
+    description: Bind eth0 in DHCP client mode to the "block" firewall zone instead of the "public" zone
+    provides:
+      file-exports:
+        - description: Drop-in NetworkManager connection fragment with firewall zone assignment
+          source: overlays/etc/NetworkManager/system-connections.d/eth0-default/22-connection-firewall@block.nmconnection
+          target: overlays/etc/NetworkManager/system-connections.d/eth0-default/22-connection-firewall.nmconnection
+  eth0-static-firewall-public:
+    description: Bind eth0 in DHCP server mode to the "public" firewall zone instead of the "nm-shared" zone
+    provides:
+      file-exports:
+        - description: Drop-in NetworkManager connection fragment with firewall zone assignment
+          source: overlays/etc/NetworkManager/system-connections.d/eth0-static/22-connection-firewall@public.nmconnection
+          target: overlays/etc/NetworkManager/system-connections.d/eth0-static/22-connection-firewall.nmconnection
   eth0-static-firewall-block:
     description: Bind eth0 in DHCP server mode to the "block" firewall zone instead of the "nm-shared" zone
     provides:
@@ -277,20 +284,6 @@ features:
         - description: Drop-in NetworkManager connection fragment with firewall zone assignment
           source: overlays/etc/NetworkManager/system-connections.d/eth0-static/22-connection-firewall@block.nmconnection
           target: overlays/etc/NetworkManager/system-connections.d/eth0-static/22-connection-firewall.nmconnection
-  eth0-static-firewall-direct:
-    description: Bind eth0 in DHCP server mode to the "public" firewall zone instead of the "nm-shared" zone
-    provides:
-      file-exports:
-        - description: Drop-in NetworkManager connection fragment with firewall zone assignment
-          source: overlays/etc/NetworkManager/system-connections.d/eth0-static/22-connection-firewall@public.nmconnection
-          target: overlays/etc/NetworkManager/system-connections.d/eth0-static/22-connection-firewall.nmconnection
-  eth1-default-firewall-block:
-    description: Bind eth1 in DHCP client mode to the "block" firewall zone instead of the "public" zone
-    provides:
-      file-exports:
-        - description: Drop-in NetworkManager connection fragment with firewall zone assignment
-          source: overlays/etc/NetworkManager/system-connections.d/eth1-default/22-connection-firewall@block.nmconnection
-          target: overlays/etc/NetworkManager/system-connections.d/eth1-default/22-connection-firewall.nmconnection
   eth1-default-firewall-direct:
     description: Bind eth1 in DHCP client mode to the "nm-shared" firewall zone instead of the "public" zone
     provides:
@@ -298,6 +291,20 @@ features:
         - description: Drop-in NetworkManager connection fragment with firewall zone assignment
           source: overlays/etc/NetworkManager/system-connections.d/eth1-default/22-connection-firewall@nm-shared.nmconnection
           target: overlays/etc/NetworkManager/system-connections.d/eth1-default/22-connection-firewall.nmconnection
+  eth1-default-firewall-block:
+    description: Bind eth1 in DHCP client mode to the "block" firewall zone instead of the "public" zone
+    provides:
+      file-exports:
+        - description: Drop-in NetworkManager connection fragment with firewall zone assignment
+          source: overlays/etc/NetworkManager/system-connections.d/eth1-default/22-connection-firewall@block.nmconnection
+          target: overlays/etc/NetworkManager/system-connections.d/eth1-default/22-connection-firewall.nmconnection
+  eth1-static-firewall-public:
+    description: Bind eth1 in DHCP server mode to the "public" firewall zone instead of the "nm-shared" zone
+    provides:
+      file-exports:
+        - description: Drop-in NetworkManager connection fragment with firewall zone assignment
+          source: overlays/etc/NetworkManager/system-connections.d/eth1-static/22-connection-firewall@public.nmconnection
+          target: overlays/etc/NetworkManager/system-connections.d/eth1-static/22-connection-firewall.nmconnection
   eth1-static-firewall-block:
     description: Bind eth1 in DHCP server mode to the "block" firewall zone instead of the "nm-shared" zone
     provides:
@@ -305,20 +312,6 @@ features:
         - description: Drop-in NetworkManager connection fragment with firewall zone assignment
           source: overlays/etc/NetworkManager/system-connections.d/eth1-static/22-connection-firewall@block.nmconnection
           target: overlays/etc/NetworkManager/system-connections.d/eth1-static/22-connection-firewall.nmconnection
-  eth1-static-firewall-direct:
-    description: Bind eth1 in DHCP server mode to the "public" firewall zone instead of the "nm-shared" zone
-    provides:
-      file-exports:
-        - description: Drop-in NetworkManager connection fragment with firewall zone assignment
-          source: overlays/etc/NetworkManager/system-connections.d/eth1-static/22-connection-firewall@public.nmconnection
-          target: overlays/etc/NetworkManager/system-connections.d/eth1-static/22-connection-firewall.nmconnection
-  usb0-default-firewall-block:
-    description: Bind usb0 in DHCP client mode to the "block" firewall zone instead of the "public" zone
-    provides:
-      file-exports:
-        - description: Drop-in NetworkManager connection fragment with firewall zone assignment
-          source: overlays/etc/NetworkManager/system-connections.d/usb0-default/22-connection-firewall@block.nmconnection
-          target: overlays/etc/NetworkManager/system-connections.d/usb0-default/22-connection-firewall.nmconnection
   usb0-default-firewall-direct:
     description: Bind usb0 in DHCP client mode to the "nm-shared" firewall zone instead of the "public" zone
     provides:
@@ -326,6 +319,20 @@ features:
         - description: Drop-in NetworkManager connection fragment with firewall zone assignment
           source: overlays/etc/NetworkManager/system-connections.d/usb0-default/22-connection-firewall@nm-shared.nmconnection
           target: overlays/etc/NetworkManager/system-connections.d/usb0-default/22-connection-firewall.nmconnection
+  usb0-default-firewall-block:
+    description: Bind usb0 in DHCP client mode to the "block" firewall zone instead of the "public" zone
+    provides:
+      file-exports:
+        - description: Drop-in NetworkManager connection fragment with firewall zone assignment
+          source: overlays/etc/NetworkManager/system-connections.d/usb0-default/22-connection-firewall@block.nmconnection
+          target: overlays/etc/NetworkManager/system-connections.d/usb0-default/22-connection-firewall.nmconnection
+  usb0-static-firewall-public:
+    description: Bind usb0 in DHCP server mode to the "public" firewall zone instead of the "nm-shared" zone
+    provides:
+      file-exports:
+        - description: Drop-in NetworkManager connection fragment with firewall zone assignment
+          source: overlays/etc/NetworkManager/system-connections.d/usb0-static/22-connection-firewall@public.nmconnection
+          target: overlays/etc/NetworkManager/system-connections.d/usb0-static/22-connection-firewall.nmconnection
   usb0-static-firewall-block:
     description: Bind usb0 in DHCP server mode to the "block" firewall zone instead of the "nm-shared" zone
     provides:
@@ -333,20 +340,6 @@ features:
         - description: Drop-in NetworkManager connection fragment with firewall zone assignment
           source: overlays/etc/NetworkManager/system-connections.d/usb0-static/22-connection-firewall@block.nmconnection
           target: overlays/etc/NetworkManager/system-connections.d/usb0-static/22-connection-firewall.nmconnection
-  usb0-static-firewall-direct:
-    description: Bind usb0 in DHCP server mode to the "public" firewall zone instead of the "nm-shared" zone
-    provides:
-      file-exports:
-        - description: Drop-in NetworkManager connection fragment with firewall zone assignment
-          source: overlays/etc/NetworkManager/system-connections.d/usb0-static/22-connection-firewall@public.nmconnection
-          target: overlays/etc/NetworkManager/system-connections.d/usb0-static/22-connection-firewall.nmconnection
-  usb1-default-firewall-block:
-    description: Bind usb1 in DHCP client mode to the "block" firewall zone instead of the "public" zone
-    provides:
-      file-exports:
-        - description: Drop-in NetworkManager connection fragment with firewall zone assignment
-          source: overlays/etc/NetworkManager/system-connections.d/usb1-default/22-connection-firewall@block.nmconnection
-          target: overlays/etc/NetworkManager/system-connections.d/usb1-default/22-connection-firewall.nmconnection
   usb1-default-firewall-direct:
     description: Bind usb1 in DHCP client mode to the "nm-shared" firewall zone instead of the "public" zone
     provides:
@@ -354,17 +347,24 @@ features:
         - description: Drop-in NetworkManager connection fragment with firewall zone assignment
           source: overlays/etc/NetworkManager/system-connections.d/usb1-default/22-connection-firewall@nm-shared.nmconnection
           target: overlays/etc/NetworkManager/system-connections.d/usb1-default/22-connection-firewall.nmconnection
+  usb1-default-firewall-block:
+    description: Bind usb1 in DHCP client mode to the "block" firewall zone instead of the "public" zone
+    provides:
+      file-exports:
+        - description: Drop-in NetworkManager connection fragment with firewall zone assignment
+          source: overlays/etc/NetworkManager/system-connections.d/usb1-default/22-connection-firewall@block.nmconnection
+          target: overlays/etc/NetworkManager/system-connections.d/usb1-default/22-connection-firewall.nmconnection
+  usb1-static-firewall-public:
+    description: Bind usb1 in DHCP server mode to the "public" firewall zone instead of the "nm-shared" zone
+    provides:
+      file-exports:
+        - description: Drop-in NetworkManager connection fragment with firewall zone assignment
+          source: overlays/etc/NetworkManager/system-connections.d/usb1-static/22-connection-firewall@public.nmconnection
+          target: overlays/etc/NetworkManager/system-connections.d/usb1-static/22-connection-firewall.nmconnection
   usb1-static-firewall-block:
     description: Bind usb1 in DHCP server mode to the "block" firewall zone instead of the "nm-shared" zone
     provides:
       file-exports:
         - description: Drop-in NetworkManager connection fragment with firewall zone assignment
           source: overlays/etc/NetworkManager/system-connections.d/usb1-static/22-connection-firewall@block.nmconnection
-          target: overlays/etc/NetworkManager/system-connections.d/usb1-static/22-connection-firewall.nmconnection
-  usb1-static-firewall-direct:
-    description: Bind usb1 in DHCP server mode to the "public" firewall zone instead of the "nm-shared" zone
-    provides:
-      file-exports:
-        - description: Drop-in NetworkManager connection fragment with firewall zone assignment
-          source: overlays/etc/NetworkManager/system-connections.d/usb1-static/22-connection-firewall@public.nmconnection
           target: overlays/etc/NetworkManager/system-connections.d/usb1-static/22-connection-firewall.nmconnection
