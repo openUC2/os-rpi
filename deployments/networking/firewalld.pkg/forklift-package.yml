@@ -29,9 +29,6 @@ deployment:
       - description:
           Drop-in firewalld config fragment with comment describing firewalld config drop-in directory
         target: overlays/etc/firewalld/firewalld.conf.d/10-README.conf
-      - description:
-          Drop-in firewalld config fragment to set DefaultZone
-        target: overlays/etc/firewalld/firewalld.conf.d/20-default-zone.conf
       # Zone file assembly:
       - description:
           Shell script to generate a firewalld zone definition file from drop-in XML fragment files
@@ -40,6 +37,30 @@ deployment:
         target: overlays/usr/lib/systemd/system/assemble-firewalld-zone@.service
 
 features:
+  default-zone-direct:
+    description: Set the "nm-shared" zone to the default zone for network interfaces
+    provides:
+      file-exports:
+        - description:
+            Drop-in firewalld config fragment to set DefaultZone
+          source: overlays/etc/firewalld/firewalld.conf.d/20-default-zone@nm-shared.conf
+          target: overlays/etc/firewalld/firewalld.conf.d/20-default-zone.conf
+  default-zone-public:
+    description: Set the "public" zone to the default zone for network interfaces
+    provides:
+      file-exports:
+        - description:
+            Drop-in firewalld config fragment to set DefaultZone
+          source: overlays/etc/firewalld/firewalld.conf.d/20-default-zone@public.conf
+          target: overlays/etc/firewalld/firewalld.conf.d/20-default-zone.conf
+  default-zone-block:
+    description: Set the "block" zone to the default zone for network interfaces
+    provides:
+      file-exports:
+        - description:
+            Drop-in firewalld config fragment to set DefaultZone
+          source: overlays/etc/firewalld/firewalld.conf.d/20-default-zone@block.conf
+          target: overlays/etc/firewalld/firewalld.conf.d/20-default-zone.conf
   zone-public:
     description: Generate definition for the public zone
     provides:
