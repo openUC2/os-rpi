@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <service>
+  <short>ESP32 firmware updates</short>
+  <description>openUC2 firmware update authentication and binary transfer services</description>
   <port port="3333" protocol="tcp" />
   <port port="3232" protocol="udp" />
 </service>

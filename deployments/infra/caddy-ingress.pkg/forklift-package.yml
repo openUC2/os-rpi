@@ -79,8 +79,10 @@ features:
       file-exports:
         - description: Drop-in XML fragment for firewalld's HTTP service
           target: overlays/etc/firewalld/zones.d/nm-shared/60-service-http.xml
-        - description: Drop-in XML fragment for firewalld's HTTPS
+        - description: Drop-in XML fragment for firewalld's HTTPS service
           target: overlays/etc/firewalld/zones.d/nm-shared/60-service-https.xml
+        - description: Drop-in XML fragment for firewalld's HTTP/3 service
+          target: overlays/etc/firewalld/zones.d/nm-shared/60-service-http3.xml
   firewall-allow-public:
     description:
       Firewall configuration to allow public access to the reverse proxy
@@ -101,3 +103,5 @@ features:
           target: overlays/etc/firewalld/zones.d/public/60-service-http.xml
         - description: Drop-in XML fragment for firewalld's HTTPS service
           target: overlays/etc/firewalld/zones.d/public/60-service-https.xml
+        - description: Drop-in XML fragment for firewalld's HTTP/3 service
+          target: overlays/etc/firewalld/zones.d/public/60-service-http3.xml

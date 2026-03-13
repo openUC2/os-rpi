@@ -21,7 +21,7 @@ deployment:
       - description: Bridge network for Caddy to connect to upstream services
         name: caddy-ingress-untrusted
     listeners:
-      - description: Web server for all HTTP requests
+      - description: Web server for all HTTP requests from untrusted peers
         port: 8000
         protocol: tcp
     services:
@@ -43,10 +43,10 @@ features:
             - /etc/firewalld/zones.d/nm-shared
     provides:
       file-exports:
-        - description: Definition for firewalld's http-ingress-untrusted service
-          target: overlays/etc/firewalld/services/http-ingress-untrusted.xml
-        - description: Drop-in XML fragment for firewalld's http-ingress-untrusted service
-          target: overlays/etc/firewalld/zones.d/nm-shared/60-service-http-ingress-untrusted.xml
+        - description: Definition for firewalld's http-untrusted service
+          target: overlays/etc/firewalld/services/http-untrusted.xml
+        - description: Drop-in XML fragment for firewalld's http-untrusted service
+          target: overlays/etc/firewalld/zones.d/nm-shared/60-service-http-untrusted.xml
   firewall-allow-public:
     description:
       Firewall configuration to allow public access to the reverse proxy over HTTP
@@ -59,10 +59,10 @@ features:
             - /etc/firewalld/zones.d/public
     provides:
       file-exports:
-        - description: Definition for firewalld's http-ingress-untrusted service
-          target: overlays/etc/firewalld/services/http-ingress-untrusted.xml
-        - description: Drop-in XML fragment for firewalld's http-ingress-untrusted service
-          target: overlays/etc/firewalld/zones.d/public/60-service-http-ingress-untrusted.xml
+        - description: Definition for firewalld's http-untrusted service
+          target: overlays/etc/firewalld/services/http-untrusted.xml
+        - description: Drop-in XML fragment for firewalld's http-untrusted service
+          target: overlays/etc/firewalld/zones.d/public/60-service-http-untrusted.xml
   firewall-forward-http-public:
     description:
       Firewall configuration to forward public traffic from port 80 to the reverse proxy
@@ -79,5 +79,5 @@ features:
           port: 80
           protocol: http-public
       file-exports:
-        - description: Drop-in XML fragment for forwarding port 80 to firewalld's http-ingress-untrusted service
-          target: overlays/etc/firewalld/zones.d/public/70-forward-http-to-http-ingress-untrusted.xml
+        - description: Drop-in XML fragment for forwarding port 80 to firewalld's http-untrusted service
+          target: overlays/etc/firewalld/zones.d/public/70-forward-http-to-http-untrusted.xml

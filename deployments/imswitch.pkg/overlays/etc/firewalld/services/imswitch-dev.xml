@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <service>
+  <short></short>
+  <description>ImSwitch web service and JupyterLab ports in development mode</description>
   <port port="8001" protocol="tcp" />
   <port port="8888" protocol="tcp" />
 </service>

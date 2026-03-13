@@ -87,6 +87,20 @@ features:
       file-exports:
         - description: Drop-in NetworkManager connection fragment with autoconnect disablement
           target: overlays/etc/NetworkManager/system-connections.d/wlan0-hotspot/21-connection-autoconnect-off.nmconnection
+  wlan0-firewall-public:
+    description: Bind the Wi-Fi hotspot to the "block" firewall zone instead of the "nm-shared" zone
+    provides:
+      file-exports:
+        - description: Drop-in NetworkManager connection fragment with firewall zone assignment
+          source: overlays/etc/NetworkManager/system-connections.d/wlan0-hotspot/22-connection-firewall@public.nmconnection
+          target: overlays/etc/NetworkManager/system-connections.d/wlan0-hotspot/22-connection-firewall.nmconnection
+  wlan0-firewall-block:
+    description: Bind the Wi-Fi hotspot to the "block" firewall zone instead of the "nm-shared" zone
+    provides:
+      file-exports:
+        - description: Drop-in NetworkManager connection fragment with firewall zone assignment
+          source: overlays/etc/NetworkManager/system-connections.d/wlan0-hotspot/22-connection-firewall@block.nmconnection
+          target: overlays/etc/NetworkManager/system-connections.d/wlan0-hotspot/22-connection-firewall.nmconnection
   wlan0-static-bg-channel:
     description: Choose a static Wi-Fi channel in the 2.4 GHz frequency range
     provides:
@@ -192,6 +206,20 @@ features:
       file-exports:
         - description: Drop-in NetworkManager connection fragment with autoconnect disablement
           target: overlays/etc/NetworkManager/system-connections.d/wlan1-hotspot/21-connection-autoconnect-off.nmconnection
+  wlan1-firewall-public:
+    description: Bind the Wi-Fi hotspot to the "block" firewall zone instead of the "nm-shared" zone
+    provides:
+      file-exports:
+        - description: Drop-in NetworkManager connection fragment with firewall zone assignment
+          source: overlays/etc/NetworkManager/system-connections.d/wlan1-hotspot/22-connection-firewall@public.nmconnection
+          target: overlays/etc/NetworkManager/system-connections.d/wlan1-hotspot/22-connection-firewall.nmconnection
+  wlan1-firewall-block:
+    description: Bind the Wi-Fi hotspot to the "block" firewall zone instead of the "nm-shared" zone
+    provides:
+      file-exports:
+        - description: Drop-in NetworkManager connection fragment with firewall zone assignment
+          source: overlays/etc/NetworkManager/system-connections.d/wlan1-hotspot/22-connection-firewall@block.nmconnection
+          target: overlays/etc/NetworkManager/system-connections.d/wlan1-hotspot/22-connection-firewall.nmconnection
   wlan1-static-bg-channel:
     description: Choose a static Wi-Fi channel in the 2.4 GHz frequency range
     provides:
