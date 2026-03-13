@@ -1,6 +1,6 @@
 services:
   server:
-    image: docker.io/lucaslorentz/caddy-docker-proxy:2.11.0@sha256:d72042c1b68d27faa70d9fe00e93ab938940a90a100065e220396b48027f881c
+    image: docker.io/lucaslorentz/caddy-docker-proxy:2.12.0@sha256:f3ebe7e762bccf17ce38b88420f80ce63f69dc548eea0cd6e5f29db2ae2ea062
     volumes:
       - type: bind
         source: /run/docker.sock
