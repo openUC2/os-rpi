@@ -20,8 +20,8 @@ mkdir -p "$HOME/.local/share/forklift/stages"
 sudo mkdir -p /var/lib/forklift/stages
 sudo systemctl enable "bind-.local-share-forklift-stages@home-$USER.service"
 if ! sudo systemctl start "bind-.local-share-forklift-stages@home-$USER.service" 2>/dev/null; then
-  echo "Warning: the system's Forklift stage store is not mounted to $USER's Forklift stage store."
-  echo "As long as you don't touch the Forklift stage store before the next boot, this is fine."
+  TARGET_UID="$(stat -c "%u" "$HOME")"
+  mount -o bind,X-mount.idmap:b:"$TARGET_UID":0:1 "$SOURCE" "$TARGET"
 fi
 
 # Stage the local pallet
