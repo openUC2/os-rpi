@@ -18,9 +18,6 @@ sudo cp "$config_files_root"/usr/lib/systemd/system-preset/* /usr/lib/systemd/sy
 # default Forklift workspace, both in the current boot and subsequent boots:
 mkdir -p "$HOME/.local/share/forklift/stages"
 sudo mkdir -p /var/lib/forklift/stages
-# TODO: maybe we should instead make a new "forklift" group which owns everything in
-# /var/lib/forklift?
-sudo chown "$USER" /var/lib/forklift/stages
 sudo systemctl enable "bind-.local-share-forklift-stages@home-$USER.service"
 if ! sudo systemctl start "bind-.local-share-forklift-stages@home-$USER.service" 2>/dev/null; then
   echo "Warning: the system's Forklift stage store is not mounted to $USER's Forklift stage store."
