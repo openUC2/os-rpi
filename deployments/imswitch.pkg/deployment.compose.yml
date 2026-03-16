@@ -19,6 +19,8 @@ services:
       - SCAN_EXT_DATA_PATH=1
       - EXT_DATA_PATH=/media
       - SSL=0
+    extra_hosts:
+      - host.docker.internal:host-gateway
     depends_on:
       volume-setup:
         condition: service_completed_successfully
