@@ -21,7 +21,7 @@ sudo mkdir -p /var/lib/forklift/stages
 sudo systemctl enable "bind-.local-share-forklift-stages@home-$USER.service"
 if ! sudo systemctl start "bind-.local-share-forklift-stages@home-$USER.service" 2>/dev/null; then
   TARGET_UID="$(stat -c "%u" "$HOME")"
-  mount -o bind,X-mount.idmap:0:"$TARGET_UID":1 \
+  sudo mount -o bind,X-mount.idmap:0:"$TARGET_UID":1 \
     /var/lib/forklift/stages "$HOME/.local/share/forklift/stages"
 fi
 
