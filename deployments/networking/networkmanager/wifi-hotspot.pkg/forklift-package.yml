@@ -133,6 +133,7 @@ features:
       file-exports:
         - description: Drop-in NetworkManager connection fragment with a cleartext Wi-Fi password
           target: overlays/etc/NetworkManager/system-connections.d/wlan0-hotspot/51-wifi-security-password.nmconnection
+          permissions: 0600
   wlan0-direct-ip-address:
     description: Set the IPv4 address to the default for direct connections on wlan0
     provides:
@@ -248,6 +249,7 @@ features:
       file-exports:
         - description: Drop-in NetworkManager connection fragment with a cleartext Wi-Fi password
           target: overlays/etc/NetworkManager/system-connections.d/wlan1-hotspot/51-wifi-security-password.nmconnection
+          permissions: 0600
   wlan1-direct-ip-address:
     description: Set the IPv4 address to the default for direct connections on wlan1
     provides:

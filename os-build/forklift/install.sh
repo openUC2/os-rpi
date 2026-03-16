@@ -18,18 +18,17 @@ sudo cp "$config_files_root"/usr/lib/systemd/system-preset/* /usr/lib/systemd/sy
 # default Forklift workspace, both in the current boot and subsequent boots:
 mkdir -p "$HOME/.local/share/forklift/stages"
 sudo mkdir -p /var/lib/forklift/stages
-# TODO: maybe we should instead make a new "forklift" group which owns everything in
-# /var/lib/forklift?
-sudo chown "$USER" /var/lib/forklift/stages
 sudo systemctl enable "bind-.local-share-forklift-stages@home-$USER.service"
 if ! sudo systemctl start "bind-.local-share-forklift-stages@home-$USER.service" 2>/dev/null; then
-  echo "Warning: the system's Forklift stage store is not mounted to $USER's Forklift stage store."
-  echo "As long as you don't touch the Forklift stage store before the next boot, this is fine."
+  TARGET_UID="$(stat -c "%u" "$HOME")"
+  sudo mount --bind -o X-mount.idmap="0:$TARGET_UID:1" \
+    /var/lib/forklift/stages "$HOME/.local/share/forklift/stages"
+  ls -l "$HOME/.local/share/forklift"
 fi
 
 # Stage the local pallet
-forklift --stage-store /var/lib/forklift/stages plt stage --cache-img=false
-forklift --stage-store /var/lib/forklift/stages stage add-bundle-name factory-reset next
+forklift plt stage --cache-img=false
+forklift stage add-bundle-name factory-reset next
 
 # Set up Forklift upgrade checks
 # TODO: add a forklift command to print the pallet path of the dev pallet, so that we won't need to
