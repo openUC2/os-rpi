@@ -23,6 +23,7 @@ if ! sudo systemctl start "bind-.local-share-forklift-stages@home-$USER.service"
   TARGET_UID="$(stat -c "%u" "$HOME")"
   sudo mount -o bind,X-mount.idmap:0:"$TARGET_UID":1 \
     /var/lib/forklift/stages "$HOME/.local/share/forklift/stages"
+  ls -lR "$HOME/.local/share/forklift"
 fi
 
 # Stage the local pallet
