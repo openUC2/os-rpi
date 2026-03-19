@@ -9,6 +9,7 @@ services:
       - TEMPLATES_PATH=/web/templates
       - ACTIONCABLE_HASH_KEYFILE=/secrets/action-cable/hash.key
       - SIDECAR_ADDRESS=tcp:sidecar:2312
+      - GODEBUG=netdns=cgo
     volumes:
       # - type: bind
       #   source: ./templates
