@@ -8,7 +8,7 @@ services:
       - HTTP_BASEPATH=/admin/panel/
       - TEMPLATES_PATH=/web/templates
       - ACTIONCABLE_HASH_KEYFILE=/secrets/action-cable/hash.key
-      - SIDECAR_ADDRESS="tcp:sidecar:2312"
+      - SIDECAR_ADDRESS=tcp:sidecar:2312
     volumes:
       # - type: bind
       #   source: ./templates
@@ -33,7 +33,7 @@ services:
     image: ghcr.io/openuc2/device-admin:0.1.6-alpha.1@sha256:ce1315d2e4cd864c916c487d351aec0571cc4d023e022a17281a3617b6cf83e0
     command: sidecar
     environment:
-      - SIDECAR_ADDRESS="tcp:0.0.0.0:2312"
+      - SIDECAR_ADDRESS=tcp:0.0.0.0:2312
     volumes:
       - type: bind
         source: /run/dbus/system_bus_socket
