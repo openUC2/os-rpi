@@ -95,7 +95,7 @@ Now you are ready to deploy these changes as an OS update to a machine running o
    ```
 
 2. To apply all changes in the upgraded local pallet (including changes to OS configuration files),
-   you should reboot.
+   you should reboot or soft-reboot.
 
    To immediately apply changes to Docker apps before you reboot, you can run:
 
@@ -122,14 +122,14 @@ forklift plt disable-depl imswitch
 To apply your modified configuration, then you can either
 
 1) run `forklift plt apply`, or
-2) run `forklift plt stage` and then reboot (e.g. via `sudo reboot`).
+2) run `forklift plt stage` and then reboot or soft-reboot (e.g. via `sudo systemctl soft-reboot`).
 
 If you later want to re-enable ImSwitch, you can then run `forklift plt enable-depl imswitch` (and
 then apply your modified configuration using the command(s) you prefer).
 
 To see the full list of deployments you can disable or enable, run `forklift plt ls-depl`. Note that
 for some deployments, especially some deployments whose names begin with `provisioning/`,
-`networking/`, `infra/`, and `dev/`, you will have to reboot in order for changes to actually take
+`networking/`, `infra/`, and `dev/`, you will have to reboot/soft-reboot in order for changes to actually take
 effect.
 
 ## Migrations for breaking changes
@@ -202,10 +202,10 @@ forklift stage set-next-result success
 forklift stage set-next next
 # This command will download the Docker container images for the version you're upgrading to.
 
-forklift stage apply && sudo reboot
+forklift stage apply && sudo systemctl soft-reboot
 # Just to be safe, we should test whether the Docker Compose apps all load correctly before we
-# reboot to fully apply the Forklift pallet. If an error occurs here, more troubleshooting will be
-# needed before it's safe to reboot!
+# soft-reboot to fully apply the Forklift pallet. If an error occurs here, more troubleshooting will be
+# needed before it's safe to soft-reboot!
 ```
 
 ## Licensing
