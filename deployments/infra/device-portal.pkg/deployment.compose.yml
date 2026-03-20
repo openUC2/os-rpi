@@ -1,19 +1,10 @@
 services:
   server:
-    image: ghcr.io/openuc2/device-portal:0.1.1@sha256:5b181d3ca8bba9b2b859318ebf72e24a99d1a197b44ea2d98633139e16fca040
+    image: ghcr.io/openuc2/device-portal:0.2.0-alpha.1@sha256:9da99f8e8886b2dc742f7c8006bd425e5b3ff6fda2c37da0100fa8ddb13bc253
     environment:
       - TEMPLATES_PATH=/web/templates
     volumes:
       - type: bind
         source: ./templates
-        target: /web/templates
-        read_only: true
-  server-untrusted:
-    image: ghcr.io/openuc2/device-portal:0.1.1@sha256:5b181d3ca8bba9b2b859318ebf72e24a99d1a197b44ea2d98633139e16fca040
-    environment:
-      - TEMPLATES_PATH=/web/templates
-    volumes:
-      - type: bind
-        source: ./templates-untrusted
         target: /web/templates
         read_only: true

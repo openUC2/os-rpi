@@ -130,6 +130,6 @@ else
   echo "Update source:         $upgrade_query"
 fi
 if [ "$upgrade_available" != "" ]; then
-  echo -e "${green_color}Upgrade available:     $upgrade_available$reset_color"
-  echo "To update, run: forklift plt upgrade && sudo reboot"
+  echo -e "${green_color}Update available:      $upgrade_available$reset_color"
+  echo "To install update, run: forklift plt upgrade && sudo systemctl soft-reboot"
 fi
