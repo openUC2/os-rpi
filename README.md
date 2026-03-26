@@ -95,9 +95,9 @@ Now you are ready to deploy these changes as an OS update to a machine running o
    ```
 
 2. To apply all changes in the upgraded local pallet (including changes to OS configuration files),
-   you should reboot or soft-reboot.
+   you should reboot or soft-reboot (e.g. via `sudo systemctl soft-reboot`).
 
-   To immediately apply changes to Docker apps before you reboot, you can run:
+   If you'd like to immediately apply changes to Docker apps before your next reboot, you can run:
 
    ```bash
    sudo systemctl restart forklift-apply
@@ -136,7 +136,7 @@ effect.
 
 ### Migrating from github.com/openUC2/os-rpi
 
-The pallet in this repo used to be called `github.com/openUC2/os-rpi`, and the default
+The pallet in this repo used to be called `github.com/openUC2/rpi-imswitch-os`, and the default
 branch in this repo used to be called `main`. On machines deployed with older versions of this OS
 built before March 2026, you will need to run the following command (instead of
 `forklift plt upgrade`) for your next upgrade:
