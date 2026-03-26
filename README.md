@@ -134,7 +134,7 @@ effect.
 
 ## Migrations for breaking changes
 
-### Migrating from github.com/openUC2/os-rpi
+### Migrating from github.com/openUC2/rpi-imswitch-os
 
 The pallet in this repo used to be called `github.com/openUC2/rpi-imswitch-os`, and the default
 branch in this repo used to be called `main`. On machines deployed with older versions of this OS
