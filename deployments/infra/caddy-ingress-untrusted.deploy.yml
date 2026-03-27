@@ -2,5 +2,5 @@ package: /deployments/infra/caddy-ingress-untrusted.pkg
 features:
   - firewall-allow-direct
   - firewall-allow-public
-  - firewall-forward-http-public
+  # - firewall-forward-http-public
 disabled: false
