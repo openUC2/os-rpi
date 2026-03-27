@@ -1,5 +1,5 @@
 # The NetworkManager drop-in connection fragment at
-# /etc/NetworkManager/system-connections.d/wlan0-hotspot/30-generated-templated.nmconnection is
+# /etc/NetworkManager/system-connections.d/wlan0-hotspot/40-generated-templated.nmconnection is
 # automatically generated from NetworkManager drop-in connection fragment template files in
 # /etc/NetworkManager/system-connections-templates.d/wlan0-hotspot.
 
