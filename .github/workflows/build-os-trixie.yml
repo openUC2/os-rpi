@@ -51,7 +51,7 @@ jobs:
       actions: read
     steps:
       - name: Download built OS image
-        uses: actions/download-artifact@v5
+        uses: actions/download-artifact@v8
         with:
           artifact-ids: ${{ needs.build.outputs.artifact_id }}.img.xz
           path: ${{ needs.build.outputs.image_name }}.img.xz
