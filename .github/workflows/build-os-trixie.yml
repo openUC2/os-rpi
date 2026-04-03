@@ -53,13 +53,12 @@ jobs:
       - name: Download built OS image
         uses: actions/download-artifact@v5
         with:
-          name: ${{ needs.build.outputs.image_name }}.img.xz
+          artifact-ids: ${{ needs.build.outputs.artifact_id }}.img.xz
           path: ${{ needs.build.outputs.image_name }}.img.xz
-          github-token: ${{ github.token }}
 
       - name: Upload image to Google Drive
         uses: willo32/google-drive-upload-action@v1.1.0
         with:
-          target: ${{ env.OUTPUT_IMAGE_NAME }}.img.xz
+          target: ${{ needs.build.outputs.image_name }}.img.xz
           parent_folder_id: ${{ vars.GOOGLE_DRIVE_FOLDER_ID }}
           credentials: ${{ secrets.GOOGLE_SERVICE_ACCOUNT_CREDENTIALS }}

@@ -34,6 +34,9 @@ on:
       image_name:
         description: 'Name of the built OS image'
         value: ${{ jobs.build-os-image.outputs.image_name }}
+      artifact_id:
+        description: 'Artifact ID of the GitHub Artifacts upload of the built OS image'
+        value: ${{ jobs.build-os-image.outputs.artifact_id }}
 
 jobs:
   build-os-image:
@@ -43,6 +46,7 @@ jobs:
       SETUP_USER: pi
     outputs:
       image_name: ${{ steps.output-image.outputs.name }}
+      artifact_id: ${{ steps.upload-artifact.outputs.artifact-id }}
     permissions:
       contents: read
       packages: write
@@ -316,9 +320,9 @@ jobs:
           compress-parallel: true
 
       - name: Upload image to Job Artifacts
+        id: upload-artifact
         uses: actions/upload-artifact@v7
         with:
-          name: ${{ env.OUTPUT_IMAGE_NAME }}
           path: ${{ env.OUTPUT_IMAGE_NAME }}.img.xz
           archive: false
           if-no-files-found: error
