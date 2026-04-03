@@ -44,8 +44,7 @@ jobs:
     runs-on: ubuntu-latest
     needs:
       - build
-    # TODO: change this to "push tag" only
-    if: ${{ github.event_name == 'pull_request' || github.event_name == 'push tag' }}
+    if: ${{ github.event_name == 'push tag' }}
     permissions:
       contents: read
       actions: read
