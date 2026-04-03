@@ -38,3 +38,27 @@ jobs:
       base_release_date: 2025-11-24
       base_file_release_date: 2025-11-24
       arch: arm64
+
+  upload:
+    name: Upload image (Google Drive)
+    runs-on: ubuntu-latest
+    needs:
+      - build
+    if: ${{ github.event_name == 'push tag' }}
+    permissions:
+      contents: read
+      actions: read
+    steps:
+      - name: Download built OS image
+        uses: actions/download-artifact@v8
+        with:
+          artifact-ids: ${{ needs.build.outputs.artifact_id }}.img.xz
+          github-token: ${{ github.token }}
+
+      - name: Upload image to Google Drive
+        uses: Jumbo810/Upload_Github_Artifacts_TO_GDrive@v2.3.3
+        with:
+          target: ${{ needs.build.outputs.image_name }}.img.xz
+          parent_folder_id: ${{ vars.GOOGLE_DRIVE_FOLDER_ID }}
+          credentials: ${{ secrets.GOOGLE_SERVICE_ACCOUNT_CREDENTIALS }}
+          replace_mode: update_in_place

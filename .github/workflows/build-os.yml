@@ -30,6 +30,13 @@ on:
         description: 'The CPU architecture of the OS (armhf, arm64)'
         required: true
         type: string
+    outputs:
+      image_name:
+        description: 'Name of the built OS image'
+        value: ${{ jobs.build-os-image.outputs.image_name }}
+      artifact_id:
+        description: 'Artifact ID of the GitHub Artifacts upload of the built OS image'
+        value: ${{ jobs.build-os-image.outputs.artifact_id }}
 
 jobs:
   build-os-image:
@@ -37,6 +44,9 @@ jobs:
     runs-on: ubuntu-24.04-arm
     env:
       SETUP_USER: pi
+    outputs:
+      image_name: ${{ steps.output-image.outputs.name }}
+      artifact_id: ${{ steps.upload-artifact.outputs.artifact-id }}
     permissions:
       contents: read
       packages: write
@@ -267,10 +277,11 @@ jobs:
 
       # UPLOAD OS IMAGE
 
-      # TODO: save this to a file in the SD card image
+      # TODO: save this to a "os-build" file in the OS image
       # TODO: use forklift to determine the version/pseudoversion string; if it's a PR, append that
       # only as a semver build tag
       - name: Determine output image name
+        id: output-image
         env:
           TAG_PREFIX: "v"
         run: |
@@ -296,6 +307,7 @@ jobs:
           fi
           output_name="$output_name-$version"
           echo "OUTPUT_IMAGE_NAME=$output_name" >> $GITHUB_ENV
+          echo "name=$output_name" >> $GITHUB_OUTPUT
 
       - name: Shrink the OS image
         uses: ethanjli/pishrink-action@v0.1.4
@@ -308,9 +320,9 @@ jobs:
           compress-parallel: true
 
       - name: Upload image to Job Artifacts
+        id: upload-artifact
         uses: actions/upload-artifact@v7
         with:
-          name: ${{ env.OUTPUT_IMAGE_NAME }}
           path: ${{ env.OUTPUT_IMAGE_NAME }}.img.xz
           archive: false
           if-no-files-found: error
