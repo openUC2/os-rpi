@@ -58,8 +58,9 @@ jobs:
           github-token: ${{ github.token }}
 
       - name: Upload image to Google Drive
-        uses: codetheweb/upload-to-drive@v1.3.0
+        uses: Jumbo810/Upload_Github_Artifacts_TO_GDrive@v2.3.3
         with:
           target: ${{ needs.build.outputs.image_name }}.img.xz
-          folder: ${{ vars.GOOGLE_DRIVE_FOLDER_ID }}
+          parent_folder_id: ${{ vars.GOOGLE_DRIVE_FOLDER_ID }}
           credentials: ${{ secrets.GOOGLE_SERVICE_ACCOUNT_CREDENTIALS }}
+          replace_mode: update_in_place
