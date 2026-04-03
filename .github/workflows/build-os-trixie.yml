@@ -58,7 +58,7 @@ jobs:
           github-token: ${{ github.token }}
 
       - name: Upload image to Google Drive
-        uses: codetheweb/upload-to-google-drive-forked@v1.3.0
+        uses: codetheweb/upload-to-drive@v1.3.0
         with:
           target: ${{ needs.build.outputs.image_name }}.img.xz
           folder: ${{ vars.GOOGLE_DRIVE_FOLDER_ID }}
