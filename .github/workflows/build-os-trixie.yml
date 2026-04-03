@@ -53,14 +53,13 @@ jobs:
       - name: Download built OS image
         uses: actions/download-artifact@v5
         with:
-          name: ${{ needs.build.outputs.image_name }}
+          name: ${{ needs.build.outputs.image_name }}.img.xz
           path: ${{ needs.build.outputs.image_name }}.img.xz
           github-token: ${{ github.token }}
 
       - name: Upload image to Google Drive
-        uses: adityak74/google-drive-upload-git-action@v0.3
+        uses: willo32/google-drive-upload-action@v1.1.0
         with:
-          filename: ${{ env.OUTPUT_IMAGE_NAME }}.img.xz
-          folderId: ${{ vars.GOOGLE_DRIVE_FOLDER_ID }}
+          target: ${{ env.OUTPUT_IMAGE_NAME }}.img.xz
+          parent_folder_id: ${{ vars.GOOGLE_DRIVE_FOLDER_ID }}
           credentials: ${{ secrets.GOOGLE_SERVICE_ACCOUNT_CREDENTIALS }}
-          overwrite: true
