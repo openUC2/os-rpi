@@ -55,6 +55,7 @@ jobs:
         with:
           artifact-ids: ${{ needs.build.outputs.artifact_id }}.img.xz
           path: ${{ needs.build.outputs.image_name }}.img.xz
+          github-token: ${{ github.token }}
 
       - name: Upload image to Google Drive
         uses: willo32/google-drive-upload-action@v1.1.0
