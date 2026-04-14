@@ -206,8 +206,8 @@ jobs:
         id: pallet-upgrade
         run: |
           if [[ "${{ github.ref_type }}" == "tag" && "${{ github.ref }}" == refs/tags/${{ env.TAG_PREFIX }}* ]]; then
-            version="${{ github.ref }}"
-            version="v${version#"refs/tags/${{ env.TAG_PREFIX }}"}"
+            version="${{ github.ref_name }}"
+            version="v${version#"${{ env.TAG_PREFIX }}"}"
             case "$version" in
               v*.*.*-alpha*)
                 branch_name="alpha"
@@ -222,9 +222,12 @@ jobs:
                 branch_name="stable"
                 ;;
             esac
-          elif [[ "${{ github.ref_type }}" == "branch" ]]; then
-            branch_name="${{ github.ref }}"
+          elif [[ "${{ github.event.pull_request.head.sha }}" ]]; then
+            # We're in a pull request
+            branch_name="${{ github.head_ref }}"
             branch_name="${branch_name#"refs/branches/"}"
+          elif [[ "${{ github.ref_type }}" == "branch" ]]; then
+            branch_name="${{ github.ref_name }}"
           else
             branch_name="edge"
           fi
@@ -259,7 +262,7 @@ jobs:
             echo "Running setup scripts..."
             export DEBIAN_FRONTEND=noninteractive
             /run/pallet/os-build/setup.sh \
-              "${{ inputs.build_variant }}" "${{ env.PALLET_UPGRADE_VERSION_QUERY }}"
+              "${{ inputs.build_variant }}" "${{ steps.pallet-upgrade.outputs.version_query }}"
             echo "Done!"
 
       - name: Prepare for a headless first boot on bare metal
