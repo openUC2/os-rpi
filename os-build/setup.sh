@@ -30,6 +30,7 @@ function panic {
 # Parse args
 
 build_variant="$1"
+pallet_upgrade_version_query="$2"
 
 # Run sub-scripts
 
@@ -81,7 +82,7 @@ fi
 
 description="set up Forklift"
 report_starting "$description"
-if "$build_scripts_root"/forklift/install.sh; then
+if "$build_scripts_root"/forklift/install.sh "$pallet_upgrade_version_query"; then
   report_finished "$description"
 else
   panic "$description"

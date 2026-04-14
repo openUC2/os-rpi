@@ -44,6 +44,7 @@ jobs:
     runs-on: ubuntu-24.04-arm
     env:
       SETUP_USER: pi
+      TAG_PREFIX: "v"
     outputs:
       image_name: ${{ steps.output-image.outputs.name }}
       artifact_id: ${{ steps.upload-artifact.outputs.artifact-id }}
@@ -201,6 +202,35 @@ jobs:
 
       # RUN OS SETUP SCRIPTS
 
+      - name: Determine pallet upgrade version query
+        id: pallet-upgrade
+        run: |
+          if [[ "${{ github.ref_type }}" == "tag" && "${{ github.ref }}" == refs/tags/${{ env.TAG_PREFIX }}* ]]; then
+            version="${{ github.ref }}"
+            version="v${version#"refs/tags/${{ env.TAG_PREFIX }}"}"
+            case "$version" in
+              v*.*.*-alpha*)
+                branch_name="alpha"
+                ;;
+              v*.*.*-beta*)
+                branch_name="beta"
+                ;;
+              v*.*.*)
+                branch_name="stable"
+                ;;
+              *)
+                branch_name="stable"
+                ;;
+            esac
+          elif [[ "${{ github.ref_type }}" == "branch" ]]; then
+            branch_name="${{ github.ref }}"
+            branch_name="${branch_name#"refs/branches/"}"
+          else
+            branch_name="edge"
+          fi
+          echo "Pallet version query: @$branch_name"
+          echo "version_query=$branch_name" >> "$GITHUB_OUTPUT"
+
       # Note: the following step isn't strictly necessary, but it's nice to separate the GitHub
       # Actions log outputs for setting up pinspawn-action for the first time from the logs for
       # the OS installation script
@@ -228,7 +258,8 @@ jobs:
             cp -r /run/pallet /home/pi/.local/share/forklift/pallet
             echo "Running setup scripts..."
             export DEBIAN_FRONTEND=noninteractive
-            /run/pallet/os-build/setup.sh "${{ inputs.build_variant }}"
+            /run/pallet/os-build/setup.sh \
+              "${{ inputs.build_variant }}" "${{ env.PALLET_UPGRADE_VERSION_QUERY }}"
             echo "Done!"
 
       - name: Prepare for a headless first boot on bare metal
@@ -282,8 +313,6 @@ jobs:
       # only as a semver build tag
       - name: Determine output image name
         id: output-image
-        env:
-          TAG_PREFIX: "v"
         run: |
           # Determine the version for the image name
           if [[ -n "${{ github.event.pull_request.head.sha }}" ]]; then
@@ -293,9 +322,9 @@ jobs:
                 "${{ github.event.pull_request.number }}" \
                 "${{ github.event.pull_request.head.sha }}" \
             )"
-          elif [[ "${{ github.ref_type }}" == "tag" && "${{ github.ref }}" == refs/tags/$TAG_PREFIX* ]]; then
+          elif [[ "${{ github.ref_type }}" == "tag" && "${{ github.ref }}" == refs/tags/${{ env.TAG_PREFIX }}* ]]; then
             version="${{ github.ref }}"
-            version="v${version#"refs/tags/$TAG_PREFIX"}"
+            version="v${version#"refs/tags/${{ env.TAG_PREFIX }}"}"
           else
             version="$(printf "%.7s" "${{ github.sha }}")"
           fi

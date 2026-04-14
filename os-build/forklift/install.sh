@@ -7,6 +7,8 @@
 
 config_files_root=$(dirname "$(realpath "$BASH_SOURCE")")
 
+pallet_upgrade_version_query="$1"
+
 # Install Forklift
 "$config_files_root/download-forklift.sh" "/usr/bin"
 
@@ -39,7 +41,6 @@ tmp_bin="$(mktemp -d --tmpdir=/tmp bin.XXXXXXX)"
 "$config_files_root/download-yq.sh" "$tmp_bin"
 export PATH="$tmp_bin:$PATH"
 
-pallet_upgrade_version_query="$(cat "$config_files_root/forklift-pallet-upgrade-version-query")"
 pallet_path="$(yq '.pallet.path' "$HOME/.local/share/forklift/pallet/forklift-pallet.yml")"
 forklift pallet set-upgrade-query "$pallet_path@$pallet_upgrade_version_query"
 
