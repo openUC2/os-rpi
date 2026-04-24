@@ -17,6 +17,10 @@ services:
       #   target: /web/templates
       #   read_only: true
       - type: bind
+        source: /run/versioning
+        target: /run/versioning
+        read_only: true
+      - type: bind
         source: /run/dbus/system_bus_socket
         target: /var/run/dbus/system_bus_socket
       - type: bind

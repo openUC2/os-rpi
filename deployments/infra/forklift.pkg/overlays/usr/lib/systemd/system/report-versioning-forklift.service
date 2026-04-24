@@ -1,0 +1,14 @@
+[Unit]
+Description=Report Forklift-related versioning info
+ConditionFileIsExecutable=/usr/libexec/report-versioning-forklift
+
+[Service]
+Type=oneshot
+ExecStartPre=mkdir -p /run/versioning
+ExecStartPre=chmod a+rx /run/versioning
+ExecStart=bash -c "/usr/libexec/report-versioning-forklift > /run/versioning/forklift.yml"
+ExecStartPost=chmod a+r /run/versioning/forklift.yml
+RemainAfterExit=yes
+
+[Install]
+WantedBy=multi-user.target

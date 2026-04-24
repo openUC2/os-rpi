@@ -1,0 +1,10 @@
+[Unit]
+Description=Report Forklift-related versioning info
+
+[Timer]
+Unit=report-versioning-forklift.service
+OnActiveSec=0
+OnUnitActiveSec=60
+
+[Install]
+WantedBy=multi-user.target
