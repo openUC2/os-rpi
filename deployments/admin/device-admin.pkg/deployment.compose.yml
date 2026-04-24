@@ -1,7 +1,7 @@
 services:
 
   server:
-    image: ghcr.io/openuc2/device-admin:0.1.6-alpha.6@sha256:bc6c204ff1b6c90071ed414d0c8e7f94bd4a010873e594dc02386891a968ac7f
+    image: ghcr.io/openuc2/device-admin:0.1.6-alpha.7@sha256:a46ebac5ba979eee88976c89416e83fdca4f146dd58de8f6078f15ad6db5e4e5
     command: server
     user: 1000:1000
     environment:
@@ -44,7 +44,7 @@ services:
         condition: service_completed_successfully
 
   sidecar:
-    image: ghcr.io/openuc2/device-admin:0.1.6-alpha.6@sha256:bc6c204ff1b6c90071ed414d0c8e7f94bd4a010873e594dc02386891a968ac7f
+    image: ghcr.io/openuc2/device-admin:0.1.6-alpha.7@sha256:a46ebac5ba979eee88976c89416e83fdca4f146dd58de8f6078f15ad6db5e4e5
     command: sidecar
     environment:
       - SIDECAR_ADDRESS=tcp:0.0.0.0:2312
