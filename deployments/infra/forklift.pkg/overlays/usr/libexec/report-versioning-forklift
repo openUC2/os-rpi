@@ -117,7 +117,7 @@ fi
 echo -e "pallet: \"$local_plt_path@$local_plt_version\""
 if [ "$local_plt_changes" != "" ]; then
   echo -e "changes: |"
-  echo -e "$local_plt_changes"
+  echo -e "$local_plt_changes" | sed 's~^~  ~'
 fi
 if [ "$upgrade_query" == "" ]; then
   echo "# warning: couldn't determine the upgrade query to check for upgrades!"
