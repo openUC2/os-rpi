@@ -1,6 +1,6 @@
 services:
   server:
-    image: ghcr.io/openuc2/imswitch:sha-fe6a2d8@sha256:6cbb3a7c9f23d9eccd9e4b8180198454ff67575264f68ffdb4a0942254026e91
+    image: ghcr.io/openuc2/imswitch:sha-ae939de
     privileged: true
     volumes:
       - /etc/machine-id:/etc/machine-id:ro
