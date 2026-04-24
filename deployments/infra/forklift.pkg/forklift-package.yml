@@ -7,6 +7,20 @@ package:
   sources:
     - https://github.com/forklift-run/forklift
 
+deployment:
+  provides:
+    file-exports:
+      - description: Shell script to report Forklift-related versioning information
+        target: overlays/usr/libexec/report-versioning-forklift
+      - description: systemd service to run the report-versioning-forklift script during boot
+        target: overlays/usr/lib/systemd/system/report-versioning-forklift.service
+      - description: systemd service enablement for report-versioning-forklift.service
+        target: overlays/etc/systemd/system/multi-user.target.wants/report-versioning-forklift.service
+      - description: systemdm timer to periodically regenerate Forklift-related versioning report
+        target: overlays/usr/lib/systemd/system/report-versioning-forklift.timer
+      - description: systemd service enablement for report-versioning-forklift.timer
+        target: overlays/etc/systemd/system/multi-user.target.wants/report-versioning-forklift.timer
+
 features:
   motd:
     provides:

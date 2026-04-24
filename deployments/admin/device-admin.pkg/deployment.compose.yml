@@ -1,7 +1,7 @@
 services:
 
   server:
-    image: ghcr.io/openuc2/device-admin:0.1.6-alpha.5@sha256:6916b5d0e6a0f3b757de17ae8b0a8ed52b2cc02dd9c31d1ccb8f0dc927414169
+    image: ghcr.io/openuc2/device-admin:0.1.6-alpha.7@sha256:a46ebac5ba979eee88976c89416e83fdca4f146dd58de8f6078f15ad6db5e4e5
     command: server
     user: 1000:1000
     environment:
@@ -16,6 +16,18 @@ services:
       #   source: ./templates
       #   target: /web/templates
       #   read_only: true
+      - type: bind
+        source: /run/versioning
+        target: /run/versioning
+        read_only: true
+      - type: bind
+        source: /run/machine-name
+        target: /run/machine-name
+        read_only: true
+      - type: bind
+        source: /etc/hostname
+        target: /etc/hostname
+        read_only: true
       - type: bind
         source: /run/dbus/system_bus_socket
         target: /var/run/dbus/system_bus_socket
@@ -32,7 +44,7 @@ services:
         condition: service_completed_successfully
 
   sidecar:
-    image: ghcr.io/openuc2/device-admin:0.1.6-alpha.5@sha256:6916b5d0e6a0f3b757de17ae8b0a8ed52b2cc02dd9c31d1ccb8f0dc927414169
+    image: ghcr.io/openuc2/device-admin:0.1.6-alpha.7@sha256:a46ebac5ba979eee88976c89416e83fdca4f146dd58de8f6078f15ad6db5e4e5
     command: sidecar
     environment:
       - SIDECAR_ADDRESS=tcp:0.0.0.0:2312
