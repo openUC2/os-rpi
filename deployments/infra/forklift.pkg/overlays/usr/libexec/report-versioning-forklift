@@ -116,7 +116,7 @@ elif [ "$next_bun" != "$current_bun" ]; then
 fi
 echo -e "pallet: \"$local_plt_path@$local_plt_version\""
 if [ "$local_plt_changes" != "" ]; then
-  echo -e "changes: |"
+  echo -e "changes: |2"
   echo -e "$local_plt_changes" | sed 's~^~  ~'
 fi
 if [ "$upgrade_query" == "" ]; then
