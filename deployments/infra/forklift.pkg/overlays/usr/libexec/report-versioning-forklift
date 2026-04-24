@@ -83,33 +83,48 @@ assemble_pallet_identifier() {
   echo "$result"
 }
 
-if [ "$forklift_version" != "" ]; then
+if [ "$forklift_version" == "" ]; then
+  echo "# error: couldn't determine the active version of Forklift!"
+else
   echo "forklift: \"$forklift_version\""
 fi
-if [ "$factory_reset_bun" != "" ]; then
+if [ "$factory_reset_bun" == "" ]; then
+  echo "# error: couldn't determine the originally-installed version of the OS!"
+else
   echo -e "factory: \"$(assemble_pallet_identifier "$factory_reset_bun")\""
 fi
-if [ "$current_bun" != "" ]; then
+if [ "$current_bun" == "" ]; then
+  echo "# error: couldn't determine the currently-booted Forklift pallet!"
+else
   if [ "$(systemctl is-system-running)" == "starting" ]; then
     echo -e "previous: \"$(assemble_pallet_identifier "$current_bun")\""
   else
     echo -e "current: \"$(assemble_pallet_identifier "$current_bun")\""
   fi
 fi
-if [ "$next_bun" != "" && "$next_bun" != "$current_bun" ]; then
+if [ "$next_bun" == "" ]; then
+  echo "# error: couldn't determine the next Forklift pallet to boot into!"
+elif [ "$next_bun" != "$current_bun" ]; then
   if [ "$(systemctl is-system-running)" == "starting" ]; then
     echo -e "current: \"$(assemble_pallet_identifier "$next_bun")\""
   else
     echo -e "pending: \"$(assemble_pallet_identifier "$next_bun")\""
     if [ "$next_failed" == "true" ]; then
-      echo -e "warning: Because the pending version had already failed during a past boot attempt, future boots will instead fall back to the currently-booted version. You can try the pending version again on the next boot, by running: forklift stage set-next-result pending"
+      echo -e "# warning: because the pending version had already failed during a past boot attempt, future boots will instead fall back to the currently-booted version. You can try the pending version again on the next boot, by running: forklift stage set-next-result pending"
     fi
   fi
 fi
 echo -e "pallet: \"$local_plt_path@$local_plt_version\""
-if [ "$upgrade_query" != "" ]; then
+if [ "$local_plt_changes" != "" ]; then
+  echo -e "changes: |"
+  echo -e "$local_plt_changes"
+fi
+if [ "$upgrade_query" == "" ]; then
+  echo "# warning: couldn't determine the upgrade query to check for upgrades!"
+else
   echo "upgrade-source: \"$upgrade_query\""
 fi
 if [ "$upgrade_available" != "" ]; then
   echo -e "upgrade: \"$upgrade_available\""
+  echo "# to install update, run: forklift plt upgrade && sudo systemctl soft-reboot"
 fi
