@@ -56,7 +56,7 @@ jobs:
           github-token: ${{ github.token }}
 
       - name: Upload image to Google Drive
-        uses: Jumbo810/Upload_Github_Artifacts_TO_GDrive@v2.3.3
+        uses: Jumbo810/Upload_Github_Artifacts_TO_GDrive@v2.3.4
         with:
           target: ${{ needs.build.outputs.image_name }}.img.xz
           parent_folder_id: ${{ vars.GOOGLE_DRIVE_FOLDER_ID }}
