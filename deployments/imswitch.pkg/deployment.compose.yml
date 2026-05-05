@@ -9,6 +9,10 @@ services:
       - /media:/media
       - /run/udev:/run/udev:ro
       - /dev/dma_heap:/dev/dma_heap
+      - type: bind
+        source: /run/versioning
+        target: /run/versioning
+        read_only: true
     environment:
       - HEADLESS=1
       - HTTP_PORT=8001
