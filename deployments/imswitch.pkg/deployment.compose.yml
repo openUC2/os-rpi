@@ -8,6 +8,9 @@ services:
       - /home/pi/Datasets:/home/pi/Datasets
       - /media:/media
       - /run/udev:/run/udev:ro
+      # For scanning and accessing USB serial devices:
+      - /dev:/dev
+      # For libcamera:
       - /dev/dma_heap:/dev/dma_heap
     environment:
       - HEADLESS=1
