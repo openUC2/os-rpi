@@ -1,6 +1,6 @@
 services:
   server:
-    image: ghcr.io/openuc2/imswitch:sha-faf0e8b@sha256:2d39320f445ab5bf0fa28e3e855fb7be82b3f63385e1ffcb41fadfe41b613c64
+    image: ghcr.io/openuc2/imswitch:sha-5cf9e1b
     privileged: true
     volumes:
       - /etc/machine-id:/etc/machine-id:ro
@@ -8,11 +8,10 @@ services:
       - /home/pi/Datasets:/home/pi/Datasets
       - /media:/media
       - /run/udev:/run/udev:ro
+      # For scanning and accessing USB serial devices:
+      - /dev:/dev
+      # For libcamera:
       - /dev/dma_heap:/dev/dma_heap
-      - type: bind
-        source: /run/versioning
-        target: /run/versioning
-        read_only: true
     environment:
       - HEADLESS=1
       - HTTP_PORT=8001
