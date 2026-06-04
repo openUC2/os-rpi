@@ -1,6 +1,6 @@
 services:
   internal:
-    image: docker.io/lucaslorentz/caddy-docker-proxy:2.12.0@sha256:f3ebe7e762bccf17ce38b88420f80ce63f69dc548eea0cd6e5f29db2ae2ea062
+    image: docker.io/lucaslorentz/caddy-docker-proxy:2.12.1@sha256:f4ca247e0b79aa308d57fd65a3b3abf9420f34449626bcea629365f34c74b832
     volumes:
       - type: bind
         source: /run/docker.sock
@@ -26,7 +26,7 @@ services:
       caddy.auto_https: disable_redirects
 
   external:
-    image: docker.io/library/caddy:2.11.3@sha256:ec18ee54aab3315c22e25f3b2babda73ff8007d39b13b3bd1bfffa2f0444c7d9
+    image: docker.io/library/caddy:2.11.4@sha256:eb37f58646a901dc7727cf448cae36daaefaba79de33b5058dab79aa4c04aefb
     network_mode: host
     volumes:
       - type: bind
