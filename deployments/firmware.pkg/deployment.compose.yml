@@ -1,6 +1,6 @@
 services:
   server:
-    image: ghcr.io/youseetoo/firmware-image-server:sha-74a0919
+    image: ghcr.io/youseetoo/firmware-image-server:sha-329ec1c
     volumes:
       - server-data:/data
       - server-config:/config
