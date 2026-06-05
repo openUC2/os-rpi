@@ -1,0 +1,11 @@
+{{$href := get . "Href"}}
+{{$name := get . "Name"}}
+{{$description := get . "Description"}}
+
+<strong>
+  {{- /* make template ignore the line break */ -}}
+  <a href="{{$href}}">{{$name}}</a>
+  <a href="{{$href}}" target="_blank">⤴️</a>
+  {{- /* make template ignore the line break */ -}}
+</strong>:
+{{$description}}

@@ -37,14 +37,12 @@
         <h2>Browser applications</h2>
         <ul>
           <li>
-            <p>
-              <strong><a href="/imswitch/ui/index.html">
-                ImSwitch dashboard
-                {{- /* make template ignore the line break */ -}}
-              </a>
-              <a href="/imswitch/ui/index.html" target="_blank">⤴️</a></strong>:
-              The standard user interface to operate the microscope
-            </p>
+            {{
+              template "shared/nav/link.partial.tmpl" dict
+              "Href" "/imswitch/ui/index.html"
+              "Name" "ImSwitch dashboard"
+              "Description" "The standard user interface to operate the microscope"
+            }}
           </li>
         </ul>
       </div>
