@@ -1,0 +1,61 @@
+{{template "shared/base.layout.tmpl" .}}
+
+{{define "title" -}}
+  {{- $machineName := .Data.MachineName -}}
+  Machine {{$machineName}}
+{{- end}}
+{{define "description"}}Machine portal{{end}}
+
+{{define "content"}}
+  {{$hostname := .Data.Hostname}}
+  {{$port := .Data.Port}}
+  {{$machineName := .Data.MachineName}}
+
+  <main>
+    <section class="section">
+      <div class="container content is-max-desktop">
+        <h1>Machine {{$machineName}}</h1>
+        <p>
+          Welcome! This is the home page for your machine with machine name
+          <code>{{$machineName}}</code>.
+        </p>
+
+        <article class="message is-info two-card-width">
+          <div class="message-body">
+            This is a simplified view of the home page. For helpful information and advanced usage, open the
+            <a href="{{urlJoin (dict
+              "path" .Meta.Path
+              "query" (.Meta.Form.WithInstead "mode" "advanced").Encode
+            )}}">advanced view</a> of this page.
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="container content is-max-desktop">
+        <h2>Browser applications</h2>
+        <ul>
+          <li>
+            <p>
+              <strong><a href="/imswitch/ui/index.html" target="_blank">
+                ImSwitch dashboard
+                {{- /* make template ignore the line break */ -}}
+              </a></strong>:
+              The standard user interface to operate the microscope
+            </p>
+            <article class="message is-info mb-3">
+              <div class="message-body">
+                If you don't know where to go, you're probably looking for the above link!
+              </div>
+            </article>
+          </li>
+          <li>
+            <strong><a href="/admin/panel/" target="_blank">Machine Administration</a></strong>:
+            The main system-administration dashboard for this machine
+          </li>
+        </ul>
+      </div>
+    </section>
+  </main>
+{{end}}

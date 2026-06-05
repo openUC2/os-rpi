@@ -5,7 +5,7 @@ package:
       email: lietk12@gmail.com
   license: Apache-2.0
   sources:
-    - https://github.com/openUC2/device-admin
+    - https://github.com/openUC2/machine-admin
 
 deployment:
   compose-files:
