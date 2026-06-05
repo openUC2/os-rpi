@@ -6,8 +6,7 @@
 
 <strong>
   {{- /* make template ignore the line break */ -}}
-  <a href="{{$href}}">{{$name}}</a>
-  {{- if $newTab}} <a href="{{$href}}" target="_blank">⤴️</a>{{end -}}
+  <a href="{{$href}}" target="_blank">{{$name}} ⤴️</a>
   {{- if $onlineHref}} <a href="{{$onlineHref}}" target="_blank">🌐</a>{{end -}}
   {{- /* make template ignore the line break */ -}}
 </strong>

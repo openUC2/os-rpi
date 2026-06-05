@@ -43,11 +43,13 @@
         <ul>
           <li>
             <p>
-              <strong><a href="/imswitch/ui/index.html" target="_blank">
-                ImSwitch dashboard
-                {{- /* make template ignore the line break */ -}}
-              </a></strong>:
-              The standard user interface to operate the microscope
+              {{
+                template "shared/link.partial.tmpl" dict
+                "Href" "/imswitch/ui/index.html"
+                "Name" "ImSwitch dashboard"
+                "NewTab" true
+                "Description" "The standard user interface to operate the microscope"
+              }}
             </p>
             <article class="message is-info mb-3">
               <div class="message-body">
@@ -116,83 +118,78 @@
         </ul>
 
         <h3 class="is-size-5">Documentation</h3>
-        <p>Accessible offline:</p>
         <ul>
           <li>
-            <strong><a href="/docs/" target="_blank">openUC2 documentation</a></strong>:
-            An offline copy of the most relevant subset of the official openUC2 project documentation
+            {{
+              template "shared/link-newtab.partial.tmpl" dict
+              "Href" "/docs/"
+              "OnlineHref" "https://docs.openuc2.com/"
+              "Name" "openUC2 documentation"
+              "Description" "An offline copy of the most relevant subset of the official openUC2 project documentation"
+            }}
           </li>
           <li>
-            <strong><a href="/docs/usage/pro/frame/tutorials/" target="_blank">
-              FRAME tutorials
-              {{- /* make template ignore the line break */ -}}
-            </a></strong>:
-            Introductory tutorials for you to set up and use a FRAME machine
+            {{
+              template "shared/link-newtab.partial.tmpl" dict
+              "Href" "/docs/usage/pro/frame/tutorials/"
+              "OnlineHref" "https://docs.openuc2.com/usage/pro/frame/tutorials/"
+              "Name" "FRAME tutorials"
+              "Description" "Introductory tutorials for you to set up and use a FRAME machine"
+            }}
           </li>
           <li>
-            <strong><a href="/docs/usage/pro/frame/guides/" target="_blank">
-              FRAME how-to guides
-              {{- /* make template ignore the line break */ -}}
-            </a></strong>:
-            Concise guides on deploying and operating FRAME machines for experienced users
+            {{
+              template "shared/link-newtab.partial.tmpl" dict
+              "Href" "/docs/usage/pro/frame/guides/"
+              "OnlineHref" "https://docs.openuc2.com/usage/pro/frame/guides/"
+              "Name" "FRAME how-to guides"
+              "Description" "Concise guides on deploying and operating FRAME machines for experienced users"
+            }}
           </li>
           <li>
-            <strong><a href="/docs/usage/disc/" target="_blank">
-              Discovery Line usage information
-              {{- /* make template ignore the line break */ -}}
-            </a></strong>:
-            Usage information for Discovery Line kits such as the
-            CoreBox, HoloBox, Electronics Add-On, and Infinity Add-On.
-          </li>
-        </ul>
-
-        <p>On the internet:</p>
-        <ul>
-          <li>
-            <strong><a href="https://docs.openuc2.com/" target="_blank">openUC2 documentation</a></strong>:
-            The latest and most complete copy of the official openUC2 project documentation
-          </li>
-          <li>
-            <strong><a href="https://docs.openuc2.com/usage/pro/frame/tutorials/" target="_blank">
-              FRAME tutorials
-              {{- /* make template ignore the line break */ -}}
-            </a></strong>:
-            Introductory tutorials for you to set up and use a FRAME machine
-          </li>
-          <li>
-            <strong><a href="https://docs.openuc2.com/usage/pro/frame/guides/" target="_blank">
-              FRAME how-to guides
-              {{- /* make template ignore the line break */ -}}
-            </a></strong>:
-            Concise guides on deploying and operating FRAME machines for experienced users
-          </li>
-          <li>
-            <strong><a href="https://docs.openuc2.com/usage/disc/" target="_blank">
-              Discovery Line usage information
-              {{- /* make template ignore the line break */ -}}
-            </a></strong>:
-            Usage information for Discovery Line kits such as the
-            CoreBox, HoloBox, Electronics Add-On, and Infinity Add-On.
+            {{
+              template "shared/link-newtab.partial.tmpl" dict
+              "Href" "/docs/usage/usage/disc/"
+              "OnlineHref" "https://docs.openuc2.com/usage/disc/"
+              "Name" "Discovery Line usage information"
+              "Description" "Usage information for Discovery Line kits such as the CoreBox, HoloBox, Electronics Add-On, and Infinity Add-On"
+            }}
           </li>
         </ul>
 
         <h3 class="is-size-5">Community</h3>
         <ul>
           <li>
-            <strong><a href="https://openuc2.com/" target="_blank">Official openUC2 website</a></strong>:
-            Information about the openUC2 optical toolbox
+            {{
+              template "shared/link-newtab.partial.tmpl" dict
+              "Href" "https://openuc2.com/"
+              "Name" "Official openUC2 website"
+              "Description" "Information about openUC2"
+            }}
           </li>
           <li>
-            <strong><a href="https://shop.openuc2.com/" target="_blank">openUC2 store</a></strong>:
-            A shop for purchasing openUC2 products
+            {{
+              template "shared/link-newtab.partial.tmpl" dict
+              "Href" "https://shop.openuc2.com/"
+              "Name" "openUC2 shop"
+              "Description" "A shop for purchasing openUC2 products"
+            }}
           </li>
           <li>
-            <strong><a href="https://openuc2.discourse.group/" target="_blank">Discourse group</a></strong>:
-            A forum for talking about openUC2 and getting help
+            {{
+              template "shared/link-newtab.partial.tmpl" dict
+              "Href" "https://openuc2.discourse.group/"
+              "Name" "Discourse group"
+              "Description" "A forum for talking about openUC2 and getting help"
+            }}
           </li>
           <li>
-            <strong><a href="https://github.com/openUC2" target="_blank">GitHub organization</a></strong>:
-            openUC2's GitHub organization for development of the openUC2 optical toolbox
+            {{
+              template "shared/link-newtab.partial.tmpl" dict
+              "Href" "https://github.com/openUC2"
+              "Name" "openUC2 on GitHub"
+              "Description" "openUC2's GitHub organization for development of the openUC2 optical toolbox"
+            }}
           </li>
         </ul>
       </div>
