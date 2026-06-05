@@ -4,11 +4,7 @@
 {{$newTab := get . "NewTab"}}
 {{$description := get . "Description"}}
 
-<strong>
-  {{- /* make template ignore the line break */ -}}
-  <a href="{{$href}}">{{$name}}</a>
-  {{- if $newTab}} <a href="{{$href}}" target="_blank">⤴️</a>{{end -}}
-  {{- if $onlineHref}} <a href="{{$onlineHref}}" target="_blank">🌐</a>{{end -}}
-  {{- /* make template ignore the line break */ -}}
-</strong>
+<a href="{{$href}}"><strong>{{$name}}</strong></a>
+{{- if $newTab}} / <a href="{{$href}}" target="_blank">⍐</a>{{end -}}
+{{- if $onlineHref}} / <a href="{{$onlineHref}}" target="_blank">🌐</a>{{end -}}
 {{- if $description -}}: {{$description}}{{- end}}
