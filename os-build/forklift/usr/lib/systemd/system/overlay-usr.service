@@ -24,9 +24,9 @@ ExecStart=mount --bind $TARGET /sysroot${TARGET}
 # Prevent changes to the contents in /sysroot unless /boot/firmware/sysroot-mounts/usr exists:
 ExecStart=bash -c -e '\
   if [ -f /boot/firmware/sysroot-mounts${TARGET}-rw ]; then \
-    echo "Mounted /sysroot${TARGET} as read-write!" \
+    echo "Mounted /sysroot${TARGET} as read-write!"; \
   else \
-    echo "Mounting /sysroot${TARGET} as read-only..." \
+    echo "Mounting /sysroot${TARGET} as read-only..."; \
     mount -o bind,remount,ro /sysroot${TARGET}; \
   fi \
 '

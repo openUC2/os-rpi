@@ -84,4 +84,7 @@ sudo systemctl preset \
   overlay-etc.service \
   start-overlaid-units.service \
   fake-hwclock-overlay-support.service
-sudo mkdir -p /boot/firmware/sysroot-mounts # for configuring overlay-usr & overlay-etc behavior
+# Set up configurability of overlay-usr & overlay-etc behavior
+file="/boot/firmware/sysroot-mounts/README.md"
+sudo mkdir -p "$(dirname "$file")"
+sudo cp "$config_files_root$file" "$file"
