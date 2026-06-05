@@ -84,3 +84,4 @@ sudo systemctl preset \
   overlay-etc.service \
   start-overlaid-units.service \
   fake-hwclock-overlay-support.service
+sudo mkdir -p /boot/firmware/sysroot-mounts # for configuring overlay-usr & overlay-etc behavior

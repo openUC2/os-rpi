@@ -26,8 +26,15 @@ ExecStartPre=mkdir -p $UPPERDIR
 Environment=TARGET=/etc
 ExecStartPre=mkdir -p /sysroot${TARGET}
 ExecStart=mount --bind $TARGET /sysroot${TARGET}
-# Prevent changes to the contents in /sysroot:
-ExecStart=mount -o bind,remount,ro /sysroot${TARGET}
+# Prevent changes to the contents in /sysroot unless /boot/firmware/sysroot-mounts/etc-rw exists:
+ExecStart=bash -c -e '\
+if [ -f /boot/firmware/sysroot-mounts${TARGET}-rw ]; then \
+echo "Mounted /sysroot${TARGET} as read-write!" \
+else \
+echo "Mounting /sysroot${TARGET} as read-only..." \
+mount -o bind,remount,ro /sysroot${TARGET}; \
+fi \
+'
 # Prevent the overlay mount from also being created onto the directory in /sysroot:
 ExecStart=mount --make-private /sysroot/${TARGET}
 Environment=FORKLIFT_STAGE_STORE=/var/lib/forklift/stages
@@ -35,11 +42,11 @@ Environment=FORKLIFT_STAGE_STORE=/var/lib/forklift/stages
 # mounted! Doing so causes undefined behavior, i.e. weirdness and inconsistency
 # (see https://docs.kernel.org/filesystems/overlayfs.html#changes-to-underlying-filesystems).
 ExecStart=bash -c -e '\
-  LOWERDIR_FORKLIFT=$(forklift stage locate-bundle next)/exports/overlays/etc; \
-  LOWERDIRS="/sysroot$TARGET"; \
-  if [ -d $LOWERDIR_FORKLIFT ]; then LOWERDIRS="$LOWERDIR_FORKLIFT:$LOWERDIRS"; fi; \
-  echo "Overlay lower directories: $LOWERDIRS"; \
-  mount -t overlay overlay -o workdir=$WORKDIR,upperdir=$UPPERDIR,lowerdir=$LOWERDIRS $TARGET \
+LOWERDIR_FORKLIFT=$(forklift stage locate-bundle next)/exports/overlays/etc; \
+LOWERDIRS="/sysroot$TARGET"; \
+if [ -d $LOWERDIR_FORKLIFT ]; then LOWERDIRS="$LOWERDIR_FORKLIFT:$LOWERDIRS"; fi; \
+echo "Overlay lower directories: $LOWERDIRS"; \
+mount -t overlay overlay -o workdir=$WORKDIR,upperdir=$UPPERDIR,lowerdir=$LOWERDIRS $TARGET \
 '
 # Immediately update any systemd units added by the overlay:
 ExecStart=systemctl daemon-reload
