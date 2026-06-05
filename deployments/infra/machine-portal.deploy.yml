@@ -1,4 +1,4 @@
-package: /deployments/infra/device-portal.pkg
+package: /deployments/infra/machine-portal.pkg
 features:
   - frontend
   - deploy-rpi

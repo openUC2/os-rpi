@@ -1,0 +1,15 @@
+{{$href := get . "Href"}}
+{{$onlineHref := get . "OnlineHref"}}
+{{$name := get . "Name"}}
+{{$description := get . "Description"}}
+
+{{if eq $href ""}}
+  {{$href = $onlineHref}}
+{{end}}
+
+<a
+  href="{{$href}}"
+  {{if eq $href $onlineHref}}target="_blank"{{end}}
+><strong>{{$name}}{{if eq $href $onlineHref}} 🌐{{end}}</strong></a>
+{{- if and (ne $onlineHref "") (ne $onlineHref $href)}} / <a href="{{$onlineHref}}" target="_blank">🌐</a>{{end -}}
+{{- if $description -}}: {{$description}}{{- end}}

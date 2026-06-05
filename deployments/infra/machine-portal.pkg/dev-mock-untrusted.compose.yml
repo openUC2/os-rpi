@@ -4,6 +4,6 @@ services:
       - MACHINENAME_NAME=dev-machine
     # volumes:
     #   - type: bind
-    #     source: $FORKLIFT_STAGED/etc/device-portal/web/templates
+    #     source: $FORKLIFT_STAGED/etc/machine-portal/web/templates
     #     target: /web/templates
     #     read_only: true
