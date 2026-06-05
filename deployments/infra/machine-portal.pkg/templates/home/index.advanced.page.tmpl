@@ -47,7 +47,6 @@
                 template "shared/link.partial.tmpl" dict
                 "Href" "/imswitch/ui/index.html"
                 "Name" "ImSwitch"
-                "NewTab" true
                 "Description" "The standard user interface to operate the microscope"
               }}
             </p>
@@ -62,7 +61,6 @@
               template "shared/link.partial.tmpl" dict
               "Href" "/admin/panel/"
               "Name" "Machine Administration"
-              "NewTab" true
               "Description" "The main system-administration dashboard for this machine"
             }}
           </li>
@@ -130,7 +128,7 @@
         <ul>
           <li>
             {{
-              template "shared/link-newtab.partial.tmpl" dict
+              template "shared/link.partial.tmpl" dict
               "Href" "/docs/"
               "OnlineHref" "https://docs.openuc2.com/"
               "Name" "openUC2 Documentation"
@@ -139,7 +137,7 @@
           </li>
           <li>
             {{
-              template "shared/link-newtab.partial.tmpl" dict
+              template "shared/link.partial.tmpl" dict
               "Href" "/docs/usage/pro/frame/tutorials/"
               "OnlineHref" "https://docs.openuc2.com/usage/pro/frame/tutorials/"
               "Name" "FRAME Tutorials"
@@ -148,7 +146,7 @@
           </li>
           <li>
             {{
-              template "shared/link-newtab.partial.tmpl" dict
+              template "shared/link.partial.tmpl" dict
               "Href" "/docs/usage/pro/frame/guides/"
               "OnlineHref" "https://docs.openuc2.com/usage/pro/frame/guides/"
               "Name" "FRAME How-To Guides"
@@ -157,7 +155,7 @@
           </li>
           <li>
             {{
-              template "shared/link-newtab.partial.tmpl" dict
+              template "shared/link.partial.tmpl" dict
               "Href" "/docs/usage/usage/disc/"
               "OnlineHref" "https://docs.openuc2.com/usage/disc/"
               "Name" "Discovery Line Usage"
@@ -170,7 +168,7 @@
         <ul>
           <li>
             {{
-              template "shared/link-newtab.partial.tmpl" dict
+              template "shared/link.partial.tmpl" dict
               "Href" "https://openuc2.com/"
               "Name" "openUC2 Website"
               "Description" "Information about openUC2"
@@ -178,7 +176,7 @@
           </li>
           <li>
             {{
-              template "shared/link-newtab.partial.tmpl" dict
+              template "shared/link.partial.tmpl" dict
               "Href" "https://shop.openuc2.com/"
               "Name" "openUC2 Shop"
               "Description" "The official shop for purchasing openUC2 products"
@@ -186,7 +184,7 @@
           </li>
           <li>
             {{
-              template "shared/link-newtab.partial.tmpl" dict
+              template "shared/link.partial.tmpl" dict
               "Href" "https://openuc2.discourse.group/"
               "Name" "openUC2 Forum"
               "Description" "openUC2's Discourse forum for talking about openUC2 projects and getting help"
@@ -194,7 +192,7 @@
           </li>
           <li>
             {{
-              template "shared/link-newtab.partial.tmpl" dict
+              template "shared/link.partial.tmpl" dict
               "Href" "https://github.com/openUC2"
               "Name" "openUC2 on GitHub"
               "Description" "openUC2's GitHub organization for development of the openUC2 optical toolbox"
@@ -215,7 +213,6 @@
               template "shared/link.partial.tmpl" dict
               "Href" "/admin/panel/?mode=advanced"
               "Name" "Machine Administration (advanced mode)"
-              "NewTab" true
               "Description" "The main system-administration dashboard for this machine, with advanced information and settings"
             }}
           </li>
@@ -224,7 +221,6 @@
               template "shared/link.partial.tmpl" dict
               "Href" "/admin/cockpit/"
               "Name" "Cockpit"
-              "NewTab" true
               "Description" "An advanced general-purpose system administration dashboard for the computer embedded in this machine"
             }}
           </li>
@@ -233,7 +229,6 @@
               template "shared/link.partial.tmpl" dict
               "Href" "/admin/fs/files/home/pi"
               "Name" "User File Manager"
-              "NewTab" true
               "Description" "A file browsing and management interface for the entire filesystem of the computer embedded in this machine"
             }}
           </li>
@@ -242,7 +237,6 @@
               template "shared/link.partial.tmpl" dict
               "Href" "/admin/fs-su/"
               "Name" "System File Manager"
-              "NewTab" true
               "Description" "A file browsing and management interface for the entire filesystem of the computer embedded in this machine, with root/superuser access"
             }}
           </li>
@@ -251,7 +245,6 @@
               template "shared/link.partial.tmpl" dict
               "Href" "/admin/dozzle/"
               "Name" "Dozzle"
-              "NewTab" true
               "Description" "A dashboard for monitoring and troubleshooting the apps deployed on this machine"
             }}
           </li>
@@ -263,7 +256,6 @@
               template "shared/link.partial.tmpl" dict
               "Href" "//{{$hostname}}:9090/admin/cockpit/"
               "Name" "Cockpit (direct-access fallback)"
-              "NewTab" true
               "Description" "Fallback access to the Cockpit application, accessible even if the system's service proxy stops working"
             }}
           </li>
@@ -281,7 +273,6 @@
               template "shared/link.partial.tmpl" dict
               "Href" "/imswitch/api/docs"
               "Name" "HTTP API docs"
-              "NewTab" true
               "Description" "Swagger docs for ImSwitch's HTTP API (also useful for testing API endpoints)"
             }}
           </li>
@@ -290,7 +281,6 @@
               template "shared/link.partial.tmpl" dict
               "Href" "/imswitch/openapi.json"
               "Name" "ImSwitch API spec"
-              "NewTab" true
               "Description" "OpenAPI specification for ImSwitch's HTTP API (useful for generating API clients)"
             }}
           </li>
@@ -299,7 +289,6 @@
               template "shared/link.partial.tmpl" dict
               "Href" "/firmware/"
               "Name" "Firmware binaries"
-              "NewTab" true
               "Description" "Provides a way to download microcontroller firmware binaries via HTTP"
             }}
           </li>
@@ -332,7 +321,6 @@
                 "query" .Meta.Form.Encode
               ))
               "Name" "Machine Portal"
-              "NewTab" true
               "Description" "A landing page as a portal to the browser applications, network APIs, and system infrastructure on this machine (this is what you're seeing right now)"
             }}
           </li>

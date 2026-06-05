@@ -1,10 +1,15 @@
 {{$href := get . "Href"}}
 {{$onlineHref := get . "OnlineHref"}}
 {{$name := get . "Name"}}
-{{$newTab := get . "NewTab"}}
 {{$description := get . "Description"}}
 
-<a href="{{$href}}"><strong>{{$name}}</strong></a>
-{{- if $newTab}} / <a href="{{$href}}" target="_blank">⍐</a>{{end -}}
-{{- if $onlineHref}} / <a href="{{$onlineHref}}" target="_blank">🌐</a>{{end -}}
+{{if eq $href ""}}
+  {{$href := $onlineHref}}
+{{end}}
+
+<a
+  href="{{$href}}"
+  {{if eq $href $onlineHref}}target="_blank"{{end}}
+><strong>{{$name}}{{if eq $href $onlineHref}} 🌐{{end}}</strong></a>
+{{- if and (ne $onlineHref "") (ne $onlineHref $href)}} / <a href="{{$onlineHref}}" target="_blank">🌐</a>{{end -}}
 {{- if $description -}}: {{$description}}{{- end}}

@@ -1,9 +1,0 @@
-{{$href := get . "Href"}}
-{{$onlineHref := get . "OnlineHref"}}
-{{$name := get . "Name"}}
-{{$newTab := get . "NewTab"}}
-{{$description := get . "Description"}}
-
-<a href="{{$href}}" target="_blank"><strong>{{$name}}</strong> ⤴️</a>
-{{- if $onlineHref}} / <a href="{{$onlineHref}}" target="_blank">🌐</a>{{end -}}
-{{- if $description -}}: {{$description}}{{- end}}
