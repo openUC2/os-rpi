@@ -156,7 +156,7 @@
           <li>
             {{
               template "shared/link.partial.tmpl" dict
-              "Href" "/docs/usage/usage/disc/"
+              "Href" "/docs/usage/disc/"
               "OnlineHref" "https://docs.openuc2.com/usage/disc/"
               "Name" "Discovery Line Usage"
               "Description" "Usage information for Discovery Line kits such as the CoreBox, HoloBox, Electronics Add-On, and Infinity Add-On"
@@ -169,7 +169,7 @@
           <li>
             {{
               template "shared/link.partial.tmpl" dict
-              "Href" "https://openuc2.com/"
+              "onlineHref" "https://openuc2.com/"
               "Name" "openUC2 Website"
               "Description" "Information about openUC2"
             }}
@@ -177,7 +177,7 @@
           <li>
             {{
               template "shared/link.partial.tmpl" dict
-              "Href" "https://shop.openuc2.com/"
+              "onlineHref" "https://shop.openuc2.com/"
               "Name" "openUC2 Shop"
               "Description" "The official shop for purchasing openUC2 products"
             }}
@@ -185,7 +185,7 @@
           <li>
             {{
               template "shared/link.partial.tmpl" dict
-              "Href" "https://openuc2.discourse.group/"
+              "onlineHref" "https://openuc2.discourse.group/"
               "Name" "openUC2 Forum"
               "Description" "openUC2's Discourse forum for talking about openUC2 projects and getting help"
             }}
@@ -193,7 +193,7 @@
           <li>
             {{
               template "shared/link.partial.tmpl" dict
-              "Href" "https://github.com/openUC2"
+              "onlineHref" "https://github.com/openUC2"
               "Name" "openUC2 on GitHub"
               "Description" "openUC2's GitHub organization for development of the openUC2 optical toolbox"
             }}
@@ -254,7 +254,7 @@
           <li>
             {{
               template "shared/link.partial.tmpl" dict
-              "Href" "//{{$hostname}}:9090/admin/cockpit/"
+              "Href" (print "//" $hostname ":9090/admin/cockpit/")
               "Name" "Cockpit (direct-access fallback)"
               "Description" "Fallback access to the Cockpit application, accessible even if the system's service proxy stops working"
             }}
