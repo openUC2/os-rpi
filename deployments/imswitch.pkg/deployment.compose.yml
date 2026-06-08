@@ -2,6 +2,7 @@ services:
   server:
     image: ghcr.io/openuc2/imswitch:sha-1af4c81@sha256:5551b925fd0a0e7171202718b2cdd0745ffd404eb75ac0d5e3bc50ee887c4be0
     privileged: true
+    user: pi
     volumes:
       - /etc/machine-id:/etc/machine-id:ro
       - /home/pi/ImSwitchConfig:/home/pi/ImSwitchConfig
