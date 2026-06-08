@@ -1,6 +1,6 @@
 services:
   server:
-    image: ghcr.io/openuc2/imswitch:sha-f9db202
+    image: ghcr.io/openuc2/imswitch:pr-291@sha256:2381aa9152b1be8be21aaf3faa4463fbc79a8707cd4482a51938cf9737b0d448
     privileged: true
     user: pi
     volumes:
