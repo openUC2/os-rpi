@@ -128,6 +128,18 @@ features:
       file-exports:
         - description: udev rules
           target: overlays/usr/lib/udev/rules.d/80-daheng-cameras.rules
+  can-device:
+    description: Provides automatic enablement of the OS interface for an SPI CAN bus transceiver
+    provides:
+      file-exports:
+        - description: systemd-networkd configuration for the can0 device
+          target: overlays/etc/systemd/network/80-can0.network
+        - description: >-
+            systemd-networkd default configuration disablement for Wi-Fi devices in ad-hoc mode,
+            which should be managed by NetworkManager instead
+          target: overlays/etc/systemd/network/80-wifi-adhoc.network
+        - description: systemd service enablement for systemd-networkd
+          target: overlays/etc/systemd/system/multi-user.target.wants/systemd-networkd.service
   dev-edge:
     description: >-
       Uses the `edge` tag for the ImSwitch docker container image, for faster development
