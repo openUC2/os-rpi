@@ -1,6 +1,6 @@
 services:
   server:
-    image: ghcr.io/openuc2/imswitch:pr-291@sha256:36c5e2041e1052650395d74445dda984edb995d2fbdbab63b149bc90a73b3502
+    image: ghcr.io/openuc2/imswitch:pr-291@sha256:2348a51036ce7e374a4ad577eab150f134b6ee8c99020e2d828d32b857d2840d
     volumes:
       - /etc/machine-id:/etc/machine-id:ro
       - /home/pi/ImSwitchConfig:/home/pi/ImSwitchConfig
@@ -8,7 +8,7 @@ services:
       - /media:/media
       - /run/udev:/run/udev:ro
       - /dev:/dev
-    privileged: true # TODO: delete me after troubleshooting the Daheng camera!
+    # privileged: true # TODO: delete me after troubleshooting the Daheng camera!
     device_cgroup_rules:
       - 'a *:* rwm' # allow all devices; only use this for debugging! Don't use this in production, because it's a massive security backdoor!
       - 'a 188:* rwm' # USB serial devices, e.g. /dev/ttyUSB0
