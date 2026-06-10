@@ -4,3 +4,7 @@ usb_max_current_enable=1
 
 # Allow the RPi 5 to charge an attached RTC battery
 dtparam=rtc_bbat_vhcg=3000000
+
+# Allow the RPi 5 to talk directly over the CAN interface
+dtparam=spi=on
+dtoverlay=mcp2515-can0,oscillator=12000000,interrupt=12,spimaxfrequency=10000000
