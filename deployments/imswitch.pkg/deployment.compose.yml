@@ -12,6 +12,7 @@ services:
     devices:
       # For libcamera:
       - /dev/dma_heap:/dev/dma_heap
+    privileged: true # needed to make the `/dev` bind-mount work
     group_add:
       - dialout
       - video
