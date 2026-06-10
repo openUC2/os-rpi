@@ -9,15 +9,19 @@ services:
       - /run/udev:/run/udev:ro
       - /dev:/dev
     device_cgroup_rules:
-      # Allow all devices (TODO: only whitelist specific major numbers, see https://stackoverflow.com/questions/24225647/docker-a-way-to-give-access-to-a-host-usb-or-serial-device and https://www.baeldung.com/ops/docker-access-host-devices):
-      - 'a *:* rwm'
-    group_add:
-      - dialout
-      - video
-      - plugdev
-      - spi
-      - i2c
-      - gpio
+      # - 'a *:* rwm' # allow all devices; only use this for debugging! Don't use this in production, because it's a massive security backdoor!
+      - 'a 188:* rwm' # USB serial devices, e.g. /dev/ttyUSB0
+      - 'a 204:* rwm' # more USB serial devices, e.g. /dev/ttyAMA0
+      - 'a 81:* rwm' # libcamera-based cameras, e.g. /dev/video0
+      - 'a 511:* rwm' # libcamera-based cameras, e.g. /dev/media0
+      - 'a 153:* rwm' # SPI devices, e.g. /dev/spidev0.1
+      # - 'a 89:* rwm' # I2C devices, e.g. /dev/i2c-1
+      # - 'a 254:* rwm' # GPIO devices, e.g. /dev/gpiochip0
+      # - 'a 235:* rwm' # GPIO devices, e.g. /dev/gpiomem0
+      # - 'a 239:* rwm' # GPIO devices, e.g. /dev/gpiomem1
+      # - 'a 238:* rwm' # GPIO devices, e.g. /dev/gpiomem2
+      # - 'a 237:* rwm' # GPIO devices, e.g. /dev/gpiomem3
+      # - 'a 236:* rwm' # GPIO devices, e.g. /dev/gpiomem4
     environment:
       - HEADLESS=1
       - HTTP_PORT=8001
