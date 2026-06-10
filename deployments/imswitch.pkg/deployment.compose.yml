@@ -11,7 +11,7 @@ services:
     device_cgroup_rules:
       # - 'a *:* rwm' # allow all devices; only use this for debugging! Don't use this in production, because it's a massive security backdoor!
       - 'a 188:* rwm' # USB serial devices, e.g. /dev/ttyUSB0
-      - 'a 204:* rwm' # more USB serial devices, e.g. /dev/ttyAMA0
+      - 'a 204:* rwm' # more USB serial devices (including Daheng cameras), e.g. /dev/ttyAMA0
       - 'a 81:* rwm' # libcamera-based cameras, e.g. /dev/video0
       - 'a 511:* rwm' # libcamera-based cameras, e.g. /dev/media0
       - 'a 153:* rwm' # SPI devices, e.g. /dev/spidev0.1
@@ -22,6 +22,14 @@ services:
       # - 'a 238:* rwm' # GPIO devices, e.g. /dev/gpiomem2
       # - 'a 237:* rwm' # GPIO devices, e.g. /dev/gpiomem3
       # - 'a 236:* rwm' # GPIO devices, e.g. /dev/gpiomem4
+    group_add:
+      - tty
+      - dialout
+      - video
+      - plugdev
+      - spi
+      # - i2c
+      # - gpio
     environment:
       - HEADLESS=1
       - HTTP_PORT=8001
