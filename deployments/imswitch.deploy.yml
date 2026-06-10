@@ -4,5 +4,7 @@ features:
   - frontend-untrusted
   - firewall-allow-direct
   - firewall-allow-public
-  - can-device
+  - hikrobot-cameras
+  - daheng-cameras
+  - can-interface
 disabled: false

@@ -114,8 +114,24 @@ features:
           target: overlays/etc/firewalld/services/imswitch-dev.xml
         - description: Drop-in XML fragment for firewalld's imswitch-dev service
           target: overlays/etc/firewalld/zones.d/public/70-service-imswitch-dev.xml
-  can-device:
+  hikrobot-cameras:
+    description: Support for Hikrobot cameras
+    provides:
+      file-exports:
+        - description: Kernel parameters
+          target: overlays/etc/sysctl.d/80-hikrobot-cameras.conf
+        - description: udev rules
+          target: overlays/usr/lib/udev/rules.d/80-hikrobot-cameras.rules
+  daheng-cameras:
+    description: Support for Daheng cameras
+    provides:
+      file-exports:
+        - description: udev rules
+          target: overlays/usr/lib/udev/rules.d/80-daheng-cameras.rules
+  can-interface:
     description: Provides automatic enablement of the OS interface for an SPI CAN bus transceiver
+    compose-files:
+      - can-interface.compose.yml
     provides:
       file-exports:
         - description: systemd-networkd configuration for the can0 device
