@@ -23,3 +23,7 @@ HIK_DEB_FILE="$(mktemp --suffix=".deb")"
 curl -L "https://github.com/openUC2/ImSwitchDockerInstall/releases/download/imswitch-master/MVS-3.0.1_${HIK_ARCH}_20241128.deb" \
   >"$HIK_DEB_FILE"
 sudo dpkg -i "$HIK_DEB_FILE"
+
+# Add config.txt configuration for the CAN transceiver on the openUC2 HAT+
+file="/boot/firmware/config.txt"
+sudo bash -c "cat \"$config_files_root$file.snippet\" >> \"$file\""
