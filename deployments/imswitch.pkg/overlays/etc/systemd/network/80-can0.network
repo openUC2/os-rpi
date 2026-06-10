@@ -2,4 +2,4 @@
 Name=can0
 
 [CAN]
-BitRate=500k
+BitRate=500000
