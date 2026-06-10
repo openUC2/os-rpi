@@ -26,7 +26,7 @@ services:
       caddy.auto_https: disable_redirects
 
   external:
-    image: docker.io/library/caddy:2.11.4@sha256:cb9d71ad83182011b79355cd57692686374bd78d6fe327efe0ff8507da03ab13
+    image: docker.io/library/caddy:2.11.4@sha256:cfeb0b281bc44a5a51fecde39e9e577c60d863c0b6196e6bbdf58fd00960887f
     network_mode: host
     volumes:
       - type: bind
@@ -49,7 +49,7 @@ services:
   ensure-external-caddyfile:
     # This service ensures that a valid Caddyfile exists as a fallback even if
     # /run/caddy-ingress/external doesn't exist, so that the container can start successfully
-    image: docker.io/library/alpine:3.23.4@sha256:5b10f432ef3da1b8d4c7eb6c487f2f5a8f096bc91145e68878dd4a5019afde11
+    image: docker.io/library/alpine:3.24.0@sha256:a2d49ea686c2adfe3c992e47dc3b5e7fa6e6b5055609400dc2acaeb241c829f4
     volumes:
       - /run/caddy-ingress/external:/etc/caddy
       - ./external.Caddyfile-fallback:/run/caddy/Caddyfile-fallback
