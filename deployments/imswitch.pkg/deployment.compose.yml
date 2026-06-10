@@ -8,10 +8,8 @@ services:
       - /media:/media
       - /run/udev:/run/udev:ro
       - /dev:/dev
-    # privileged: true # TODO: delete me after troubleshooting the Daheng camera!
     device_cgroup_rules:
-      - 'a *:* rwm' # allow all devices; only use this for debugging! Don't use this in production, because it's a massive security backdoor!
-      - 'a 188:* rwm' # USB serial devices, e.g. /dev/ttyUSB0
+      - 'a 188:* rwm' # USB serial devices (such as the openUC2 HAT+), e.g. /dev/ttyUSB0
       # - 'a 204:* rwm' # Serial devices, e.g. /dev/ttyAMA0
       - 'a 81:* rwm' # libcamera-based cameras, e.g. /dev/video0
       - 'a 511:* rwm' # libcamera-based cameras, e.g. /dev/media0
@@ -23,6 +21,7 @@ services:
       # - 'a 238:* rwm' # GPIO devices, e.g. /dev/gpiomem2
       # - 'a 237:* rwm' # GPIO devices, e.g. /dev/gpiomem3
       # - 'a 236:* rwm' # GPIO devices, e.g. /dev/gpiomem4
+      # - 'a *:* rwm' # allow all devices; only use this for debugging! Don't use this in production, because it's a massive security backdoor!
     group_add:
       - tty
       - dialout
