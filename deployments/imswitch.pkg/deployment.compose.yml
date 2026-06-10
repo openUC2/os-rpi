@@ -9,8 +9,16 @@ services:
       - /run/udev:/run/udev:ro
       # For scanning and accessing USB serial devices:
       - /dev:/dev
+    devices:
       # For libcamera:
       - /dev/dma_heap:/dev/dma_heap
+    group_add:
+      - dialout
+      - video
+      - plugdev
+      - spi
+      - i2c
+      - gpio
     environment:
       - HEADLESS=1
       - HTTP_PORT=8001
