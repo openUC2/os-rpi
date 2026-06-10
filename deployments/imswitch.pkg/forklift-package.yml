@@ -114,6 +114,14 @@ features:
           target: overlays/etc/firewalld/services/imswitch-dev.xml
         - description: Drop-in XML fragment for firewalld's imswitch-dev service
           target: overlays/etc/firewalld/zones.d/public/70-service-imswitch-dev.xml
+  can-device:
+    description: Provides automatic enablement of the OS interface for an SPI CAN bus transceiver
+    provides:
+      file-exports:
+        - description: systemd-networkd configuration for the can0 device
+          target: overlays/etc/systemd/network/80-can0.network
+        - description: systemd service enablement for systemd-networkd
+          target: overlays/etc/systemd/system/multi-user.target.wants/systemd-networkd.service
   dev-edge:
     description: >-
       Uses the `edge` tag for the ImSwitch docker container image, for faster development

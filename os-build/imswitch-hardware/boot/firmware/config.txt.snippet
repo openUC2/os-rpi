@@ -1,0 +1,4 @@
+
+# Allow the RPi 5 to talk directly over the CAN interface
+dtparam=spi=on
+dtoverlay=mcp2515-can0,oscillator=12000000,interrupt=12,spimaxfrequency=10000000
