@@ -121,13 +121,13 @@ features:
         - description: Kernel parameters
           target: overlays/etc/sysctl.d/80-hikrobot-cameras.conf
         - description: udev rules
-          target: overlays/usr/lib/udev/rules.d/80-hikrobot-cameras.conf
+          target: overlays/usr/lib/udev/rules.d/80-hikrobot-cameras.rules
   daheng-cameras:
     description: Support for Daheng cameras
     provides:
       file-exports:
         - description: udev rules
-          target: overlays/usr/lib/udev/rules.d/80-daheng-cameras.conf
+          target: overlays/usr/lib/udev/rules.d/80-daheng-cameras.rules
   dev-edge:
     description: >-
       Uses the `edge` tag for the ImSwitch docker container image, for faster development
