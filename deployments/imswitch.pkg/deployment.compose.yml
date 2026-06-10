@@ -1,15 +1,16 @@
 services:
   server:
-    image: ghcr.io/openuc2/imswitch:pr-291@sha256:0d7555655c0a742e06d8b220a66aa9e9e50e282606c5a3592df4747149df4c88
+    image: ghcr.io/openuc2/imswitch:pr-291@sha256:36c5e2041e1052650395d74445dda984edb995d2fbdbab63b149bc90a73b3502
     volumes:
       - /etc/machine-id:/etc/machine-id:ro
       - /home/pi/ImSwitchConfig:/home/pi/ImSwitchConfig
       - /home/pi/Datasets:/home/pi/Datasets
       - /media:/media
       - /run/udev:/run/udev:ro
-      # For scanning and accessing USB serial devices:
       - /dev:/dev
-    privileged: true # needed to make the `/dev` bind-mount work
+    device_cgroup_rules:
+      # Allow all devices (TODO: only whitelist specific major numbers, see https://stackoverflow.com/questions/24225647/docker-a-way-to-give-access-to-a-host-usb-or-serial-device and https://www.baeldung.com/ops/docker-access-host-devices):
+      - 'a *:* rwm'
     group_add:
       - dialout
       - video
