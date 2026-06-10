@@ -1,0 +1,6 @@
+services:
+  server:
+    device_cgroup_rules:
+      - 'a 153:* rwm' # SPI devices, e.g. /dev/spidev0.1
+    group_add:
+      - spi

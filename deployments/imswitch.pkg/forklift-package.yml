@@ -128,8 +128,10 @@ features:
       file-exports:
         - description: udev rules
           target: overlays/usr/lib/udev/rules.d/80-daheng-cameras.rules
-  can-device:
+  can-interface:
     description: Provides automatic enablement of the OS interface for an SPI CAN bus transceiver
+    compose-files:
+      - can-interface.compose.yml
     provides:
       file-exports:
         - description: systemd-networkd configuration for the can0 device

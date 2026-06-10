@@ -6,5 +6,5 @@ features:
   - firewall-allow-public
   - hikrobot-cameras
   - daheng-cameras
-  - can-device
+  - can-interface
 disabled: false

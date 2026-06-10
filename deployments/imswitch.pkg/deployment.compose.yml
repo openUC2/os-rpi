@@ -13,7 +13,6 @@ services:
       # - 'a 204:* rwm' # Serial devices, e.g. /dev/ttyAMA0
       - 'a 81:* rwm' # libcamera-based cameras, e.g. /dev/video0
       - 'a 511:* rwm' # libcamera-based cameras, e.g. /dev/media0
-      - 'a 153:* rwm' # SPI devices, e.g. /dev/spidev0.1
       # - 'a 89:* rwm' # I2C devices, e.g. /dev/i2c-1
       # - 'a 254:* rwm' # GPIO devices, e.g. /dev/gpiochip0
       # - 'a 235:* rwm' # GPIO devices, e.g. /dev/gpiomem0
@@ -27,7 +26,6 @@ services:
       - dialout
       - video
       - plugdev
-      - spi
       # - i2c
       # - gpio
     environment:
