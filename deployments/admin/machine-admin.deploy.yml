@@ -1,0 +1,4 @@
+package: /deployments/admin/machine-admin.pkg
+features:
+  - frontend
+disabled: false

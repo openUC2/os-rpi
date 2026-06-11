@@ -15,6 +15,16 @@
     <section class="section">
       <div class="container content is-max-desktop">
         <h1>Machine {{$machineName}}</h1>
+        <article class="message is-info two-card-width">
+          <div class="message-body">
+            This is the full view of the home page. If it's too overwhelming, you can instead open the
+            <a href="{{urlJoin (dict
+              "path" .Meta.Path
+              "query" (.Meta.Form.Without "mode").Encode
+            )}}">simplified view</a> of this page.
+          </div>
+        </article>
+
         <p>
           Welcome! This is the limited-access home page for your machine with machine name
           <code>{{$machineName}}</code>.
@@ -33,11 +43,12 @@
         <ul>
           <li>
             <p>
-              <strong><a href="/imswitch/ui/index.html" target="_blank">
-                ImSwitch dashboard
-                {{- /* make template ignore the line break */ -}}
-              </a></strong>:
-              The standard user interface to operate the microscope
+              {{
+                template "shared/link.partial.tmpl" dict
+                "Href" "/imswitch/ui/index.html"
+                "Name" "ImSwitch"
+                "Description" "This machine's microscope control interface"
+              }}
             </p>
             <article class="message is-info mb-3">
               <div class="message-body">
@@ -49,7 +60,7 @@
       </div>
     </section>
 
-    <section class="section is-large">
+    <section class="section is-medium">
       <div class="container content is-max-desktop">
         <h2>Need help?</h2>
 
@@ -106,114 +117,115 @@
         </ul>
 
         <h3 class="is-size-5">Documentation</h3>
-        <p>Accessible offline:</p>
         <ul>
           <li>
-            <strong><a href="/docs/" target="_blank">openUC2 documentation</a></strong>:
-            An offline copy of the most relevant subset of the official openUC2 project documentation
+            {{
+              template "shared/link.partial.tmpl" dict
+              "Href" "/docs/"
+              "OnlineHref" "https://docs.openuc2.com/"
+              "Name" "openUC2 Documentation"
+              "Description" "Official documentation for all openUC2 products and projects"
+            }}
           </li>
           <li>
-            <strong><a href="/docs/usage/pro/frame/tutorials/" target="_blank">
-              FRAME tutorials
-              {{- /* make template ignore the line break */ -}}
-            </a></strong>:
-            Introductory tutorials for you to set up and use a FRAME machine
+            {{
+              template "shared/link.partial.tmpl" dict
+              "Href" "/docs/usage/pro/frame/tutorials/"
+              "OnlineHref" "https://docs.openuc2.com/usage/pro/frame/tutorials/"
+              "Name" "FRAME Tutorials"
+              "Description" "Introductory tutorials for you to set up and use a FRAME machine"
+            }}
           </li>
           <li>
-            <strong><a href="/docs/usage/pro/frame/guides/" target="_blank">
-              FRAME how-to guides
-              {{- /* make template ignore the line break */ -}}
-            </a></strong>:
-            Concise guides on deploying and operating FRAME machines for experienced users
+            {{
+              template "shared/link.partial.tmpl" dict
+              "Href" "/docs/usage/pro/frame/guides/"
+              "OnlineHref" "https://docs.openuc2.com/usage/pro/frame/guides/"
+              "Name" "FRAME How-To Guides"
+              "Description" "Concise guides on deploying and operating FRAME machines for experienced users"
+            }}
           </li>
           <li>
-            <strong><a href="/docs/usage/disc/" target="_blank">
-              Discovery Line usage information
-              {{- /* make template ignore the line break */ -}}
-            </a></strong>:
-            Usage information for Discovery Line kits such as the
-            CoreBox, HoloBox, Electronics Add-On, and Infinity Add-On.
-          </li>
-        </ul>
-
-        <p>On the internet:</p>
-        <ul>
-          <li>
-            <strong><a href="https://docs.openuc2.com/" target="_blank">openUC2 documentation</a></strong>:
-            The latest and most complete copy of the official openUC2 project documentation
-          </li>
-          <li>
-            <strong><a href="https://docs.openuc2.com/usage/pro/frame/tutorials/" target="_blank">
-              FRAME tutorials
-              {{- /* make template ignore the line break */ -}}
-            </a></strong>:
-            Introductory tutorials for you to set up and use a FRAME machine
-          </li>
-          <li>
-            <strong><a href="https://docs.openuc2.com/usage/pro/frame/guides/" target="_blank">
-              FRAME how-to guides
-              {{- /* make template ignore the line break */ -}}
-            </a></strong>:
-            Concise guides on deploying and operating FRAME machines for experienced users
-          </li>
-          <li>
-            <strong><a href="https://docs.openuc2.com/usage/disc/" target="_blank">
-              Discovery Line usage information
-              {{- /* make template ignore the line break */ -}}
-            </a></strong>:
-            Usage information for Discovery Line kits such as the
-            CoreBox, HoloBox, Electronics Add-On, and Infinity Add-On.
+            {{
+              template "shared/link.partial.tmpl" dict
+              "Href" "/docs/usage/disc/"
+              "OnlineHref" "https://docs.openuc2.com/usage/disc/"
+              "Name" "Discovery Line Usage"
+              "Description" "Usage information for Discovery Line kits such as the CoreBox, HoloBox, Electronics Add-On, and Infinity Add-On"
+            }}
           </li>
         </ul>
 
         <h3 class="is-size-5">Community</h3>
         <ul>
           <li>
-            <strong><a href="https://openuc2.com/" target="_blank">Official openUC2 website</a></strong>:
-            Information about the openUC2 optical toolbox
+            {{
+              template "shared/link.partial.tmpl" dict
+              "OnlineHref" "https://openuc2.com/"
+              "Name" "openUC2 Website"
+              "Description" "Information about openUC2"
+            }}
           </li>
           <li>
-            <strong><a href="https://openuc2-gmbh.odoo.com/" target="_blank">Official openUC2 website</a></strong>:
-            openUC2 store
+            {{
+              template "shared/link.partial.tmpl" dict
+              "OnlineHref" "https://shop.openuc2.com/"
+              "Name" "openUC2 Shop"
+              "Description" "The official shop for purchasing openUC2 products"
+            }}
           </li>
           <li>
-            <strong><a href="https://openuc2.discourse.group/" target="_blank">Discourse group</a></strong>:
-            A forum for talking about openUC2 and getting help
+            {{
+              template "shared/link.partial.tmpl" dict
+              "OnlineHref" "https://openuc2.discourse.group/"
+              "Name" "openUC2 Forum"
+              "Description" "openUC2's Discourse forum for talking about openUC2 projects and getting help"
+            }}
           </li>
           <li>
-            <strong><a href="https://github.com/openUC2" target="_blank">GitHub organization</a></strong>:
-            openUC2's GitHub organization for development of the openUC2 optical toolbox
+            {{
+              template "shared/link.partial.tmpl" dict
+              "OnlineHref" "https://github.com/openUC2"
+              "Name" "openUC2 on GitHub"
+              "Description" "openUC2's GitHub organization for development of the openUC2 optical toolbox"
+            }}
           </li>
         </ul>
       </div>
     </section>
 
-    <section class="section is-large">
+    <section class="section is-medium">
       <div class="container content is-max-desktop">
         <h2>For advanced users</h2>
         <h3 class="is-size-5">Browser applications</h3>
         <p>System administration and troubleshooting:</p>
         <ul>
           <li>
-            <strong><a href="/admin/cockpit/" target="_blank">Cockpit</a></strong>:
-            An advanced system administration dashboard for the computer embedded in this
-            machine
+            {{
+              template "shared/link.partial.tmpl" dict
+              "Href" "/admin/cockpit/"
+              "Name" "Cockpit"
+              "Description" "An advanced general-purpose system administration dashboard for the computer embedded in this machine"
+            }}
           </li>
           <li>
-            <strong><a href="/admin/fs/files/home/pi" target="_blank">User file manager</a></strong>:
-            A file browsing and management interface for the entire filesystem of the
-            computer embedded in this machine
+            {{
+              template "shared/link.partial.tmpl" dict
+              "Href" "/admin/fs/files/home/pi"
+              "Name" "User File Manager"
+              "Description" "A file browsing and management interface for the entire filesystem of the computer embedded in this machine"
+            }}
           </li>
         </ul>
         <p>System recovery:</p>
         <ul>
           <li>
-            <strong><a href="//{{$hostname}}:9090/admin/cockpit/" target="_blank">
-              Cockpit (direct-access fallback)
-              {{- /* make template ignore the line break */ -}}
-            </a></strong>:
-            Fallback access to the Cockpit application, accessible even if the system's
-            service proxy stops working
+            {{
+              template "shared/link.partial.tmpl" dict
+              "Href" (print "//" $hostname ":9090/admin/cockpit/")
+              "Name" "Cockpit (direct-access fallback)"
+              "Description" "Fallback access to the Cockpit application, accessible even if the system's service proxy stops working"
+            }}
           </li>
         </ul>
 
@@ -225,15 +237,20 @@
             <code>/imswitch/api</code>
           </li>
           <li>
-            <strong><a href="/imswitch/api/docs" target="_blank">
-              ImSwitch HTTP API docs
-              {{- /* make template ignore the line break */ -}}
-            </a></strong>:
-            Swagger docs for ImSwitch's HTTP API (also useful for testing API endpoints)
+            {{
+              template "shared/link.partial.tmpl" dict
+              "Href" "/imswitch/api/docs"
+              "Name" "HTTP API docs"
+              "Description" "Swagger docs for ImSwitch's HTTP API (also useful for testing API endpoints)"
+            }}
           </li>
           <li>
-            <strong><a href="/imswitch/openapi.json" target="_blank">ImSwitch API spec</a></strong>:
-            OpenAPI specification for ImSwitch's HTTP API (useful for generating API clients)
+            {{
+              template "shared/link.partial.tmpl" dict
+              "Href" "/imswitch/openapi.json"
+              "Name" "ImSwitch API spec"
+              "Description" "OpenAPI specification for ImSwitch's HTTP API (useful for generating API clients)"
+            }}
           </li>
         </ul>
 
@@ -257,9 +274,15 @@
             for public (unauthenticated) access.
           </li>
           <li>
-            <strong><a href="/" target="_blank">Device portal</a></strong>:
-            A landing page as a portal to the browser applications, network APIs, and system
-            infrastructure on this machine (this is what you're seeing right now)
+            {{
+              template "shared/link.partial.tmpl" dict
+              "Href" (urlJoin (dict
+                "path" .Meta.Path
+                "query" .Meta.Form.Encode
+              ))
+              "Name" "Machine Portal"
+              "Description" "A landing page as a portal to the browser applications, network APIs, and system infrastructure on this machine (this is what you're seeing right now)"
+            }}
           </li>
         </ul>
 

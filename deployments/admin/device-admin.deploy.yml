@@ -1,4 +1,0 @@
-package: /deployments/admin/device-admin.pkg
-features:
-  - frontend
-disabled: false

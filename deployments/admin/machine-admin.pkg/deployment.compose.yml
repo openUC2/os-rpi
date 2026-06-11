@@ -1,7 +1,7 @@
 services:
 
   server:
-    image: ghcr.io/openuc2/device-admin:0.1.6-alpha.7@sha256:a46ebac5ba979eee88976c89416e83fdca4f146dd58de8f6078f15ad6db5e4e5
+    image: ghcr.io/openuc2/machine-admin:0.1.6-alpha.8@sha256:dd8fa8818305f6abe398ac003fb4608f95766515ef87914b0e73029d6fb50c15
     command: server
     user: 1000:1000
     environment:
@@ -44,7 +44,7 @@ services:
         condition: service_completed_successfully
 
   sidecar:
-    image: ghcr.io/openuc2/device-admin:0.1.6-alpha.7@sha256:a46ebac5ba979eee88976c89416e83fdca4f146dd58de8f6078f15ad6db5e4e5
+    image: ghcr.io/openuc2/machine-admin:0.1.6-alpha.8@sha256:dd8fa8818305f6abe398ac003fb4608f95766515ef87914b0e73029d6fb50c15
     command: sidecar
     environment:
       - SIDECAR_ADDRESS=tcp:0.0.0.0:2312
@@ -62,7 +62,7 @@ services:
   volume-setup:
     # This service ensures that pi is the owner of the secrets volume, since Docker creates it with
     # root ownership.
-    image: docker.io/library/alpine:3.23.4@sha256:5b10f432ef3da1b8d4c7eb6c487f2f5a8f096bc91145e68878dd4a5019afde11
+    image: docker.io/library/alpine:3.24.0@sha256:a2d49ea686c2adfe3c992e47dc3b5e7fa6e6b5055609400dc2acaeb241c829f4
     networks:
       - sidecar
     volumes:

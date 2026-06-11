@@ -1,11 +1,11 @@
 services:
-  server:
+  server-untrusted:
     volumes:
       - type: bind
         source: /run/machine-name
         target: /run/machine-name
         read_only: true
       # - type: bind
-      #   source: /etc/device-portal/web/templates
+      #   source: /etc/machine-portal/web/templates
       #   target: /web/templates
       #   read_only: true
