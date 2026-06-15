@@ -12,7 +12,7 @@ Before=avahi-daemon.socket
 
 [Service]
 Type=oneshot
-ExecStart=sh -c 'hostnamectl "$(cat /etc/hostname)"'
+ExecStart=sh -c 'hostnamectl hostname "$(cat /etc/hostname)"'
 RemainAfterExit=yes
 
 [Install]
