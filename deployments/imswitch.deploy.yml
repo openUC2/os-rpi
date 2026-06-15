@@ -6,5 +6,7 @@ features:
   - firewall-allow-public
   - hikrobot-cameras
   - daheng-cameras
+  - tucsen-cameras
+  - tucsen-cameras-dev
   - can-interface
 disabled: false
