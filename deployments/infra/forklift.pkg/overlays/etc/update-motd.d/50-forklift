@@ -45,7 +45,7 @@ local_plt_version=""
 local_plt_changes=""
 # TODO: move the version string-building logic to a Forklift subcommand!
 if [ "$local_plt_dir" != "" ] && which forklift >/dev/null && which git >/dev/null; then
-  local_plt_tag="$(sudo -u pi git -C "$local_plt_dir" describe --tags --exact-match)"
+  local_plt_tag="$(sudo -u pi git -C "$local_plt_dir" describe --tags --exact-match 2>/dev/null)"
   if [ "$local_plt_tag" != "" ]; then
     local_plt_version="$local_plt_tag"
   else
