@@ -15,9 +15,9 @@ if which forklift >/dev/null; then
   forklift_version="$(forklift --version | sed 's~^forklift version ~~')"
   local_plt_dir="$(forklift plt locate-file /)"
   upgrade_query="$(forklift plt show-upgrade-query)"
-  sudo -u pi forklift plt check-upgrade 1>&2 # FIXME: this is a workaround for spurious printing to stdout in Forklift v0.8.0
+  sudo -u pi forklift plt check-upgrade 1>&2 2>/dev/null # FIXME: this is a workaround for spurious printing to stdout in Forklift v0.8.0
   upgrade_available="$(
-    sudo -u pi forklift plt check-upgrade |
+    sudo -u pi forklift plt check-upgrade 2>/dev/null |
       sed 's~^.* -> ~~'
   )" # TODO: cache this in the filesystem for faster MOTD generation! Otherwise, connecting by SSH is a bit slower.
 fi
@@ -45,7 +45,7 @@ local_plt_version=""
 local_plt_changes=""
 # TODO: move the version string-building logic to a Forklift subcommand!
 if [ "$local_plt_dir" != "" ] && which forklift >/dev/null && which git >/dev/null; then
-  local_plt_tag="$(sudo -u pi git -C "$local_plt_dir" describe --tags --exact-match)"
+  local_plt_tag="$(sudo -u pi git -C "$local_plt_dir" describe --tags --exact-match 2>/dev/null)"
   if [ "$local_plt_tag" != "" ]; then
     local_plt_version="$local_plt_tag"
   else
