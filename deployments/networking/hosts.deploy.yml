@@ -2,4 +2,6 @@ package: /deployments/networking/hosts.pkg
 features:
   - direct-custom-domain-branded
   - direct-custom-domain-machine-name
+  - direct-custom-domain-hostname
+  - direct-mdns-hostname
 disabled: false
