@@ -1,0 +1,7 @@
+192.168.3.1     {hostname}.{custom-domain}
+192.168.4.1     {hostname}.{custom-domain}
+192.168.5.1     {hostname}.{custom-domain}
+192.168.6.1     {hostname}.{custom-domain}
+192.168.7.1     {hostname}.{custom-domain}
+192.168.8.1     {hostname}.{custom-domain}
+
