@@ -50,7 +50,7 @@ features:
     provides:
       file-exports:
         - description: Drop-in hosts fragment template
-          target: overlays/etc/hosts-templates.d/41-direct-mdns-openuc2.local
+          target: overlays/etc/hosts.d/41-direct-mdns-openuc2.local
   register-uc2-local:
     description: "Register `uc2.local` as an alias"
     requires:
@@ -79,4 +79,4 @@ features:
     provides:
       file-exports:
         - description: Drop-in hosts fragment template
-          target: overlays/etc/hosts-templates.d/51-direct-mdns-openuc2.local
+          target: overlays/etc/hosts.d/51-direct-mdns-openuc2.local
