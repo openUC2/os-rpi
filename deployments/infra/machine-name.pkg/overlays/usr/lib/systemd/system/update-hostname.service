@@ -1,5 +1,6 @@
 [Unit]
 Description=Make systemd-hostnamed update the hostname from /etc/hostname
+DefaultDependencies=no
 ConditionPathExists=/etc/hostname
 Wants=generate-hostname-templated.service
 After=generate-hostname-templated.service
