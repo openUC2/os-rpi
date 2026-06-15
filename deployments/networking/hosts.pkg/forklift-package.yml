@@ -99,7 +99,7 @@ features:
     provides:
       file-exports:
         - description: Drop-in hosts fragment template
-          target: overlays/etc/hosts-templates.d/32-direct-ecustom-domain-hostname
+          target: overlays/etc/hosts-templates.d/32-direct-custom-domain-hostname
   direct-mdns-hostname:
     description:
       "Use static IP addresses for direct connections over mDNS from non-mDNS devices, e.g.
