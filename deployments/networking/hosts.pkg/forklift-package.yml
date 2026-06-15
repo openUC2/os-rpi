@@ -91,4 +91,12 @@ features:
     provides:
       file-exports:
         - description: Drop-in hosts fragment template
-          target: overlays/etc/hosts-templates.d/40-direct-custom-domain-machine-name
+          target: overlays/etc/hosts-templates.d/31-direct-custom-domain-machine-name
+  direct-mdns-hostname:
+    description:
+      "Use static IP addresses for direct connections over mDNS from non-mDNS devices, e.g.
+      'open-metal-slope-23501.local'"
+    provides:
+      file-exports:
+        - description: Drop-in hosts fragment template
+          target: overlays/etc/hosts-templates.d/32-direct-mdns-hostname
