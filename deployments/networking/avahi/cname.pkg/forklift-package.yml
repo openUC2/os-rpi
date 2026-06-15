@@ -65,7 +65,7 @@ features:
         - description: systemd service enablement
           target: overlays/etc/systemd/system/multi-user.target.wants/avahi-publish-cname@uc2.local.service
         - description: Drop-in hosts fragment file for locally resolving the mDNS name
-          target: overlays/etc/hosts.d/50-mdns-uc2.local
+          target: overlays/etc/hosts.d/42-mdns-uc2.local
   direct-fallback-uc2-local:
     description:
       "Provide fallback static IP addresses for direct connections over mDNS from non-mDNS devices to uc2.local"
@@ -79,4 +79,4 @@ features:
     provides:
       file-exports:
         - description: Drop-in hosts fragment template
-          target: overlays/etc/hosts.d/51-direct-mdns-openuc2.local
+          target: overlays/etc/hosts.d/43-direct-mdns-openuc2.local
