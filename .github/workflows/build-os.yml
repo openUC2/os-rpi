@@ -66,18 +66,18 @@ jobs:
           # pseudoversion string generation:
           fetch-tags: true
 
-      # We pull all branches so that the OS image's local pallet will know if its current commit is
-      # actually on a branch (e.g. for an image built from a PR-triggered CI run)
-      - name: Fetch all branches
+      - name: Use branch of PR commit
+        if: ${{ github.event.pull_request.head.sha }}
         run: |
           set -x
-          git fetch --all
-          git branch -a
-          for remote in "$(git branch -r | grep -v '\->' | sed "s~\x1B\[[0-9;]*[a-zA-Z]~~g")"; do
-            echo "Tracking $remote..."
-            git branch --track ${remote#origin/} $remote
-          done
-          git branch --all
+          matching_branches="$(git branch -r --contains | sed 's~^[* ]*~~')"
+          echo "Branches with the current commit:"
+          echo $matching_branches
+          if [[ -n "$matching_branches" ]]; then
+            matching_branch="$(head -n 1 <<< "$matching_branches")"
+            git branch --track "${matching_branch#origin/}" $matching_branch
+            git branch --all
+          fi
 
       # GET BASE IMAGE
 
