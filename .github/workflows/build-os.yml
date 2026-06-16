@@ -70,9 +70,11 @@ jobs:
       # actually on a branch (e.g. for an image built from a PR-triggered CI run)
       - name: Fetch all branches
         run: |
+          git fetch --all
           for remote in `git branch -r`; do
             git branch --track ${remote#origin/} $remote
           done
+          git branch --all
 
       # GET BASE IMAGE
 
