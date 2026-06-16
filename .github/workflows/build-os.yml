@@ -65,6 +65,9 @@ jobs:
           # We fetch tags so that the staged pallet bundle has a record of ancestral tags, for
           # pseudoversion string generation:
           fetch-tags: true
+          # We fetch the history of all branches so that the OS image's local pallet will know if
+          # the commit it's on is on a branch (e.g. for an image built from a PR)
+          fetch-depth: 0
 
       # GET BASE IMAGE
 
