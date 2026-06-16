@@ -65,6 +65,27 @@ jobs:
           # We fetch tags so that the staged pallet bundle has a record of ancestral tags, for
           # pseudoversion string generation:
           fetch-tags: true
+          # We fetch the entire history so that the full history is available in the local pallet,
+          # for reporting version information:
+          fetch-depth: 0
+
+      - name: Use branch of PR commit
+        if: ${{ github.event.pull_request.head.sha }}
+        run: |
+          set -x
+          git fetch --all
+          matching_branches="$(git branch -r --contains | sed 's~^[* ]*~~')"
+          echo $matching_branches
+          if [[ -n "$matching_branches" ]]; then
+            matching_branch="$(head -n 1 <<< "$matching_branches")"
+            local_branch="${matching_branch#origin/}"
+            git branch "$local_branch"
+            git branch -a -v
+            git branch -u "$matching_branch" "$local_branch"
+            git branch -a -v
+            git switch "$local_branch"
+            git branch -v
+          fi
 
       # GET BASE IMAGE
 

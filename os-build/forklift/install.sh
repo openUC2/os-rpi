@@ -43,6 +43,7 @@ export PATH="$tmp_bin:$PATH"
 
 pallet_path="$(yq '.pallet.path' "$HOME/.local/share/forklift/pallet/forklift-pallet.yml")"
 forklift pallet set-upgrade-query "$pallet_path@$pallet_upgrade_version_query"
+forklift pallet show
 
 # Pre-download container images without Docker
 
