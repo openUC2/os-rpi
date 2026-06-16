@@ -70,9 +70,11 @@ jobs:
       # actually on a branch (e.g. for an image built from a PR-triggered CI run)
       - name: Fetch all branches
         run: |
+          set -x
           git fetch --all
-          git branch --all
+          git branch -a
           for remote in "$(git branch -r | grep -v '\->' | sed "s~\x1B\[[0-9;]*[a-zA-Z]~~g")"; do
+            echo "Tracking $remote..."
             git branch --track ${remote#origin/} $remote
           done
           git branch --all
