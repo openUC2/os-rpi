@@ -76,7 +76,9 @@ jobs:
           if [[ -n "$matching_branches" ]]; then
             matching_branch="$(head -n 1 <<< "$matching_branches")"
             git branch --track "${matching_branch#origin/}" $matching_branch
-            git branch --all
+            git branch -a -v
+            git switch "${matching_branch#origin/}"
+            git branch -v
           fi
 
       # GET BASE IMAGE
