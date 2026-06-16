@@ -73,6 +73,8 @@ forklift plt ls-img |
 
 export FORKLIFT_STAGE_STORE=/var/lib/forklift/stages
 sudo -E forklift stage plan
+sudo -E forklift stage apply
+forklift stage show
 sudo -E forklift stage set-next next
 
 # Use forklift on future boot sequences
