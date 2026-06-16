@@ -75,9 +75,11 @@ jobs:
           echo $matching_branches
           if [[ -n "$matching_branches" ]]; then
             matching_branch="$(head -n 1 <<< "$matching_branches")"
-            git branch --track "${matching_branch#origin/}" $matching_branch
+            local_branch="${matching_branch#origin/}"
+            git branch "$local_branch"
+            git branch -u $matching_branch
             git branch -a -v
-            git switch "${matching_branch#origin/}"
+            git switch "$local_branch"
             git branch -v
           fi
 
