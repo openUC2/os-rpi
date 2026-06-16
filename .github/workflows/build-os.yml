@@ -65,9 +65,14 @@ jobs:
           # We fetch tags so that the staged pallet bundle has a record of ancestral tags, for
           # pseudoversion string generation:
           fetch-tags: true
-          # We fetch the history of all branches so that the OS image's local pallet will know if
-          # the commit it's on is on a branch (e.g. for an image built from a PR)
-          fetch-depth: 0
+
+      # We pull all branches so that the OS image's local pallet will know if its current commit is
+      # actually on a branch (e.g. for an image built from a PR-triggered CI run)
+      - name: Fetch all branches
+        run: |
+          for remote in `git branch -r`; do
+            git branch --track ${remote#origin/} $remote
+          done
 
       # GET BASE IMAGE
 
