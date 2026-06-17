@@ -37,6 +37,20 @@ features:
           target: overlays/etc/systemd/system/multi-user.target.wants/avahi-publish-cname@openuc2.local.service
         - description: Drop-in hosts fragment file for locally resolving the mDNS name
           target: overlays/etc/hosts.d/40-mdns-openuc2.local
+  direct-fallback-openuc2-local:
+    description:
+      "Provide fallback static IP addresses for direct connections over mDNS from non-mDNS devices to openuc2.local"
+    requires:
+      filesets:
+        - description: Drop-in directory for hosts fragment files to generate the hosts file
+          tags:
+            - drop-in-assembly
+          paths:
+            - /etc/hosts.d
+    provides:
+      file-exports:
+        - description: Drop-in hosts fragment template
+          target: overlays/etc/hosts.d/41-direct-mdns-openuc2.local
   register-uc2-local:
     description: "Register `uc2.local` as an alias"
     requires:
@@ -51,4 +65,18 @@ features:
         - description: systemd service enablement
           target: overlays/etc/systemd/system/multi-user.target.wants/avahi-publish-cname@uc2.local.service
         - description: Drop-in hosts fragment file for locally resolving the mDNS name
-          target: overlays/etc/hosts.d/40-mdns-uc2.local
+          target: overlays/etc/hosts.d/42-mdns-uc2.local
+  direct-fallback-uc2-local:
+    description:
+      "Provide fallback static IP addresses for direct connections over mDNS from non-mDNS devices to uc2.local"
+    requires:
+      filesets:
+        - description: Drop-in directory for hosts fragment files to generate the hosts file
+          tags:
+            - drop-in-assembly
+          paths:
+            - /etc/hosts.d
+    provides:
+      file-exports:
+        - description: Drop-in hosts fragment template
+          target: overlays/etc/hosts.d/43-direct-mdns-openuc2.local

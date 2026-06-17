@@ -1,5 +1,6 @@
 [Unit]
 Description=Make systemd-hostnamed update the hostname from /etc/hostname
+DefaultDependencies=no
 ConditionPathExists=/etc/hostname
 Wants=generate-hostname-templated.service
 After=generate-hostname-templated.service
@@ -8,13 +9,11 @@ After=systemd-hostnamed.service
 Wants=network-pre.target
 Before=network-pre.target
 Before=avahi-daemon.service
+Before=avahi-daemon.socket
 
 [Service]
 Type=oneshot
-# Note: in Debian bookworm the official command is `hostnamectl hostname` but `set-hostname` still
-# should # work for backwards-compatibility; in Debian bullseye `hostnamectl hostname` doesn't work,
-# and instead `hostnamectl set-hostname` must be used:
-ExecStart=sh -c 'hostnamectl set-hostname "$(cat /etc/hostname)"'
+ExecStart=sh -c 'hostnamectl hostname "$(cat /etc/hostname)"'
 RemainAfterExit=yes
 
 [Install]
