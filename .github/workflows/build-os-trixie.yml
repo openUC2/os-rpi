@@ -15,6 +15,9 @@ on:
       - '**'
       - '!README.md'
   # merge_group:
+  release:
+    types:
+      - published
   workflow_dispatch:
     inputs:
       git-ref:
@@ -40,11 +43,11 @@ jobs:
       arch: arm64
 
   upload:
-    name: Upload image (Google Drive)
+    name: upload-image (Google Drive)
     runs-on: ubuntu-latest
     needs:
       - build
-    if: ${{ github.event_name == 'push tag' }}
+    if: github.event_name == 'push' && contains(github.ref, 'refs/tags/')
     permissions:
       contents: read
       actions: read
@@ -56,9 +59,9 @@ jobs:
           github-token: ${{ github.token }}
 
       - name: Upload image to Google Drive
-        uses: Jumbo810/Upload_Github_Artifacts_TO_GDrive@v2.3.4
+        uses: adityak74/google-drive-upload-git-action@v0.3
         with:
-          target: ${{ needs.build.outputs.image_name }}.img.xz
-          parent_folder_id: ${{ vars.GOOGLE_DRIVE_FOLDER_ID }}
+          filename: ${{ needs.build.outputs.image_name }}.img.xz
+          folderId: ${{ vars.GOOGLE_DRIVE_FOLDER_ID }}
           credentials: ${{ secrets.GOOGLE_SERVICE_ACCOUNT_CREDENTIALS }}
-          replace_mode: update_in_place
+          overwrite: true

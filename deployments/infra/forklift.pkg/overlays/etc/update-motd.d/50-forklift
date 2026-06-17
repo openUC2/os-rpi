@@ -78,6 +78,10 @@ assemble_pallet_identifier() {
   bundle_manifest="$(cat "$bundle_path/forklift-bundle.yml")"
   pallet_path="$(echo "$bundle_manifest" | gojq --yaml-input ".pallet.path" -r)"
   pallet_version="$(echo "$bundle_manifest" | gojq --yaml-input ".pallet.version" -r)"
+  pallet_branch="$(git -C "$bundle_path/pallet" symbolic-ref -q --short HEAD)"
+  if [ "$pallet_branch" != "" ]; then
+    pallet_version="$pallet_version (branch: $pallet_branch)"
+  fi
   is_clean="$(echo "$bundle_manifest" | gojq --yaml-input ".pallet.clean" -r)"
   result="$pallet_path@$pallet_version"
   if [ "$is_clean" != "true" ]; then

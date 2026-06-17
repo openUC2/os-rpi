@@ -1,6 +1,5 @@
 [Unit]
 Description=Make systemd-hostnamed update the hostname from /etc/hostname
-DefaultDependencies=no
 ConditionPathExists=/etc/hostname
 Wants=generate-hostname-templated.service
 After=generate-hostname-templated.service
@@ -14,6 +13,7 @@ Before=avahi-daemon.socket
 [Service]
 Type=oneshot
 ExecStart=sh -c 'hostnamectl hostname "$(cat /etc/hostname)"'
+ExecStartPost=sh -c 'systemctl try-restart --no-block avahi-daemon.service'
 RemainAfterExit=yes
 
 [Install]
