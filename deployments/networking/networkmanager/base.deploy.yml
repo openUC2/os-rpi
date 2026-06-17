@@ -1,8 +1,9 @@
 package: /deployments/networking/networkmanager/base.pkg
 features:
+  - manage-usb-gadget
   - direct-ip-addresses
   - link-local-ip-addresses
   - firewall-allow-direct
   - firewall-allow-public
-  - manage-usb-gadget
+  - captive-portal
 disabled: false

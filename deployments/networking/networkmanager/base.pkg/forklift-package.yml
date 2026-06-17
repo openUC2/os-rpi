@@ -176,6 +176,20 @@ deployment:
           - /usr/lib/systemd/system/assemble-networkmanager-connection-templated@.service
 
 features:
+
+  manage-usb-gadget:
+    description: udev rule to allow NetworkManager to manage the USB gadget port
+    requires:
+      services:
+        - description: systemd service for reloading udev rules
+          protocol: systemd
+          paths:
+            - udev-readd.service
+    provides:
+      file-exports:
+        - description: Drop-in udev rule for enabling NetworkManager on USB gadget devices
+          target: overlays/etc/udev/rules.d/99-nm-usb-gadget.rules
+
   direct-ip-addresses:
     description: IP addresses for direct connections
     provides:
@@ -208,19 +222,6 @@ features:
           target: overlays/etc/NetworkManager/system-connections.d/usb1-default/63-ipv4-link-local.nmconnection
         - description: Link-local IPv4 address settings
           target: overlays/etc/NetworkManager/system-connections.d/usb1-static/63-ipv4-link-local.nmconnection
-
-  manage-usb-gadget:
-    description: udev rule to allow NetworkManager to manage the USB gadget port
-    requires:
-      services:
-        - description: systemd service for reloading udev rules
-          protocol: systemd
-          paths:
-            - udev-readd.service
-    provides:
-      file-exports:
-        - description: Drop-in udev rule for enabling NetworkManager on USB gadget devices
-          target: overlays/etc/udev/rules.d/99-nm-usb-gadget.rules
 
   firewall-allow-direct:
     description:
