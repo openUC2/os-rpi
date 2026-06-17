@@ -265,8 +265,7 @@ features:
   windows-ncsi-active-probing:
     description: Prevent Windows from automatically disconnecting from the hotspot if there's no internet access
     compose-files:
-      - deployment.compose.yml
-      - frontend.compose.yml
+      - windows-ncsi-active-probing.compose.yml
     requires:
       filesets:
         - description: Drop-in directory for hosts fragment files to generate the hosts file
