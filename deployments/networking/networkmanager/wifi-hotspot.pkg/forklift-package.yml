@@ -262,3 +262,16 @@ features:
       file-exports:
         - description: Drop-in NetworkManager connection fragment with enabelement of link-local IPv4 address
           target: overlays/etc/NetworkManager/system-connections.d/wlan1-hotspot/63-ipv4-link-local.nmconnection
+  windows-ncsi-active-probing:
+    description: Prevent Windows from automatically disconnecting from hotspot without internet access
+    requires:
+      filesets:
+        - description: Drop-in directory for hosts fragment files to generate the hosts file
+          tags:
+            - drop-in-assembly
+          paths:
+            - /etc/hosts.d
+    provides:
+      file-exports:
+        - description:
+          target: overlays/etc/hosts.d/40-direct-windows-ncsi
