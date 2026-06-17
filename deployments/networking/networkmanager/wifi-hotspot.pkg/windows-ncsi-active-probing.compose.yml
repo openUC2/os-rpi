@@ -5,9 +5,6 @@ services:
     networks:
       - caddy-ingress
     labels:
-      # To make Windows redirect any captive portal page to the landing page:
-      caddy_0: http://
-      caddy_0.redir: /redirect /
       # To make Windows 10 or newer detect a captive portal:
       caddy_1: http://www.msftconnecttest.com
       caddy_1.respond: /connecttest.txt "Microsoft Connect Test"
