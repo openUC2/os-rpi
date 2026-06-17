@@ -290,7 +290,6 @@ features:
           port: 8000
           protocol: http
           paths:
-            - www.msftconnecttest.com/connecttest.txt
-            - www.msftconnecttest.com/redirect
-            - www.msftncsi.com/ncsi.txt
-            - www.msftncsi.com/redirect
+            - /connecttest.txt
+            - /ncsi.txt
+            - /redirect
