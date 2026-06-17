@@ -263,7 +263,7 @@ features:
         - description: Drop-in NetworkManager connection fragment with enabelement of link-local IPv4 address
           target: overlays/etc/NetworkManager/system-connections.d/wlan1-hotspot/63-ipv4-link-local.nmconnection
   windows-ncsi-active-probing:
-    description: Prevent Windows from automatically disconnecting from hotspot without internet access
+    description: Prevent Windows from automatically disconnecting from the hotspot if there's no internet access
     compose-files:
       - deployment.compose.yml
       - frontend.compose.yml
@@ -290,6 +290,6 @@ features:
           port: 8000
           protocol: http
           paths:
-            - /connecttest.txt
-            - /ncsi.txt
+            - //www.msftconnecttest.com/connecttest.txt
+            - //www.msftncsi.com/ncsi.txt
             - /redirect
