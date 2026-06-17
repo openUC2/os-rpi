@@ -16,5 +16,4 @@ features:
   - wlan1-direct-ip-address
   - wlan0-link-local-ip-address
   - dhcp-default-route
-  - windows-ncsi-active-probing
 disabled: false
