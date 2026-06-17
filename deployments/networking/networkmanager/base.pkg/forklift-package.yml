@@ -208,6 +208,20 @@ features:
           target: overlays/etc/NetworkManager/system-connections.d/usb1-default/63-ipv4-link-local.nmconnection
         - description: Link-local IPv4 address settings
           target: overlays/etc/NetworkManager/system-connections.d/usb1-static/63-ipv4-link-local.nmconnection
+
+  manage-usb-gadget:
+    description: udev rule to allow NetworkManager to manage the USB gadget port
+    requires:
+      services:
+        - description: systemd service for reloading udev rules
+          protocol: systemd
+          paths:
+            - udev-readd.service
+    provides:
+      file-exports:
+        - description: Drop-in udev rule for enabling NetworkManager on USB gadget devices
+          target: overlays/etc/udev/rules.d/99-nm-usb-gadget.rules
+
   firewall-allow-direct:
     description:
       Firewall configuration to allow ICMP, DHCP, and DNS traffic from directly-connected devices
@@ -244,18 +258,7 @@ features:
           target: overlays/etc/firewalld/zones.d/public/40-service-dhcp.xml
         - description: Drop-in XML fragment for firewalld's DNS service
           target: overlays/etc/firewalld/zones.d/public/40-service-dns.xml
-  manage-usb-gadget:
-    description: udev rule to allow NetworkManager to manage the USB gadget port
-    requires:
-      services:
-        - description: systemd service for reloading udev rules
-          protocol: systemd
-          paths:
-            - udev-readd.service
-    provides:
-      file-exports:
-        - description: Drop-in udev rule for enabling NetworkManager on USB gadget devices
-          target: overlays/etc/udev/rules.d/99-nm-usb-gadget.rules
+
   eth0-default-firewall-direct:
     description: Bind eth0 in DHCP client mode to the "nm-shared" firewall zone instead of the "public" zone
     provides:
@@ -368,3 +371,84 @@ features:
         - description: Drop-in NetworkManager connection fragment with firewall zone assignment
           source: overlays/etc/NetworkManager/system-connections.d/usb1-static/22-connection-firewall@block.nmconnection
           target: overlays/etc/NetworkManager/system-connections.d/usb1-static/22-connection-firewall.nmconnection
+
+  captive-portal:
+    description: Trigger captive portal detection & behavior in supported client devices except Windows
+    compose-files:
+      - captive-portal.base.compose.yml
+      - captive-portal-apple.compose.yml
+      - captive-portal-google.compose.yml
+      - captive-portal-linux.compose.yml
+    requires:
+      filesets:
+        - description: Drop-in directory for hosts fragment files to generate the hosts file
+          tags:
+            - drop-in-assembly
+          paths:
+            - /etc/hosts.d
+      networks:
+        - description: Overlay network for Caddy to connect to upstream services
+          name: caddy-ingress-untrusted
+      services:
+        - tags: [caddy-docker-proxy]
+          port: 8000
+          protocol: http
+    provides:
+      file-exports:
+        - description: Domain names for triggering captive portal detection in macOS & iOS
+          target: overlays/etc/hosts.d/40-direct-captive-portals-apple
+        - description: Domain names for triggering captive portal detection in Android & ChromeOS
+          target: overlays/etc/hosts.d/40-direct-captive-portals-google
+        - description: Domain names for triggering captive portal detection in Linux
+          target: overlays/etc/hosts.d/40-direct-captive-portals-linux
+      services:
+        - description: Captive portal detection triggers
+          port: 8000
+          protocol: http
+          paths:
+            # Apple:
+            - //captive.apple.com/hotspot-detect.html
+            # Google:
+            - //connectivitycheck.gstatic.com/generate_204
+            - //www.gstatic.com/generate_204
+            - //clients3.google.com/generate_204
+            # NetworkManager (GNOME):
+            - //nmcheck.gnome.org/check_network_status.txt
+            # NetworkManager (KDE Plasma):
+            - //networkcheck.kde.org/
+
+  captive-portal-windows:
+    # Note: Windows support is a separate feature flag because enabling captive portal behavior
+    # causes the Wi-Fi hotspot to be handled as a network without internet access, and then Windows
+    # automatically disconnects from it after around one minute. This conflicts with Wi-Fi hotspot
+    # functionality requirements
+    description: Trigger captive portal detection & behavior in Windows client devices
+    compose-files:
+      - captive-portal.base.compose.yml
+      - captive-portal-windows.compose.yml
+    requires:
+      filesets:
+        - description: Drop-in directory for hosts fragment files to generate the hosts file
+          tags:
+            - drop-in-assembly
+          paths:
+            - /etc/hosts.d
+      networks:
+        - description: Overlay network for Caddy to connect to upstream services
+          name: caddy-ingress-untrusted
+      services:
+        - tags: [caddy-docker-proxy]
+          port: 8000
+          protocol: http
+    provides:
+      file-exports:
+        - description:
+          target: overlays/etc/hosts.d/40-direct-captive-portals-windows
+      services:
+        - description: Captive portal detection triggers
+          port: 8000
+          protocol: http
+          paths:
+            - //www.msftconnecttest.com/connecttest.txt
+            - //www.msftncsi.com/ncsi.txt
+            - /redirect

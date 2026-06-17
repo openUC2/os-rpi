@@ -1,0 +1,6 @@
+services:
+  reverse-proxy-config:
+    labels:
+      caddy: http://
+      # NetworkManager (GNOME):
+      caddy.redir_1: /check_network_status.txt /

@@ -1,0 +1,5 @@
+services:
+  reverse-proxy-config:
+    labels:
+      caddy: http://
+      caddy.redir_1: /hotspot-detect.html /

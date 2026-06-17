@@ -282,7 +282,7 @@ features:
           protocol: http
     provides:
       file-exports:
-        - description:
+        - description: Domain names for bypassing Windows's NCSI Active Probing
           target: overlays/etc/hosts.d/40-direct-windows-ncsi
       services:
         - description: Microsoft NCSI Active Probing bypasses

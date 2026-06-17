@@ -1,0 +1,10 @@
+services:
+  reverse-proxy-config:
+    labels:
+      caddy: http://
+      # To make Windows redirect any captive portal page to the landing page:
+      caddy.redir_0: /redirect /
+      # To make Windows 10 or newer detect a captive portal:
+      caddy.redir_1: /connecttest.txt /
+      # To make Windows 8.1 or below detect a captive portal:
+      caddy.redir_2: /ncsi.txt /
