@@ -1,0 +1,12 @@
+services:
+  reverse-proxy-config:
+    networks:
+      - caddy-ingress
+    labels:
+      caddy: http://
+      caddy.redir_0: /connecttest.txt /
+      caddy.redir_1: /ncsi.txt /
+
+networks:
+  caddy-ingress:
+    external: true
