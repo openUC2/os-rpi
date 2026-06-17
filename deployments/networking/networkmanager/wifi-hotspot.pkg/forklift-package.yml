@@ -291,4 +291,3 @@ features:
           paths:
             - //www.msftconnecttest.com/connecttest.txt
             - //www.msftncsi.com/ncsi.txt
-            - /redirect
