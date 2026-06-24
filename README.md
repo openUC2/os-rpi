@@ -132,53 +132,18 @@ for some deployments, especially some deployments whose names begin with `provis
 `networking/`, `infra/`, and `dev/`, you will have to reboot/soft-reboot in order for changes to actually take
 effect.
 
-## Migrations for breaking changes
+## Exceptional operation
 
-### Migrating from github.com/openUC2/rpi-imswitch-os
+### Upgrading from ancient installations
 
-The pallet in this repo used to be called `github.com/openUC2/rpi-imswitch-os`, and the default
-branch in this repo used to be called `main`. On machines deployed with older versions of this OS
-built before March 2026, you will need to run the following command (instead of
-`forklift plt upgrade`) for your next upgrade:
-
-```
-forklift plt switch github.com/openUC2/os-rpi@edge
-```
-
-If it gives you a warning that you may have changes in your local pallet which have not been
-committed/pushed up to GitHub, but you're sure that you won't lose any important changes by wiping
-your local pallet, then you should run:
-
-```
-forklift plt switch --force github.com/openUC2/os-rpi@edge
-```
-
-### Updating local clones to migrate from `main` branch
-
-The default branch in this repo used to be called `main`. This was renamed to `edge` around the end
-of February 2026, to match the name of the `edge` release channel described in [DN 16](https://www.notion.so/DN-16-Software-release-process-2864e612c78a8068bce9f61adfc96963?source=copy_link)'s release branching model.
-
-As a result, local clones of this repo need to switch to using `edge` as the default branch:
-```
-git branch -m main edge
-git fetch origin
-git branch -u origin/edge edge
-git remote set-head origin -a
-git remote prune origin
-```
-
-If you don't do this, you'll get an error message from GitHub that you're not allowed to push up to
-the `main` branch.
-
-### Working around openUC2's premature deletion of imswitch-noqt
-
-Machines running versions of os-rpi built before late-January 2026 may be running a version
-of this repo's pallet which uses the `ghcr.io/openuc2/imswitch-noqt` Docker container image. Trying
-to upgrade the pallet from that version will now result an error, because the
-`ghcr.io/openuc2/imswitch-noqt` Docker container image was prematurely deleted, and upgrading the
-pallet will require the current pallet to ensure it has a copy of `ghcr.io/openuc2/imswitch-noqt`
-(which will fail) so that the current pallet can be used as a rollback in case the next pallet turns
-out to be invalid. To restore the ability to upgrade the pallet, please run the following commands:
+Machines running versions of os-rpi built a long time ago may be running a version of this repo's
+pallet which uses Docker container image that no longer exist. Trying to upgrade the pallet from
+such versions will result an error, because upgrading the pallet will require the current pallet to
+ensure it has a copy of the required container images so that the current pallet can be used as a
+rollback in case the next pallet turns out to be invalid, and Forklift does not yet try to detect
+that a local copy of the container image exists if there is no longer any remote copy of the image.
+To restore the ability to upgrade the pallet in such a circumstance, please run the following
+commands:
 
 ```bash
 forklift plt upgrade --force @main
