@@ -34,7 +34,7 @@ jobs:
       run:
         shell: bash
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
 
       - name: Setup Forklift
         uses: PlanktoScope/setup-forklift@v1
@@ -70,7 +70,7 @@ jobs:
 
       - name: Try to load container image pre-cache from GitHub Actions cache
         id: restore-precache
-        uses: actions/cache/restore@v5
+        uses: actions/cache/restore@v6
         with:
           key: "container-images-${{ matrix.platform.arch }}-${{ steps.setup-precaching.outputs.container_list_hash }}"
           path: ${{ steps.setup-precaching.outputs.path }}
@@ -100,7 +100,7 @@ jobs:
 
       - name: Save container image pre-cache to GitHub Actions cache
         if: "!steps.restore-precache.outputs.cache-hit"
-        uses: actions/cache/save@v5
+        uses: actions/cache/save@v6
         with:
           key: "container-images-${{ matrix.platform.arch }}-${{ steps.setup-precaching.outputs.container_list_hash }}"
           path: ${{ steps.setup-precaching.outputs.path }}

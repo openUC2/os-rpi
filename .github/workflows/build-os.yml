@@ -55,7 +55,7 @@ jobs:
     timeout-minutes: 60
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
         with:
           # We check out the PR's HEAD commit instead of its merge commit for traceability when
           # running `forklift plt show`/`forklift stage show`, and so that `forklift plt upgrade`
@@ -160,7 +160,7 @@ jobs:
 
       - name: Try to load container image pre-cache from GitHub Actions cache
         id: restore-precache
-        uses: actions/cache/restore@v5
+        uses: actions/cache/restore@v6
         with:
           key: "container-images-${{ matrix.platform.arch }}-${{ steps.setup-precaching.outputs.container_list_hash }}"
           restore-keys: |
@@ -193,7 +193,7 @@ jobs:
 
       - name: Save container image pre-cache to GitHub Actions cache
         if: "!steps.restore-precache.outputs.cache-hit"
-        uses: actions/cache/save@v5
+        uses: actions/cache/save@v6
         with:
           key: "container-images-${{ matrix.platform.arch }}-${{ steps.setup-precaching.outputs.container_list_hash }}"
           path: ${{ steps.setup-precaching.outputs.path }}
