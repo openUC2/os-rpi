@@ -7,5 +7,6 @@ features:
   - hikrobot-cameras
   - daheng-cameras
   - tucsen-cameras
+  - touptek-cameras
   - can-interface
 disabled: false
