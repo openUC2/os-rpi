@@ -136,10 +136,6 @@ features:
           target: overlays/etc/tucam/tuusb.conf
         - description: udev rules
           target: overlays/usr/lib/udev/rules.d/80-tucsen-cameras.rules
-  tucsen-cameras-dev:
-    description: Support for Tucsen cameras when running ImSwitch outside Docker
-    provides:
-      file-exports:
         - description: Compiled library file
           target: overlays/usr/lib/aarch64-linux-gnu/libTUCam.so
         - description: Compiled library file
@@ -148,6 +144,15 @@ features:
           target: overlays/usr/lib/aarch64-linux-gnu/libTUCam.so.1.0
         - description: Compiled library file
           target: overlays/usr/lib/aarch64-linux-gnu/libTUCam.so.1.0.0
+  touptek-cameras:
+    description: Support for Touptek cameras
+    provides:
+      file-exports:
+        - description: udev rules
+        - description: Compiled library file
+          type: http
+          source: https://github.com/openUC2/ImSwitchDockerInstall/releases/download/imswitch-master/libtoupcam-arm64-glibc.so
+          target: /usr/lib/aarch64-linux-gnu/libtoupcam.so
   can-interface:
     description: Provides automatic enablement of the OS interface for an SPI CAN bus transceiver
     compose-files:
