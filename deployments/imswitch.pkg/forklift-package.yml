@@ -149,9 +149,10 @@ features:
     provides:
       file-exports:
         - description: udev rules
+          target: overlays/usr/lib/udev/rules.d/80-touptek-cameras.rules
         - description: Compiled library file
-          type: http
-          source: https://github.com/openUC2/ImSwitchDockerInstall/releases/download/imswitch-master/libtoupcam-arm64-glibc.so
+          source-type: http
+          url: https://github.com/openUC2/ImSwitchDockerInstall/releases/download/imswitch-master/libtoupcam-arm64-glibc.so
           target: /usr/lib/aarch64-linux-gnu/libtoupcam.so
   can-interface:
     description: Provides automatic enablement of the OS interface for an SPI CAN bus transceiver
