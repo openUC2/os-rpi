@@ -154,6 +154,7 @@ features:
           source-type: http
           url: https://github.com/openUC2/ImSwitchDockerInstall/releases/download/imswitch-master/libtoupcam-arm64-glibc.so
           target: overlays/usr/lib/aarch64-linux-gnu/libtoupcam.so
+          permissions: 0755
   can-interface:
     description: Provides automatic enablement of the OS interface for an SPI CAN bus transceiver
     compose-files:
