@@ -272,6 +272,14 @@ jobs:
           image: ${{ steps.expand-image.outputs.destination }}
           run: echo "Done!"
 
+      # The OS setup scripts need registry credentials to (re-)pull container images from private
+      # repositories. We bind-mount them into /run (a tmpfs) of the unbooted container so that they
+      # are never written into the OS image.
+      - name: Prepare registry credentials for the OS setup scripts
+        run: |
+          mkdir -p /tmp/docker-config
+          install -m 644 "$HOME/.docker/config.json" /tmp/docker-config/config.json
+
       - name: Run OS setup scripts in an unbooted container
         uses: ethanjli/pinspawn-action@v0.1.5
         with:
@@ -282,9 +290,11 @@ jobs:
           # resolves noisy (but harmless) error messages from sudo.
           args: >-
             --bind "$(pwd)":/run/pallet
+            --bind /tmp/docker-config:/run/docker-config
             --capability=CAP_NET_ADMIN
             --machine=raspberrypi
           run: |
+            export DOCKER_CONFIG=/run/docker-config
             echo "Provisioning local pallet..."
             mkdir -p /home/pi/.local/share/forklift
             cp -r /run/pallet /home/pi/.local/share/forklift/pallet

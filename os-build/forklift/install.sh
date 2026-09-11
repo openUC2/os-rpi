@@ -67,13 +67,17 @@ forklift plt ls-img |
   rush "$config_files_root/load-precached-image.sh" \
     {} "$HOME/.cache/forklift/containers/docker-archives"
 
+echo "Resolving container image references..."
+forklift plt ls-img |
+  rush "$config_files_root/pull-image.sh" {} "$container_platform"
+
 # Prepare to apply the local pallet on the next boot
 # FIXME: containerd or runc always fails when we try to create containers (at least in a
 # systemd-nspawn container), so we can't run `forklift stage apply here`
 
 export FORKLIFT_STAGE_STORE=/var/lib/forklift/stages
 sudo -E forklift stage plan
-sudo -E forklift stage set-next next
+sudo -E forklift stage set-next --cache-img=false next
 
 # Use forklift on future boot sequences
 sudo systemctl preset forklift-apply.service
