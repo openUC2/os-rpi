@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<service>
+  <short></short>
+  <description>FLIM Imager REST API and web frontend</description>
+  <port port="5249" protocol="tcp" />
+</service>
