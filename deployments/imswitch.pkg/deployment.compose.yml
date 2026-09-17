@@ -39,6 +39,7 @@ services:
       - SCAN_EXT_DATA_PATH=1
       - EXT_DATA_PATH=/media
       - SSL=0
+      - GENICAM_GENTL64_PATH=/opt/VimbaX/cti
     extra_hosts:
       - host.docker.internal:host-gateway
     depends_on:
