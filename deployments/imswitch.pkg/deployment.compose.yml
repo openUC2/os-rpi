@@ -1,6 +1,6 @@
 services:
   server:
-    image: ghcr.io/openuc2/imswitch:sha-f6cc2ab
+    image: ghcr.io/openuc2/imswitch:sha-3bfc183
     volumes:
       - /etc/machine-id:/etc/machine-id:ro
       - /home/pi/ImSwitchConfig:/home/pi/ImSwitchConfig
@@ -39,7 +39,6 @@ services:
       - SCAN_EXT_DATA_PATH=1
       - EXT_DATA_PATH=/media
       - SSL=0
-      - GENICAM_GENTL64_PATH=/opt/VimbaX/cti
     extra_hosts:
       - host.docker.internal:host-gateway
     depends_on:
