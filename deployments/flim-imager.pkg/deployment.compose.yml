@@ -1,0 +1,46 @@
+services:
+  server:
+    # Note: this image is in a private GHCR repository. The OS build workflows log in to GHCR with
+    # the GHCR_PULL_TOKEN repository secret before pre-downloading container images, so the image
+    # ends up baked into the SD card image; no credentials are needed on the device for first boot.
+    image: ghcr.io/flim-labs/flim-imager-2.0:sha-3adced4d89b7624d2d4d61da93144927e5e5ac62@sha256:d34fc7eb73bbfcffa1ddb046024862a079f9ca2ac0f383659dab9fbee9adb13b
+    ports:
+      - 5249:5249
+    # Required for USB access to the ZestSC3 acquisition card
+    privileged: true
+    volumes:
+      # /dev/bus/usb must be a bind mount rather than a `devices:` entry, so that the container
+      # sees the new device node when the ZestSC3 drops off the bus and re-enumerates.
+      - /dev/bus/usb:/dev/bus/usb
+      # Firmware cache
+      - flim-data:/app/data
+      - flim-logs:/app/logs
+      # Acquisition data & calibration references go into the ImSwitch data tree, so that the
+      # ImSwitch container sees them under its DATA_PATH without any additional mounts. Host uid
+      # 1000 (pi) matches container uid 1000 (appuser).
+      - /home/pi/Datasets/flim-labs:/home/appuser/.flim-labs
+    environment:
+      - RUST_LOG=info
+      - RUST_BACKTRACE=1
+    healthcheck:
+      test: ['CMD', 'curl', '-f', 'http://localhost:5249/health']
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    depends_on:
+      volume-setup:
+        condition: service_completed_successfully
+    restart: always
+
+  volume-setup:
+    # This service ensures that root isn't the owner of /home/pi/Datasets/flim-labs, since Docker
+    # auto-creates that path with root ownership if it didn't exist before for the bind mount.
+    image: docker.io/library/alpine:3.24.1@sha256:28bd5fe8b56d1bd048e5babf5b10710ebe0bae67db86916198a6eec434943f8b
+    volumes:
+      - /home/pi/Datasets/flim-labs:/home/pi/Datasets/flim-labs
+    command: 'sh -c "chown -R 1000:1000 /home/pi/Datasets/flim-labs"'
+
+volumes:
+  flim-data:
+  flim-logs:
