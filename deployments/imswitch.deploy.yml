@@ -8,5 +8,6 @@ features:
   - daheng-cameras
   - tucsen-cameras
   - touptek-cameras
+  - alliedvision-cameras
   - can-interface
 disabled: false
