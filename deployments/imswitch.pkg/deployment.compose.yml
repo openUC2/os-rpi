@@ -1,6 +1,6 @@
 services:
   server:
-    image: ghcr.io/openuc2/imswitch:sha-08b08f6@sha256:9b47ddb131262960e2ebd07a8fd2f396b1b6b430357a04f8d2fdbf63851ea6dd
+    image: ghcr.io/openuc2/imswitch:sha-6058ef0@sha256:69567a06a34dcac9f6017b69fe25177ef762736f7e4e6578fb8f525943a8369b
     volumes:
       - /etc/machine-id:/etc/machine-id:ro
       - /home/pi/ImSwitchConfig:/home/pi/ImSwitchConfig
