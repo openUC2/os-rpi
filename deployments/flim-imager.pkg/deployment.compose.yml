@@ -31,6 +31,8 @@ services:
     depends_on:
       volume-setup:
         condition: service_completed_successfully
+      firmware-seed:
+        condition: service_completed_successfully
     restart: always
 
   volume-setup:
@@ -40,6 +42,99 @@ services:
     volumes:
       - /home/pi/Datasets/flim-labs:/home/pi/Datasets/flim-labs
     command: 'sh -c "chown -R 1000:1000 /home/pi/Datasets/flim-labs"'
+
+  firmware-seed:
+    # The server ships no firmwares: it downloads each .flim on demand from
+    # github.com/flim-labs/flim-firmwares into FIRMWARES_ROOT (/app/data/firmwares) the first time an
+    # experiment asks for it. On a device with no internet -- or one that merely loses it at the
+    # wrong moment -- that download fails and the experiment dies with
+    # "Failed to find firmware: /app/data/firmwares/<name>.flim". This service warms the cache from
+    # the firmwares vendored next to this file, so the server never depends on the network.
+    #
+    # Best-effort by design: it never fails the deployment. Anything the bundle does not cover is
+    # downloaded if the firmware store happens to be reachable, and otherwise left to the server's
+    # own on-demand download, exactly as before.
+    image: docker.io/library/alpine:3.24.1@sha256:28bd5fe8b56d1bd048e5babf5b10710ebe0bae67db86916198a6eec434943f8b
+    volumes:
+      - flim-data:/seed
+      # Relative to this compose file, so it resolves inside the staged pallet. See firmwares/README.md.
+      - ./firmwares:/bundled:ro
+    command:
+      - sh
+      - -c
+      - |
+        set -u
+        base=https://raw.githubusercontent.com/flim-labs/flim-firmwares/main
+        mkdir -p /seed/firmwares
+
+        # Write to a sidecar name and rename, so a container killed mid-transfer never leaves a
+        # truncated .flim behind: the server only checks that the path exists before flashing it to
+        # the card.
+        copied=0
+        for src in /bundled/*.flim; do
+          # No bundle mounted at all: the glob stays literal.
+          [ -e "$$src" ] || break
+          name=$${src##*/}
+          dest="/seed/firmwares/$$name"
+          [ -s "$$dest" ] && continue
+          if cp "$$src" "$$dest.part" && mv "$$dest.part" "$$dest"; then
+            copied=$$((copied + 1))
+          else
+            rm -f "$$dest.part"
+            echo "firmware-seed: could not copy bundled $$name"
+          fi
+        done
+        echo "firmware-seed: $$copied bundled firmwares added to the cache"
+
+        # The names are exactly what flim-lib's firmware_finder builds:
+        #   imaging_<reconstruction>_<frequency>[_100ps]_ch<channel>_<sync>_sy<sync_connection>.flim
+        # Only the chsma/sysma wiring is listed, because that is what the ImSwitch bridge asks for
+        # (it hardcodes channel=sma, sync_connection=sma); a usb-wired card still downloads on
+        # demand. The _100ps variants only exist upstream for 80 MHz.
+        wanted() {
+          echo frequency_meter.flim
+          echo channels_detection.flim
+          for reconstruction in f lf plf; do
+            for frequency in 10 20 40 80; do
+              for sync in in out; do
+                echo "imaging_$${reconstruction}_$${frequency}_chsma_$${sync}_sysma.flim"
+                if [ "$$frequency" = 80 ]; then
+                  echo "imaging_$${reconstruction}_80_100ps_chsma_$${sync}_sysma.flim"
+                fi
+              done
+            done
+          done
+        }
+
+        missing=
+        for name in $$(wanted); do
+          [ -s "/seed/firmwares/$$name" ] || missing="$$missing $$name"
+        done
+
+        if [ -z "$$missing" ]; then
+          echo "firmware-seed: cache complete, nothing to download"
+        # One cheap reachability probe, so an offline boot costs ~10s instead of a timeout per file.
+        elif ! wget -q -T 10 --spider "$$base/frequency_meter.flim"; then
+          echo "firmware-seed:$$missing missing from the bundle and $$base is unreachable;"
+          echo "firmware-seed: leaving them to the server's on-demand download"
+        else
+          for name in $$missing; do
+            dest="/seed/firmwares/$$name"
+            if wget -q -T 30 -O "$$dest.part" "$$base/$$name"; then
+              mv "$$dest.part" "$$dest"
+              echo "firmware-seed: downloaded $$name (not in the bundle)"
+            else
+              rm -f "$$dest.part"
+              echo "firmware-seed: could not fetch $$name; it will be downloaded on demand"
+            fi
+          done
+        fi
+
+        # The server runs as uid 1000 (appuser) and must stay able to add firmwares this list does
+        # not cover. Docker only seeds a fresh named volume from the image -- including the
+        # appuser-owned /app/data/firmwares -- while it is still empty, and this service fills it
+        # first, so the ownership has to be set here.
+        chown -R 1000:1000 /seed
 
 volumes:
   flim-data:
