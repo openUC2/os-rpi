@@ -10,3 +10,6 @@ services:
       - server-data:/data
     environment:
       - DOZZLE_ENABLE_ACTIONS=true
+
+volumes:
+  server-data: {}
