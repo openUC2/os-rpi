@@ -8,8 +8,6 @@ services:
         bind:
           create_host_path: false
       - server-data:/data
-    environment:
-      - DOZZLE_ENABLE_ACTIONS=true
 
 volumes:
   server-data: {}

@@ -1,4 +1,4 @@
 services:
   server:
     environment:
-      - DOZZLE_ENABLE_SHELL=true
+      - DOZZLE_ENABLE_ACTIONS=true
