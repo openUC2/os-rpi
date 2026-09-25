@@ -1,4 +1,5 @@
 package: /deployments/admin/dozzle.pkg
 features:
+  - actions
   - frontend
 disabled: false
