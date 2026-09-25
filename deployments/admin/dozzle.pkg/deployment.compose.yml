@@ -7,5 +7,7 @@ services:
         target: /var/run/docker.sock
         bind:
           create_host_path: false
-    environment:
-      - DOZZLE_ENABLE_ACTIONS=true
+      - server-data:/data
+
+volumes:
+  server-data: {}
