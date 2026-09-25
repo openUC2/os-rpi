@@ -15,8 +15,6 @@ services:
       - server-data:/data
     environment:
       - FILEBROWSER_CONFIG=/configs/deployment.filebrowser.yml
-      - FB_DATABASE=/database/filebrowser.db
-      - FB_ROOT=/root
 
 volumes:
   server-data: {}
