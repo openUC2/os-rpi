@@ -139,13 +139,13 @@ fi
 
 if [[ -n "$errors" ]]; then
   echo -e "errors:"
-  sed -e 's~^~  - ~' <<<"$errors"
+  echo "$errors" | grep '[^[:space:]]' | sed -e 's~^~  - ~'
 fi
 if [[ -n "$warnings" ]]; then
   echo -e "warnings:"
-  sed -e 's~^~  - ~' <<<"$warnings"
+  echo "$warnings" | grep '[^[:space:]]' | sed -e 's~^~  - ~'
 fi
 if [[ -n "$info" ]]; then
   echo -e "info:"
-  sed -e 's~^~  - ~' <<<"$warnings"
+  echo "$info" | grep '[^[:space:]]' | sed -e 's~^~  - ~'
 fi
