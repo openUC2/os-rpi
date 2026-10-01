@@ -118,7 +118,7 @@ elif [ "$next_bun" != "$current_bun" ]; then
   else
     echo -e "pending: \"$(assemble_pallet_identifier "$next_bun")\""
     if [ "$next_failed" == "true" ]; then
-      printf -v warnings '%s\n"%s"' "$warnings" "Because the pending version had already failed during a past boot attempt, future boots will instead fall back to the currently-booted version. You can try the pending version again on the next boot, by running: forklift stage set-next-result pending"
+      printf -v warnings '%s\n"%s"' "$warnings" "Because the pending version had already failed during a past boot attempt, future boots will instead fall back to the currently-booted version. You can try the pending version again on the next boot, by running in the terminal: forklift stage set-next-result pending"
     fi
   fi
 fi
@@ -134,7 +134,7 @@ else
 fi
 if [ "$upgrade_available" != "" ]; then
   echo -e "upgrade: \"$upgrade_available\""
-  printf -v info '%s\n"%s"' "$info" "To install update, run: forklift plt upgrade && sudo systemctl soft-reboot"
+  printf -v info '%s\n"%s"' "$info" "To install update, run in the terminal: forklift plt upgrade && sudo systemctl soft-reboot"
 fi
 
 if [[ -n "$errors" ]]; then
