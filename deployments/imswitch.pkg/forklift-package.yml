@@ -20,6 +20,11 @@ deployment:
       - description: Firmware binary transfer service
         port: 3333
         protocol: tcp
+    file-exports:
+      - description: >-
+          systemd service run by ImSwitch's (experimental) pallet upgrade button:
+          `forklift plt upgrade --force && forklift stage apply`
+        target: overlays/usr/lib/systemd/system/imswitch-pallet-upgrade.service
 
 features:
   frontend:
