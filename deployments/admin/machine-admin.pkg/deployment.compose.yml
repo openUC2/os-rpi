@@ -1,7 +1,7 @@
 services:
 
   server:
-    image: ghcr.io/openuc2/machine-admin:0.1.7-alpha.0@sha256:f6e12f30e863bcb42d1202b166b6c3f27ebf78a09a58dd9672d78a2bd0346620
+    image: ghcr.io/openuc2/machine-admin:0.1.7-alpha.1@sha256:d91cd4a7625090772053d4cdcbce54534a01575fae94d360caa9686c68cd137a
     command: server
     user: 1000:1000
     environment:
