@@ -227,6 +227,14 @@
           <li>
             {{
               template "shared/link.partial.tmpl" dict
+              "Href" (print "//" $hostname ":9090/admin/cockpit/")
+              "Name" "Cockpit (direct access)"
+              "Description" "Direct access to Cockpit; needed for applying Forklift upgrades from the Cockpit terminal without rebooting"
+            }}
+          </li>
+          <li>
+            {{
+              template "shared/link.partial.tmpl" dict
               "Href" "/admin/fs/files/root/home/pi"
               "Name" "User File Manager"
               "Description" "A file browsing and management interface for the entire filesystem of the computer embedded in this machine"
@@ -246,17 +254,6 @@
               "Href" "/admin/dozzle/"
               "Name" "Dozzle"
               "Description" "A dashboard for monitoring and troubleshooting the apps deployed on this machine"
-            }}
-          </li>
-        </ul>
-        <p>System recovery:</p>
-        <ul>
-          <li>
-            {{
-              template "shared/link.partial.tmpl" dict
-              "Href" (print "//" $hostname ":9090/admin/cockpit/")
-              "Name" "Cockpit (direct-access fallback)"
-              "Description" "Fallback access to the Cockpit application, accessible even if the system's service proxy stops working"
             }}
           </li>
         </ul>
