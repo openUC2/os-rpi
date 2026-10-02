@@ -1,0 +1,126 @@
+name: hardware-test
+
+on:
+  workflow_dispatch:
+    inputs:
+      image:
+        description: >
+          Only swap this ImSwitch image in, on whatever pallet the rig runs.
+          Empty (the default) tests the whole os-rpi pallet of the commit this
+          run is on instead: every Docker deployment, the firmware server
+          included. A bare tag (e.g. sha-7d3adda) resolves against
+          ghcr.io/openuc2/imswitch; a full ref (repo/image:tag) is used as-is.
+        required: false
+        default: ""
+      tests:
+        description: >
+          Space-separated e2e folders to run (e.g. "board firmware"). Empty
+          runs the whole suite, including motor/camera/laser/ledmatrix.
+        required: false
+        default: ""
+      suite_ref:
+        description: >
+          Branch, tag or SHA of the e2e suite to run. Empty takes the default
+          branch of the suite repository (the IMSWITCH_REPO variable, otherwise
+          LeonardPertsch/ImSwitch).
+        required: false
+        default: ""
+  # PRs with the "hardware-test" label: runs when the label is added and on
+  # every push to the PR while it is set.
+  pull_request:
+    types: [labeled, synchronize, reopened]
+
+# One rig, one run.
+concurrency:
+  group: hardware-test-${{ github.repository }}
+  cancel-in-progress: false
+
+jobs:
+  hardware-test:
+    # PRs only from branches of this repository: the job runs on the rig, and
+    # code from someone else's fork must not get there. Adding any other label
+    # to a labelled PR does not start another run.
+    if: >-
+      github.event_name == 'workflow_dispatch' ||
+      (github.event.pull_request.head.repo.full_name == github.repository &&
+       contains(github.event.pull_request.labels.*.name, 'hardware-test') &&
+       (github.event.action != 'labeled' || github.event.label.name == 'hardware-test'))
+    runs-on: [self-hosted, uc2-rig]
+
+    env:
+      # Where the e2e suite (hil-run.sh included) comes from. The HIL tooling
+      # is not in openUC2/ImSwitch yet, so the fork is the default; once it
+      # is, set the IMSWITCH_REPO repository variable to openUC2/ImSwitch.
+      SUITE_REPO: ${{ vars.IMSWITCH_REPO || 'LeonardPertsch/ImSwitch' }}
+
+    steps:
+      - name: Checkout ImSwitch
+        uses: actions/checkout@v7
+        with:
+          repository: ${{ env.SUITE_REPO }}
+          # Empty takes that repository's default branch, and so does every PR
+          # run: inputs only exist for a manual run.
+          ref: ${{ inputs.suite_ref }}
+          path: ImSwitch
+
+      - name: Determine what to test
+        id: config
+        env:
+          IMAGE_INPUT: ${{ inputs.image }}
+          TESTS_INPUT: ${{ inputs.tests }}
+          # A PR's head commit, not the merge commit GitHub makes for it: only
+          # commits on a branch can be fetched by forklift.
+          PALLET_COMMIT: ${{ github.event.pull_request.head.sha || github.sha }}
+        run: |
+          TESTS="$TESTS_INPUT"
+
+          # Only a manual run with an image swaps just that image. Everything
+          # else tests the os-rpi pallet of this run's commit as a whole.
+          if [ -n "$IMAGE_INPUT" ]; then
+            MODE=image
+            TARGET="$IMAGE_INPUT"
+            # Artifact names must not contain / or :, a full ref has both. The
+            # digest adds nothing a reader needs there.
+            NAME="${TARGET%@*}"
+            REPORT="hil-report-${NAME//[\/:]/-}"
+          else
+            MODE=pallet
+            TARGET="github.com/$GITHUB_REPOSITORY@$PALLET_COMMIT"
+            REPORT="hil-report-pallet-${PALLET_COMMIT::7}"
+          fi
+
+          echo "mode=$MODE" >> "$GITHUB_OUTPUT"
+          echo "target=$TARGET" >> "$GITHUB_OUTPUT"
+          echo "tests=$TESTS" >> "$GITHUB_OUTPUT"
+          echo "report=$REPORT" >> "$GITHUB_OUTPUT"
+
+          # The suite moves with its branch, so record the exact commit that ran.
+          SUITE="$SUITE_REPO@$(git -C ImSwitch rev-parse --short HEAD)"
+
+          echo "Runner:  $(hostname)"
+          echo "Testing: $MODE $TARGET"
+          echo "Suite:   $SUITE"
+          echo "Tests:   ${TESTS:-all}"
+          echo "Testing $MODE \`$TARGET\` on \`$(hostname)\` with suite \`$SUITE\`, tests: ${TESTS:-all}" >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Run the e2e suite on the rig
+        working-directory: ImSwitch/imswitch/imcontrol/_test/e2e
+        env:
+          MODE: ${{ steps.config.outputs.mode }}
+          TARGET: ${{ steps.config.outputs.target }}
+          TESTS: ${{ steps.config.outputs.tests }}
+        run: |
+          ci/hil-run.sh \
+            "--$MODE" "$TARGET" \
+            --yes \
+            --out ci/reports \
+            --tests "$TESTS"
+
+      - name: Upload report
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: ${{ steps.config.outputs.report || 'hil-report' }}
+          path: ImSwitch/imswitch/imcontrol/_test/e2e/ci/reports/
+          if-no-files-found: warn
+          retention-days: 30
