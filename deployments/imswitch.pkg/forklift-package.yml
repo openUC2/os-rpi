@@ -25,6 +25,8 @@ deployment:
           systemd service run by ImSwitch's (experimental) pallet upgrade button:
           `forklift plt upgrade --force && forklift stage apply`
         target: overlays/usr/lib/systemd/system/imswitch-pallet-upgrade.service
+      - description: polkit rule letting pi (the ImSwitch container user) start only that service
+        target: overlays/usr/share/polkit-1/rules.d/20-imswitch-pallet-upgrade.rules
 
 features:
   frontend:
