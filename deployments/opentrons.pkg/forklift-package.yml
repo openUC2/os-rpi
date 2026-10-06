@@ -5,7 +5,7 @@ package:
       email: benedictdied@gmail.com
   license: MIT
   sources:
-    - https://github.com/stainSTORM/OT2windy
+    - https://github.com/stainSTORM/OT2windy_service
 
 deployment:
   compose-files:

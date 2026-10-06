@@ -16,7 +16,7 @@ Raspberry Pi computers in the OS.
 | Deployment | Robot | Container | Page |
 |---|---|---|---|
 | `fairino` | Fairino arm | [stainSTORM/fairinogale](https://github.com/stainSTORM/fairinogale) | `http://<machine>/fairino/` |
-| `opentrons` | Opentrons OT-2 | [stainSTORM/OT2windy](https://github.com/stainSTORM/OT2windy) | `http://<machine>/opentrons/` |
+| `opentrons` | Opentrons OT-2 | [stainSTORM/OT2windy_service](https://github.com/stainSTORM/OT2windy_service) | `http://<machine>/opentrons/` |
 
 Both are on by default, and the machine's home page links to them. On a robot's page:
 
