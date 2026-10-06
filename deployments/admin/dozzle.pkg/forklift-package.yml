@@ -17,6 +17,14 @@ deployment:
           - /run/docker.sock
 
 features:
+  actions:
+    description: Allows performing start/stop/restart/remove/update actions on containers
+    compose-files:
+      - actions.compose.yml
+  shell:
+    description: Allows attaching or executing shell commands in containers
+    compose-files:
+      - shell.compose.yml
   frontend:
     description: Provides access to the GUI
     compose-files:

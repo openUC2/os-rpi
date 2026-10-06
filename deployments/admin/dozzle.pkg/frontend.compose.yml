@@ -9,6 +9,8 @@ services:
       caddy.redir: /admin/dozzle /admin/dozzle/
       caddy.handle: /admin/dozzle/*
       caddy.handle.reverse_proxy: "{{upstreams 8080}}"
+      # Disable response buffering for streaming endpoints:
+      caddy.handle.reverse_proxy.flush_interval: "-1"
 
 networks:
   default:

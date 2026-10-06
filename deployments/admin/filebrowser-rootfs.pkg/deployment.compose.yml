@@ -1,6 +1,6 @@
 services:
   server:
-    image: docker.io/filebrowser/filebrowser:v2.63.23@sha256:a469ea076d4a1b4b1d86a41d130f2f536cd9da996a2b1fb39c0d7635f9d89b9a
+    image: ghcr.io/gtsteffaniak/filebrowser:2.1.0-beta-slim@sha256:47379d59d64ce2b124311f81c920d305fb8b8610b086a7478f95c16dd0cd2744
     volumes:
       - type: bind
         source: /
@@ -8,14 +8,13 @@ services:
         bind:
           create_host_path: false
       - type: bind
-        source: /
-        target: /srv # this prevents filebrowser from making an unnamed volume
+        source: deployment.filebrowser.yml
+        target: /configs/deployment.filebrowser.yml
         bind:
           create_host_path: false
-      - server-data:/database
+      - server-data:/data
     environment:
-      - FB_DATABASE=/database/filebrowser.db
-      - FB_ROOT=/root
+      - FILEBROWSER_CONFIG=/configs/deployment.filebrowser.yml
 
 volumes:
   server-data: {}

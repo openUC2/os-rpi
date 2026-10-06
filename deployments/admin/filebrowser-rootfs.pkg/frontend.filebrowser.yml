@@ -1,0 +1,27 @@
+server:
+  database:
+    path: "/data/filebrowser.sqlite"
+  cacheDir: "/data/cache"
+  sources:
+    - path: "/root"
+      config:
+        defaultEnabled: true
+        rules:
+          - folderPath: "/"
+            viewable: true # disable indexing
+  disableUpdateCheck: true
+
+auth:
+  methods:
+    noauth: true
+
+frontend:
+  name: "Filebrowser"
+  externalLinks:
+    - text: Landing Page
+      title: Device Portal
+      url: /?mode=advanced
+
+http:
+  baseURL: "/admin/fs"
+  trustProxyHeaders: true
