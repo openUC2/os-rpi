@@ -1,0 +1,23 @@
+services:
+  server:
+    # Built by https://github.com/stainSTORM/fairinogale (.github/workflows/docker.yml) on every push.
+    image: ghcr.io/stainstorm/fairinogale:sha-8958f53
+    volumes:
+      # config.yaml, its data and the stored Arkitekt login (.state/); edited from the
+      # binding page at /fairino/ or directly on the Pi
+      - /home/pi/arkitekt/fairino:/config
+      # a stable Arkitekt device id across container re-creation
+      - /etc/machine-id:/etc/machine-id:ro
+    environment:
+      - FAIRINO_CONFIG=/config/config.yaml
+    depends_on:
+      volume-setup:
+        condition: service_completed_successfully
+    restart: always
+
+  volume-setup:
+    # Docker creates a missing bind-mount path owned by root; the app runs as uid 1000 (pi).
+    image: docker.io/library/alpine:3.24.2@sha256:294b683cb724975bec92580e1e685676bd4b50bda910ddb8c51d4cabeaec77e6
+    volumes:
+      - /home/pi/arkitekt/fairino:/home/pi/arkitekt/fairino
+    command: 'sh -c "chown -R 1000:1000 /home/pi/arkitekt/fairino"'

@@ -80,6 +80,19 @@ else
   panic "$description"
 fi
 
+if [[ "$build_variant" == "arkitekt" ]]; then
+  # Before Forklift is set up, so that the image gets the robot services' containers (and not
+  # ImSwitch's). This needs forklift itself, which the Forklift setup installs again afterwards.
+  description="switch the pallet to the Arkitekt robot services"
+  report_starting "$description"
+  if "$build_scripts_root"/forklift/download-forklift.sh "/usr/bin" &&
+    "$pallet_root"/arkitekt/setup.sh; then
+    report_finished "$description"
+  else
+    panic "$description"
+  fi
+fi
+
 description="set up Forklift"
 report_starting "$description"
 if "$build_scripts_root"/forklift/install.sh "$pallet_upgrade_version_query"; then

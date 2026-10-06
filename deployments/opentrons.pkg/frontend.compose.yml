@@ -1,0 +1,13 @@
+services:
+  server:
+    networks:
+      - caddy-ingress
+    labels:
+      caddy: http://
+      caddy.redir: /opentrons /opentrons/
+      caddy.handle_path: /opentrons/*
+      caddy.handle_path.reverse_proxy: "{{upstreams 8080}}"
+
+networks:
+  caddy-ingress:
+    external: true

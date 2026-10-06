@@ -132,6 +132,42 @@ for some deployments, especially some deployments whose names begin with `provis
 `networking/`, `infra/`, and `dev/`, you will have to reboot/soft-reboot in order for changes to actually take
 effect.
 
+### Arkitekt robot controllers (Fairino arm, Opentrons OT-2)
+
+A Raspberry Pi next to a robot can provide that robot to an [Arkitekt](https://arkitekt.live) server.
+Two deployments do this, one per robot:
+
+| Deployment | Robot | Container | Page |
+|---|---|---|---|
+| `fairino` | Fairino arm | [stainSTORM/fairinogale](https://github.com/stainSTORM/fairinogale) | `http://<machine>/fairino/` |
+| `opentrons` | Opentrons OT-2 | [stainSTORM/OT2windy](https://github.com/stainSTORM/OT2windy) | `http://<machine>/opentrons/` |
+
+The `build-os-trixie-arkitekt` workflow builds a separate SD card image, `os-rpi-arkitekt-*.img.xz`,
+on every PR that touches them. It runs [arkitekt/setup.sh](./arkitekt/setup.sh) during the build:
+ImSwitch is off, and both robot services are on, with their containers baked in. So the image works
+without internet at first boot.
+
+On the robot's page:
+
+1. Edit `config.yaml` (the robot's IP, and for the arm its stations) and press **Save and restart**.
+2. Enter the Arkitekt server and press **Bind**. Open the approval link it shows in any browser and
+   check the code. The login is stored, so the service reconnects after a reboot.
+
+Each service only talks to its robot when an Arkitekt action runs, so the unused one just waits.
+The Pi must be able to reach the robot's IP: on the same network, or on a direct cable with an
+address in the robot's subnet. The OT-2's USB connection uses link-local `169.254.x.x` addresses.
+To switch it off, run `forklift plt disable-depl opentrons` (or `fairino`), then `forklift plt apply`.
+The config, teach points and stored login live in `/home/pi/arkitekt/<deployment>/`.
+
+To do the same on a machine with the standard image, run
+`bash "$(forklift plt locate-file arkitekt/setup.sh)" && forklift plt apply`. The switch is a
+local change to the pallet: `forklift plt upgrade --force` resets it, so run the script again
+after such an upgrade.
+
+To ship a new robot service version, push to its repo (GitHub Actions builds
+`ghcr.io/stainstorm/<repo>:sha-<commit>`), then set that tag in
+`deployments/<deployment>.pkg/deployment.compose.yml`.
+
 ## Exceptional operation
 
 ### Upgrading from ancient installations
