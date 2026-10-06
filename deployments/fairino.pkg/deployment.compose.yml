@@ -1,7 +1,7 @@
 services:
   server:
     # Built by https://github.com/stainSTORM/fairinogale (.github/workflows/docker.yml) on every push.
-    image: ghcr.io/stainstorm/fairinogale:sha-8958f53
+    image: ghcr.io/stainstorm/fairinogale:sha-50d9ed2
     volumes:
       # config.yaml, its data and the stored Arkitekt login (.state/); edited from the
       # binding page at /fairino/ or directly on the Pi

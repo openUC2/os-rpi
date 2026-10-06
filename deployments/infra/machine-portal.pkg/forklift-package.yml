@@ -39,7 +39,7 @@ features:
             - /static/*
             - /fonts/*
   deploy-rpi:
-    description: Integrates with Imswitch OS
+    description: Integrates with openUC2 OS
     compose-files:
       - deploy-rpi.compose.yml
   dev-mock:
@@ -74,7 +74,7 @@ features:
             - /static/*
             - /fonts/*
   deploy-rpi-untrusted:
-    description: Integrates with Imswitch OS for untrusted access
+    description: Integrates with openUC2 OS for untrusted access
     compose-files:
       - deploy-rpi-untrusted.compose.yml
   dev-mock-untrusted:

@@ -18,5 +18,5 @@ sudo mkdir -p /boot/firmware/init-root/as-root/etc/firewalld/policies
 sudo mkdir -p /boot/firmware/init-root/as-root/etc/firewalld/services
 sudo mkdir -p /boot/firmware/init-root/as-root/etc/firewalld/zones.d
 sudo mkdir -p /boot/firmware/init-root/as-root/var/lib
-sudo mkdir -p /boot/firmware/init-root/as-pi/home/pi/ImSwitchConfig/config
-sudo mkdir -p /boot/firmware/init-root/as-pi/home/pi/ImSwitchConfig/imcontrol_setups
+sudo mkdir -p /boot/firmware/init-root/as-pi/home/pi/arkitekt/fairino
+sudo mkdir -p /boot/firmware/init-root/as-pi/home/pi/arkitekt/opentrons

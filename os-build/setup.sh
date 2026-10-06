@@ -80,19 +80,6 @@ else
   panic "$description"
 fi
 
-if [[ "$build_variant" == "arkitekt" ]]; then
-  # Before Forklift is set up, so that the image gets the robot services' containers (and not
-  # ImSwitch's). This needs forklift itself, which the Forklift setup installs again afterwards.
-  description="switch the pallet to the Arkitekt robot services"
-  report_starting "$description"
-  if "$build_scripts_root"/forklift/download-forklift.sh "/usr/bin" &&
-    "$pallet_root"/arkitekt/setup.sh; then
-    report_finished "$description"
-  else
-    panic "$description"
-  fi
-fi
-
 description="set up Forklift"
 report_starting "$description"
 if "$build_scripts_root"/forklift/install.sh "$pallet_upgrade_version_query"; then
@@ -123,41 +110,4 @@ if "$build_scripts_root"/init-root/prepare.sh; then
   report_finished "$description"
 else
   panic "$description"
-fi
-
-description="set up imswitch hardware"
-report_starting "$description"
-if "$build_scripts_root"/imswitch-hardware/install.sh; then
-  report_finished "$description"
-else
-  panic "$description"
-fi
-
-if [[ "$build_variant" == "dx" ]]; then
-
-  description="set up developer mode"
-  report_starting "$description"
-
-  # Note: we need to adjust update-initramfs's behavior to make apt-get finish successfully when
-  # installing things like python3-picamera2; see
-  # https://github.com/PlanktoScope/PlanktoScope/pull/596 and
-  # https://github.com/RPi-Distro/repo/issues/382 for details.
-  adjust_initramfs_scope=false
-  if grep -q 'MODULES=dep' /etc/initramfs-tools/initramfs.conf; then
-    adjust_initramfs_scope=true
-    sudo sed -i 's~MODULES=dep~MODULES=most~' /etc/initramfs-tools/initramfs.conf
-  fi
-
-  if "$pallet_root"/dx/setup.sh; then
-    if [ "$adjust_initramfs_scope" = true ]; then
-      sudo sed -i 's~MODULES=most~MODULES=dep~' /etc/initramfs-tools/initramfs.conf
-    fi
-    report_finished "$description"
-  else
-    if [ "$adjust_initramfs_scope" = true ]; then
-      sudo sed -i 's~MODULES=most~MODULES=dep~' /etc/initramfs-tools/initramfs.conf
-    fi
-    panic "$description"
-  fi
-
 fi

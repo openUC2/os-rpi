@@ -2,7 +2,5 @@ description: openUC2 OS-specific control/operation apps
 modifiers:
   - type: add-feature
     source: infra/http
-  - target: /deployments/apps/imswitch.pkg
-  - target: /deployments/apps/imswitch.deploy.yml
   - target: /deployments/apps/lepmon.pkg
   - target: /deployments/apps/lepmon.deploy.yml

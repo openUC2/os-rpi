@@ -5,6 +5,7 @@ on:
     branches:
       - main
       - edge
+      - arkitekt-service
       - beta
       - stable
       - updatecli_**

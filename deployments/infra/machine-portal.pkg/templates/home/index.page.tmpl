@@ -31,19 +31,20 @@
       <div class="container content is-max-desktop">
         <ul>
           <li>
-            <p>
-              {{
-                template "shared/link.partial.tmpl" dict
-                "Href" "/imswitch/ui/index.html"
-                "Name" "Microscope Control"
-                "Description" "This machine's microscope control interface (ImSwitch)"
-              }}
-            </p>
-            <article class="message is-info mb-3">
-              <div class="message-body">
-                If you don't know where to go, you're probably looking for the above link!
-              </div>
-            </article>
+            {{
+              template "shared/link.partial.tmpl" dict
+              "Href" "/fairino/"
+              "Name" "Fairino Arm"
+              "Description" "Bind this machine's Fairino robot arm to an Arkitekt server, and edit its settings"
+            }}
+          </li>
+          <li>
+            {{
+              template "shared/link.partial.tmpl" dict
+              "Href" "/opentrons/"
+              "Name" "Opentrons OT-2"
+              "Description" "Bind this machine's Opentrons OT-2 to an Arkitekt server, and edit its settings"
+            }}
           </li>
           <li>
             {{

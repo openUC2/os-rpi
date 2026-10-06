@@ -1,7 +1,7 @@
 services:
   server:
     # Built by https://github.com/stainSTORM/OT2windy (.github/workflows/docker.yml) on every push.
-    image: ghcr.io/stainstorm/ot2windy:sha-e9d50f8
+    image: ghcr.io/stainstorm/ot2windy:sha-c5e5c1c
     volumes:
       # config.yaml, its data and the stored Arkitekt login (.state/); edited from the
       # binding page at /opentrons/ or directly on the Pi
