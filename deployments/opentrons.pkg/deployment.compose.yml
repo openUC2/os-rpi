@@ -18,6 +18,7 @@ services:
   volume-setup:
     # Docker creates a missing bind-mount path owned by root; the app runs as uid 1000 (pi).
     image: docker.io/library/alpine:3.24.2@sha256:294b683cb724975bec92580e1e685676bd4b50bda910ddb8c51d4cabeaec77e6
+    network_mode: none
     volumes:
       - /home/pi/arkitekt/opentrons:/home/pi/arkitekt/opentrons
     command: 'sh -c "chown -R 1000:1000 /home/pi/arkitekt/opentrons"'
