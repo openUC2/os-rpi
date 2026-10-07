@@ -21,6 +21,7 @@ services:
     # This service ensures that root isn't the owner of /data, since Docker auto-creates those paths
     # with root ownership.
     image: docker.io/library/alpine:3.24.2@sha256:294b683cb724975bec92580e1e685676bd4b50bda910ddb8c51d4cabeaec77e6
+    network_mode: none
     volumes:
       - server-data:/data
     command: 'sh -c "chown -R 1000:1000 /data"'
