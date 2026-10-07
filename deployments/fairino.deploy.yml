@@ -1,0 +1,4 @@
+package: /deployments/fairino.pkg
+features:
+  - frontend
+disabled: false

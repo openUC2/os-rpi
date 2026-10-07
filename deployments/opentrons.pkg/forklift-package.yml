@@ -1,0 +1,34 @@
+package:
+  description: Opentrons OT-2 liquid handler as an Arkitekt app, with a page to bind it to an Arkitekt server
+  maintainers:
+    - name: Benedict Diederich
+      email: benedictdied@gmail.com
+  license: MIT
+  sources:
+    - https://github.com/stainSTORM/OT2windy_service
+
+deployment:
+  compose-files:
+    - deployment.compose.yml
+
+features:
+  frontend:
+    description: Serves the binding page and config editor at /opentrons/
+    compose-files:
+      - frontend.compose.yml
+    requires:
+      networks:
+        - description: Overlay network for Caddy to connect to upstream services
+          name: caddy-ingress
+      services:
+        - tags: [caddy-docker-proxy]
+          port: 80
+          protocol: http
+    provides:
+      services:
+        - description: Arkitekt binding page and config.yaml editor for the Opentrons OT-2 liquid handler
+          port: 80
+          protocol: http
+          paths:
+            - /opentrons
+            - /opentrons/*

@@ -2,5 +2,3 @@ description: openUC2 OS usage help resources
 modifiers:
   - type: add-feature
     source: infra/http
-  - target: /deployments/docs.pkg
-  - target: /deployments/docs.deploy.yml

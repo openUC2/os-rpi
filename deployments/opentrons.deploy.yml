@@ -1,0 +1,4 @@
+package: /deployments/opentrons.pkg
+features:
+  - frontend
+disabled: false

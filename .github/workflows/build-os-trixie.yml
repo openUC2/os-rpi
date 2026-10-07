@@ -5,6 +5,7 @@ on:
     branches:
       - main
       - edge
+      - arkitekt-service
     tags:
       - 'v*'
     paths:
@@ -34,7 +35,7 @@ jobs:
     uses: ./.github/workflows/build-os.yml
     secrets: inherit
     with:
-      name: os-rpi
+      name: os-rpi-arkitekt
       build_variant: ''
       base_release_name: trixie
       base_image_variant: lite

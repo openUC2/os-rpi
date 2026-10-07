@@ -1,11 +1,43 @@
-# os-rpi
+# os-rpi: Arkitekt robot controller pallet
 
-This is the standard operating system used on Raspberry Pi computers in openUC2 devices; we call it
-"openUC2 OS".
+**This branch (`arkitekt-service`) is a separate pallet: never merge it into `edge`.** It is
+openUC2 OS for a Raspberry Pi next to a lab robot, which the Pi provides to an
+[Arkitekt](https://arkitekt.live) server. ImSwitch, the openUC2 documentation and the ImSwitch
+build steps (Hikrobot camera driver, CAN overlay, `dx` mode) are removed; the microscope pallet
+on `edge` is unchanged. The infrastructure (networking, Caddy, Cockpit, file browser, Forklift
+itself) is the same, so merge `edge` into this branch now and then to pick up its updates.
 
 This repo is both the [Forklift](https://github.com/PlanktoScope/forklift) pallet for the OS, and
 the automated build system for creating OS images which can be flashed onto SD cards for booting
 Raspberry Pi computers in the OS.
+
+## Robots
+
+| Deployment | Robot | Container | Page |
+|---|---|---|---|
+| `fairino` | Fairino arm | [stainSTORM/fairinogale](https://github.com/stainSTORM/fairinogale) | `http://<machine>/fairino/` |
+| `opentrons` | Opentrons OT-2 | [stainSTORM/OT2windy_service](https://github.com/stainSTORM/OT2windy_service) | `http://<machine>/opentrons/` |
+
+Both are on by default, and the machine's home page links to them. On a robot's page:
+
+1. Edit `config.yaml` (the robot's IP, and for the arm its stations) and press **Save and restart**.
+2. Enter the Arkitekt server and press **Bind**. Open the approval link it shows in any browser and
+   check the code. The login is stored, so the service reconnects after a reboot.
+
+Each service only talks to its robot when an Arkitekt action runs, so an unused one just waits.
+To switch it off, run `forklift plt disable-depl opentrons` (or `fairino`), then
+`forklift plt apply`.
+
+The config, teach points and stored login live in `/home/pi/arkitekt/<deployment>/`. To set up a
+robot before the first boot, put its `config.yaml` on the SD card's boot partition, in
+`init-root/as-pi/home/pi/arkitekt/<deployment>/`; it is moved into place at the next boot.
+
+The Pi must be able to reach the robot's IP: on the same network, or on a direct cable with an
+address in the robot's subnet. The OT-2's USB connection uses link-local `169.254.x.x` addresses.
+
+To ship a new robot service version, push to its repo (GitHub Actions builds
+`ghcr.io/stainstorm/<repo>:sha-<commit>`), then set that tag in
+`deployments/<deployment>.pkg/deployment.compose.yml`.
 
 ## Usage
 
@@ -13,74 +45,17 @@ These are usage instructions for developers.
 
 ### Downloading an OS image
 
-If you have appropriate permissions on this repo, you can download OS images from the
-`build-os-bookworm` GitHub Actions CI workflow. Otherwise, you can download one of the images from
-[our Google Drive archive of selected images](https://drive.google.com/drive/folders/1i5baXgEq9UAybYQGHqEnLtaQ7-Js22MK?usp=sharing).
-You should flash the OS image to an SD card using
-[Raspberry Pi Imager](https://www.raspberrypi.com/software/).
-
-### Enabling `dx` (developer experience) mode
-
-If you downloaded the basic variant of our OS images instead of the `dx` variant, you can enable
-`dx` mode by running:
-```bash
-bash "$(forklift plt locate-file dx/setup.sh)"
-```
-
-This will set up a development environment for locally developing and testing ImSwitch on your RPi.
-Note that you should only do this once per OS installation: if you run it multiple times on the
-same OS installation, things might break in weird ways.
-
-### Integrating changes in ImSwitch
-
-1. Commit and push your changes to the [openUC2/ImSwitch](https://github.com/openUC2/ImSwitch) repo.
-
-2. Wait for GitHub Actions to finish automatically building a new Docker container image from your
-   commit.
-
-3. Open <https://github.com/orgs/openUC2/packages/container/package/imswitch> and find the
-   tagged image version (e.g.
-   [sha-d57b561](https://github.com/orgs/openUC2/packages/container/imswitch/642900285?tag=sha-d57b561))
-   corresponding to the commit you just pushed (e.g.
-   [d57b561](https://github.com/openUC2/ImSwitch/commit/d57b561bc46a3fd353ea3e44f681b147e578ec4c))
-
-4. In this repo, manually edit the
-   [deployments/imswitch.pkg/deployment.compose.yml](./deployments/imswitch.pkg/deployment.compose.yml)
-   file's `services.imswitch.image` value.
-
-   It should be of format `ghcr.io/openuc2/imswitch:{something}`, and you should replace the
-   `{something}` (which may look like `sha-7b9de3d` or like `sha-0c335c4@sha256:{a very long hash}`)
-   with the tagged image version (e.g. `sha:d57b561`). The result should look something like:
-
-   ```bash
-   image: ghcr.io/openuc2/imswitch:sha-d57b561
-   ```
-
-   If the ImSwitch container image you want to use is the most-recently-built container image in any
-   branch of the openUC2/ImSwitch repo, then
-   you could instead just manually trigger a run of this repo's
-   [updatecli-compose action](https://github.com/openUC2/os-rpi/actions/workflows/updatecli-compose.yml)
-   and then merge the pull request which that action should create. This way, you wouldn't have to
-   manually edit any files.
-
-5. If you made your edits directly in the local pallet on a machine running openUC2 OS (i.e. you
-   edited files inside `/home/pi/.local/share/forklift/pallet`), then before publishing your edits
-   you can test them directly on the device by running:
-
-   ```bash
-   forklift plt apply
-   ```
-
-6. To publish your edits as an update to be deployed on other machines, commit and push your changes
-   to GitHub.
-
-Now you are ready to deploy these changes as an OS update to a machine running openUC2 OS.
+The `build-os-trixie` GitHub Actions workflow builds `os-rpi-arkitekt-*.img.xz` on every push to
+this branch and on every PR, and keeps it as a workflow artifact. Flash it to an SD card with
+[Raspberry Pi Imager](https://www.raspberrypi.com/software/). Both robot containers are baked in, so
+the image works without internet at first boot.
 
 ### Deploying a published OS update to your machine
 
-1. Once you've booted your machine into openUC2 OS, from a terminal (either the Cockpit terminal or
+1. Once you've booted your machine into the OS, from a terminal (either the Cockpit terminal or
    an SSH remote session) you can run the following command to upgrade the local pallet to the
-   latest commit on the `edge` branch:
+   latest commit on the branch the image was built from (`arkitekt-service` for images built from
+   pushes to it):
 
    ```bash
    forklift plt upgrade
@@ -112,11 +87,10 @@ Now you are ready to deploy these changes as an OS update to a machine running o
 
 ### Disabling/enabling functionalities
 
-To disable the deployment of ImSwitch on your RPi, you can change the configuration on your RPi by
-running:
+To disable a deployment on your RPi, e.g. the Opentrons service, run:
 
 ```bash
-forklift plt disable-depl imswitch
+forklift plt disable-depl opentrons
 ```
 
 To apply your modified configuration, then you can either
@@ -124,8 +98,8 @@ To apply your modified configuration, then you can either
 1) run `forklift plt apply`, or
 2) run `forklift plt stage` and then reboot or soft-reboot (e.g. via `sudo systemctl soft-reboot`).
 
-If you later want to re-enable ImSwitch, you can then run `forklift plt enable-depl imswitch` (and
-then apply your modified configuration using the command(s) you prefer).
+`forklift plt enable-depl opentrons` switches it on again. Note that `forklift plt upgrade --force`
+discards such local changes.
 
 To see the full list of deployments you can disable or enable, run `forklift plt ls-depl`. Note that
 for some deployments, especially some deployments whose names begin with `provisioning/`,

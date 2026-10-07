@@ -1,3 +1,0 @@
-services:
-  server:
-    image: ghcr.io/openuc2/imswitch-noqt:latest@sha256:5b9ed4b51ca778123ced1e124dbb1dd7473400e9f43bace4a32383bf8ef5c427

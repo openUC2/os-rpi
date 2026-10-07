@@ -4,9 +4,9 @@ services:
       - caddy-ingress
     labels:
       caddy: http://
-      caddy.redir: /docs /docs/
-      caddy.handle: /docs/*
-      caddy.handle.reverse_proxy: "{{upstreams 80}}"
+      caddy.redir: /fairino /fairino/
+      caddy.handle_path: /fairino/*
+      caddy.handle_path.reverse_proxy: "{{upstreams 8080}}"
 
 networks:
   default:

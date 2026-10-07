@@ -1,5 +1,0 @@
-package: /deployments/docs.pkg
-features:
-  - website
-  - website-untrusted
-disabled: false
