@@ -1,0 +1,14 @@
+[Unit]
+Description=Upgrade and apply the local Forklift pallet (EXPERIMENTAL, started from ImSwitch)
+
+[Service]
+# ImSwitch starts this unit over D-Bus (see 20-imswitch-pallet-upgrade.rules). It must run on the
+# host rather than in the ImSwitch container, because `forklift stage apply` recreates that container.
+Type=oneshot
+# Same as running the commands in an SSH session as pi, which owns the local pallet:
+User=pi
+# The output goes into the ImSwitch config folder, which is bind-mounted into the ImSwitch
+# container, so that ImSwitch can show it. Both commands share one ExecStart because `truncate:`
+# would re-truncate the file for each ExecStart.
+StandardOutput=truncate:/home/pi/ImSwitchConfig/pallet-upgrade.log
+ExecStart=bash -c 'forklift plt upgrade --force && forklift stage apply'

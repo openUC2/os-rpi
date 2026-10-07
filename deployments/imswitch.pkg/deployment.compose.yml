@@ -1,6 +1,6 @@
 services:
   server:
-    image: ghcr.io/openuc2/imswitch:sha-6058ef0@sha256:69567a06a34dcac9f6017b69fe25177ef762736f7e4e6578fb8f525943a8369b
+    image: ghcr.io/openuc2/imswitch:sha-427ade9
     volumes:
       - /etc/machine-id:/etc/machine-id:ro
       - /home/pi/ImSwitchConfig:/home/pi/ImSwitchConfig
@@ -8,6 +8,9 @@ services:
       - /media:/media
       - /run/udev:/run/udev:ro
       - /dev:/dev
+      # Lets ImSwitch start the host's imswitch-pallet-upgrade.service (experimental pallet upgrade
+      # button), the same way machine-admin talks to the host over D-Bus:
+      - /run/dbus/system_bus_socket:/var/run/dbus/system_bus_socket
     device_cgroup_rules:
       - 'a 188:* rwm' # USB serial devices (such as the openUC2 HAT+), e.g. /dev/ttyUSB0
       - 'a 166:* rwm' # USB serial devices (such as SeeedStudio XIAO microcontrollers), e.g. /dev/ttyACM0
