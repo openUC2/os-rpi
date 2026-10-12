@@ -1,0 +1,22 @@
+services:
+  server:
+    # Built by https://github.com/stainSTORM/dockerwebcam (.github/workflows/docker.yml) on every push.
+    image: ghcr.io/stainstorm/dockerwebcam:sha-1a0e06e
+    volumes:
+      # A bind mount rather than `devices:`, so that the container starts without a camera and
+      # sees one plugged in later (the app keeps trying to open it).
+      - /dev:/dev
+    device_cgroup_rules:
+      - 'c 81:* rmw' # video4linux devices, e.g. /dev/video0
+    environment:
+      - CAM_INDEX=0 # /dev/video<N>
+      - CAM_WIDTH=1280
+      - CAM_HEIGHT=720
+      - CAM_FPS=30
+      - JPG_QUALITY=80
+    restart: always
+
+networks:
+  default:
+    name: none
+    external: true

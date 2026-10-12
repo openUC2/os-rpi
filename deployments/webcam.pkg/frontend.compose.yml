@@ -1,0 +1,15 @@
+services:
+  server:
+    networks:
+      - caddy-ingress
+    labels:
+      caddy: http://
+      caddy.redir: /webcam /webcam/
+      caddy.handle_path: /webcam/*
+      caddy.handle_path.reverse_proxy: "{{upstreams 9000}}"
+      # The video is an endless MJPEG response: pass it on without buffering.
+      caddy.handle_path.reverse_proxy.flush_interval: "-1"
+
+networks:
+  caddy-ingress:
+    external: true

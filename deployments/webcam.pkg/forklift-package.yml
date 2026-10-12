@@ -1,0 +1,34 @@
+package:
+  description: USB webcam as an MJPEG stream, to watch the robots
+  maintainers:
+    - name: Benedict Diederich
+      email: benedictdied@gmail.com
+  license: NOASSERTION
+  sources:
+    - https://github.com/stainSTORM/dockerwebcam
+
+deployment:
+  compose-files:
+    - deployment.compose.yml
+
+features:
+  frontend:
+    description: Serves the live view at /webcam/
+    compose-files:
+      - frontend.compose.yml
+    requires:
+      networks:
+        - description: Overlay network for Caddy to connect to upstream services
+          name: caddy-ingress
+      services:
+        - tags: [caddy-docker-proxy]
+          port: 80
+          protocol: http
+    provides:
+      services:
+        - description: Live MJPEG view and JPEG snapshots of the webcam
+          port: 80
+          protocol: http
+          paths:
+            - /webcam
+            - /webcam/*
