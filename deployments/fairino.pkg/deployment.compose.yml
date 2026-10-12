@@ -2,6 +2,11 @@ services:
   server:
     # Built by https://github.com/stainSTORM/fairinogale (.github/workflows/docker.yml) on every push.
     image: ghcr.io/stainstorm/fairinogale:sha-50d9ed2
+    # Host networking, so that the robot is reached the way a shell on the Pi reaches it. A robot
+    # cabled to a direct-connect port (eth0, eth1, usb0, usb1: 192.168.5-8.x) is behind a
+    # NetworkManager "shared" connection, whose nftables rules reject new connections forwarded
+    # from any other interface, Docker bridges included ("Connection refused" in the container).
+    network_mode: host
     volumes:
       # config.yaml, its data and the stored Arkitekt login (.state/); edited from the
       # binding page at /fairino/ or directly on the Pi
@@ -10,6 +15,7 @@ services:
       - /etc/machine-id:/etc/machine-id:ro
     environment:
       - FAIRINO_CONFIG=/config/config.yaml
+      - PORT=8091  # the binding page; Caddy proxies /fairino/ to it (8080 is Caddy's)
     depends_on:
       volume-setup:
         condition: service_completed_successfully
@@ -22,3 +28,8 @@ services:
     volumes:
       - /home/pi/arkitekt/fairino:/home/pi/arkitekt/fairino
     command: 'sh -c "chown -R 1000:1000 /home/pi/arkitekt/fairino"'
+
+networks:
+  default:
+    name: none
+    external: true

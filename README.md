@@ -17,6 +17,7 @@ Raspberry Pi computers in the OS.
 |---|---|---|---|
 | `fairino` | Fairino arm | [stainSTORM/fairinogale](https://github.com/stainSTORM/fairinogale) | `http://<machine>/fairino/` |
 | `opentrons` | Opentrons OT-2 | [stainSTORM/OT2windy_service](https://github.com/stainSTORM/OT2windy_service) | `http://<machine>/opentrons/` |
+| `webcam` | USB camera, to watch the robots | [stainSTORM/dockerwebcam](https://github.com/stainSTORM/dockerwebcam) | `http://<machine>/webcam/` |
 
 Both are on by default, and the machine's home page links to them. On a robot's page:
 
@@ -34,6 +35,15 @@ robot before the first boot, put its `config.yaml` on the SD card's boot partiti
 
 The Pi must be able to reach the robot's IP: on the same network, or on a direct cable with an
 address in the robot's subnet. The OT-2's USB connection uses link-local `169.254.x.x` addresses.
+
+The robot services use the host's network (`network_mode: host`; their pages listen on 8091 and
+8092 and Caddy proxies to them). A robot cabled straight to the Pi gets an address from the Pi's
+NetworkManager "shared" connection (eth0, eth1, usb0, usb1: `192.168.5-8.x`), and its nftables
+rules reject new connections forwarded from a Docker bridge: from a bridged container the robot
+answers "Connection refused" while `curl` on the Pi works.
+
+The webcam reads `/dev/video0`; set `CAM_INDEX` in `deployments/webcam.pkg/deployment.compose.yml`
+for another device. It starts without a camera and picks one up when it is plugged in.
 
 To ship a new robot service version, push to its repo (GitHub Actions builds
 `ghcr.io/stainstorm/<repo>:sha-<commit>`), then set that tag in

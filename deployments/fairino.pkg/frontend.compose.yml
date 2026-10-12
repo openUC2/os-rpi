@@ -1,16 +1,17 @@
 services:
-  server:
+  # The server runs in the host's network namespace, so Caddy cannot reach it on caddy-ingress.
+  # This stub only carries the route (like cockpit.pkg); Caddy also reads stopped containers.
+  reverse-proxy-config:
+    image: docker.io/library/alpine:3.24.2@sha256:294b683cb724975bec92580e1e685676bd4b50bda910ddb8c51d4cabeaec77e6
+    command: sh -c 'sleep 60'
     networks:
       - caddy-ingress
     labels:
       caddy: http://
       caddy.redir: /fairino /fairino/
       caddy.handle_path: /fairino/*
-      caddy.handle_path.reverse_proxy: "{{upstreams 8080}}"
+      caddy.handle_path.reverse_proxy: host.docker.internal:8091
 
 networks:
-  default:
-    name: none
-    external: true
   caddy-ingress:
     external: true
