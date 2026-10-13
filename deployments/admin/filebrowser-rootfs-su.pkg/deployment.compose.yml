@@ -1,6 +1,6 @@
 services:
   server:
-    image: ghcr.io/gtsteffaniak/filebrowser:2.1.1-beta-slim@sha256:0614cb1d912002de83c797011e4dd9f23a56ecb8a6e73d86d7d208a954d60732
+    image: ghcr.io/gtsteffaniak/filebrowser:2.1.2-beta-slim@sha256:bedc788afa8620ed7e0b863653190d6b0f9e92ecf8dd0280d212020040e97701
     volumes:
       - type: bind
         source: /
