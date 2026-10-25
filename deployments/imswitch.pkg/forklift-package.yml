@@ -168,6 +168,29 @@ features:
       file-exports:
         - description: udev rules
           target: overlays/usr/lib/udev/rules.d/80-alliedvision-cameras.rules
+  andor-cameras:
+    description: >-
+      Support for Andor SDK2 cameras (iXon) through the andor-server sidecar container, used by
+      ImSwitch's AndorServerManager (host andor-server, port 8000). Raspberry Pi 5 needs the
+      4K-page kernel (kernel=kernel8.img in /boot/firmware/config.txt).
+    compose-files:
+      - andor-cameras.compose.yml
+    requires:
+      networks:
+        - description: Overlay network for Caddy to connect to upstream services
+          name: caddy-ingress
+      services:
+        - tags: [caddy-docker-proxy]
+          port: 80
+          protocol: http
+    provides:
+      services:
+        - description: andor-server API (Swagger UI at /andor/docs) and live view
+          port: 80
+          protocol: http
+          paths:
+            - /andor
+            - /andor/*
   can-interface:
     description: Provides automatic enablement of the OS interface for an SPI CAN bus transceiver
     compose-files:
