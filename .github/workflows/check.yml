@@ -60,6 +60,13 @@ jobs:
       # TODO: move some of this into a separate GitHub Action and/or Forklift command, to keep
       # this workflow simpler
 
+      - name: Log in to GHCR
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GHCR_PULL_TOKEN }}
+
       - name: Set up container image pre-caching
         id: setup-precaching
         run: |
@@ -115,4 +122,6 @@ jobs:
           forklift dev plt ls-img | rush ".github/load-precached-image.sh" {} "$PRECACHE_PATH"
 
       - name: Try to stage the pallet
-        run: forklift dev plt stage
+        # Images were already loaded into Docker above; Forklift's own image download doesn't
+        # send registry credentials, so it would fail on images from private repositories.
+        run: forklift dev plt stage --cache-img=false
