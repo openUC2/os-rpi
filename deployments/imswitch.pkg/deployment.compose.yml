@@ -1,6 +1,6 @@
 services:
   server:
-    image: ghcr.io/openuc2/imswitch:sha-a5138bb
+    image: ghcr.io/openuc2/imswitch:sha-e902b93 # pr 330 on imswitch with andor camera remote interface 
     volumes:
       - /etc/machine-id:/etc/machine-id:ro
       - /home/pi/ImSwitchConfig:/home/pi/ImSwitchConfig
