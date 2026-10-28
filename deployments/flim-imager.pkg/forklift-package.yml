@@ -18,7 +18,7 @@ deployment:
       - description: FLIM firmware images
         source-type: http-archive
         source: /
-        url: https://github.com/flim-labs/flim-firmwares/archive/bc670b5ef3e03f3437d732fb92cc784b566480a0.zip
+        url: https://github.com/flim-labs/flim-firmwares/archive/bc670b5ef3e03f3437d732fb92cc784b566480a0.tar.gz
         # TODO: export instead to overlays/flim-imager/firmware, and mount it to the Docker container
         target: overlays/usr/lib/flim-imager/firmware
 
