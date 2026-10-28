@@ -4,7 +4,7 @@ services:
     ports:
       - 5249:5249
     volumes:
-      - /usr/lib/flim-imager/firmware:/app/data/firmwares
+      - /usr/lib/flim-imager/firmware:/app/data/firmwares:ro
       - flim-data:/app/data
       - flim-logs:/app/logs
       # Acquisition data & calibration references go into the ImSwitch data tree, so that the
