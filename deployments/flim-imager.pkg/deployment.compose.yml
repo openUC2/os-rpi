@@ -16,6 +16,7 @@ services:
       - /dev/bus/usb:/dev/bus/usb
     device_cgroup_rules:
       - 'a 189:* rwm' # USB devices, e.g. /dev/bus/usb/004/002
+      # - 'a *:* rwm' # allow all devices; only use this for debugging! Don't use this in production, because it's a massive security backdoor!
     environment:
       - RUST_LOG=info
       - RUST_BACKTRACE=1
