@@ -14,6 +14,13 @@ deployment:
       - description: FLIM Imager REST API and web frontend
         port: 5249
         protocol: tcp
+    file-exports:
+      - description: FLIM firmware images
+        source-type: http-archive
+        source: /
+        url: https://github.com/flim-labs/flim-firmwares/archive/bc670b5ef3e03f3437d732fb92cc784b566480a0.zip
+        # TODO: export instead to overlays/flim-imager/firmware, and mount it to the Docker container
+        target: overlays/usr/lib/flim-imager/firmware
 
 features:
   firewall-allow-direct:
