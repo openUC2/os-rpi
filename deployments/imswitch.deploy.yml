@@ -10,4 +10,5 @@ features:
   - touptek-cameras
   - alliedvision-cameras
   - can-interface
+  # - slm-display # HDMI output as an SLM/DMD display: detaches the text console from /dev/fb0
 disabled: false

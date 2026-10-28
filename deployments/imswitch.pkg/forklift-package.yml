@@ -182,6 +182,17 @@ features:
           target: overlays/etc/systemd/network/80-wifi-adhoc.network
         - description: systemd service enablement for systemd-networkd
           target: overlays/etc/systemd/system/multi-user.target.wants/systemd-networkd.service
+  slm-display:
+    description: >-
+      Dedicates the HDMI output to an SLM/DMD driven by ImSwitch (setup "slm": {"display":
+      "framebuffer"}): keeps the text console, its cursor and screen blanking off /dev/fb0
+      (kernel parameters in /boot/firmware/cmdline.txt, applied at the next boot)
+    provides:
+      file-exports:
+        - description: systemd service adding the SLM display kernel parameters to cmdline.txt
+          target: overlays/usr/lib/systemd/system/imswitch-slm-display.service
+        - description: systemd service enablement for imswitch-slm-display.service
+          target: overlays/etc/systemd/system/multi-user.target.wants/imswitch-slm-display.service
   dev-edge:
     description: >-
       Uses the `edge` tag for the ImSwitch docker container image, for faster development

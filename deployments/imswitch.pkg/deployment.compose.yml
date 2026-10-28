@@ -16,6 +16,7 @@ services:
       - 'a 166:* rwm' # USB serial devices (such as SeeedStudio XIAO microcontrollers), e.g. /dev/ttyACM0
       # - 'a 204:* rwm' # Serial devices, e.g. /dev/ttyAMA0
       - 'a 81:* rwm' # libcamera-based cameras, e.g. /dev/video0
+      - 'a 29:* rwm' # Linux framebuffer, e.g. /dev/fb0: the HDMI output as an SLM/DMD display
       - 'a 511:* rwm' # libcamera-based cameras, e.g. /dev/media0
       # - 'a 89:* rwm' # I2C devices, e.g. /dev/i2c-1
       # - 'a 254:* rwm' # GPIO devices, e.g. /dev/gpiochip0

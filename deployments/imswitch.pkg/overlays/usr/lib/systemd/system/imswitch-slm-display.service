@@ -1,0 +1,37 @@
+[Unit]
+Description=Kernel parameters for the HDMI output as an ImSwitch SLM/DMD display (/dev/fb0)
+# consoleblank=0: the output never blanks; vt.global_cursor_default=0: no blinking cursor;
+# fbcon=map:1: the text console stays off /dev/fb0 (it would overwrite the pattern), the
+# serial console and SSH remain. An optional video mode for a DMD without usable EDID goes
+# into /etc/imswitch-slm-display.conf as SLM_VIDEO_MODE=HDMI-A-1:1920x1080@60D.
+# Changes apply at the next boot.
+ConditionPathExists=/boot/firmware/cmdline.txt
+After=boot-init-root.service
+
+[Service]
+Type=oneshot
+EnvironmentFile=-/etc/imswitch-slm-display.conf
+ExecStart=:bash -c -e -u '\
+  params="consoleblank=0 vt.global_cursor_default=0 fbcon=map:1"; \
+  if [ -n "${SLM_VIDEO_MODE:-}" ]; then params="$params video=$SLM_VIDEO_MODE"; fi; \
+  line="$(cat /boot/firmware/cmdline.txt)"; \
+  changed=0; \
+  for p in $params; do \
+    key="${p%%=*}"; \
+    case " $line " in \
+      *" $p "*) ;; \
+      *" $key="*) line="$(echo "$line" | sed -e "s~[[:space:]]*$key=[^[:space:]]*~~g") $p"; changed=1 ;; \
+      *) line="$line $p"; changed=1 ;; \
+    esac; \
+  done; \
+  if [ "$changed" = 1 ]; then \
+    echo "Adding SLM display parameters to /boot/firmware/cmdline.txt: $params"; \
+    echo "$line" | tr -s " " > /boot/firmware/cmdline.txt; \
+  else \
+    echo "/boot/firmware/cmdline.txt already has the SLM display parameters"; \
+  fi \
+'
+RemainAfterExit=yes
+
+[Install]
+WantedBy=multi-user.target
