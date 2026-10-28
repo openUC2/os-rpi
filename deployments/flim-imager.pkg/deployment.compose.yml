@@ -32,8 +32,8 @@ services:
     depends_on:
       volume-setup:
         condition: service_completed_successfully
-      firmware-seed:
-        condition: service_completed_successfully
+      # firmware-seed:
+      #   condition: service_completed_successfully
     restart: always
 
   volume-setup:
