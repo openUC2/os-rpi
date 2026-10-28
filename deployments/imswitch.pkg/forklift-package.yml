@@ -119,7 +119,7 @@ features:
     provides:
       file-exports:
         - description: Kernel parameters
-          target: overlays/etc/sysctl.d/65-hikrobot-cameras.conf
+          target: overlays/etc/sysctl.d/80-hikrobot-cameras.conf
         - description: udev rules
           target: overlays/usr/lib/udev/rules.d/65-hikrobot-cameras.rules
   daheng-cameras:
@@ -168,11 +168,11 @@ features:
     provides:
       file-exports:
         - description: systemd-networkd configuration for the can0 device
-          target: overlays/etc/systemd/network/65-can0.network
+          target: overlays/etc/systemd/network/80-can0.network
         - description: >-
             systemd-networkd default configuration disablement for Wi-Fi devices in ad-hoc mode,
             which should be managed by NetworkManager instead
-          target: overlays/etc/systemd/network/65-wifi-adhoc.network
+          target: overlays/etc/systemd/network/80-wifi-adhoc.network
         - description: systemd service enablement for systemd-networkd
           target: overlays/etc/systemd/system/multi-user.target.wants/systemd-networkd.service
   dev-edge:
