@@ -1,1 +1,9 @@
 ACTION=="add", SUBSYSTEM=="usb", ATTRS{idVendor}=="165d", MODE:="0666", TAG+="uaccess", TAG+="udev-acl", GROUP="plugdev"
+
+# Never let the kernel autosuspend the card. Runtime power management on the
+# Raspberry Pi's USB controller suspends an idle bulk endpoint, and the card
+# does not survive the resume: the next ZestSC3ReadData fails with
+# "No such device (it may have been disconnected)" and the card only comes back
+# after a physical replug.
+SUBSYSTEM=="usb", ATTRS{idVendor}=="165d", TEST=="power/control", ATTR{power/control}="on"
+SUBSYSTEM=="usb", ATTRS{idVendor}=="165d", TEST=="power/autosuspend_delay_ms", ATTR{power/autosuspend_delay_ms}="-1"
