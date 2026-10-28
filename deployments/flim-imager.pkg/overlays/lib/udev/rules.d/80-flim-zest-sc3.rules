@@ -1,0 +1,1 @@
+ACTION=="add", SUBSYSTEM=="usb", ATTRS{idVendor}=="165d", MODE:="0666", TAG+="uaccess", TAG+="udev-acl", GROUP="plugdev"
