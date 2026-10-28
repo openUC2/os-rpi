@@ -16,7 +16,7 @@ deployment:
         protocol: tcp
     file-exports:
       - description: udev rules for unprivileged access to hardware
-        target: overlays/usr/lib/udev/rules.d/80-flim-zest-sc3.rules
+        target: overlays/usr/lib/udev/rules.d/65-flim-zest-sc3.rules
       - description: FLIM firmware images
         source-type: http-archive
         url: https://github.com/flim-labs/flim-firmwares/archive/bc670b5ef3e03f3437d732fb92cc784b566480a0.tar.gz
