@@ -5,9 +5,6 @@ services:
       - 5249:5249
     privileged: true
     volumes:
-      # /dev/bus/usb must be a bind mount rather than a `devices:` entry, so that the container
-      # sees the new device node when the ZestSC3 drops off the bus and re-enumerates.
-      - /dev/bus/usb:/dev/bus/usb
       - /usr/lib/flim-imager/firmware:/app/data/firmwares
       - flim-data:/app/data
       - flim-logs:/app/logs
@@ -15,6 +12,11 @@ services:
       # ImSwitch container sees them under its DATA_PATH without any additional mounts. Host uid
       # 1000 (pi) matches container uid 1000 (appuser).
       - /home/pi/Datasets/flim-labs:/home/appuser/.flim-labs
+      # /dev/bus/usb must be a bind mount rather than a `devices:` entry, so that the container
+      # sees the new device node when the ZestSC3 drops off the bus and re-enumerates.
+      - /dev/bus/usb:/dev/bus/usb
+    device_cgroup_rules:
+      - 'a 189:* rwm' # USB devices, e.g. /dev/bus/usb/004/002
     environment:
       - RUST_LOG=info
       - RUST_BACKTRACE=1
