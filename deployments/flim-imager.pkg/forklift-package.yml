@@ -15,12 +15,167 @@ deployment:
         port: 5249
         protocol: tcp
     file-exports:
-      - description: FLIM firmware images
-        source-type: http-archive
-        source: /
-        url: https://github.com/flim-labs/flim-firmwares/archive/bc670b5ef3e03f3437d732fb92cc784b566480a0.tar.gz
         # TODO: export instead to overlays/flim-imager/firmware, and mount it to the Docker container
-        target: overlays/usr/lib/flim-imager/firmware
+      - description: FLIM firmware image
+        source-type: http-archive
+        url: https://github.com/flim-labs/flim-firmwares/archive/bc670b5ef3e03f3437d732fb92cc784b566480a0.tar.gz
+        source: channels_detection.flim
+        target: overlays/usr/lib/flim-imager/firmware/channels_detection.flim
+      - description: FLIM firmware image
+        source-type: http-archive
+        url: https://github.com/flim-labs/flim-firmwares/archive/bc670b5ef3e03f3437d732fb92cc784b566480a0.tar.gz
+        source: frequency_meter.flim
+        target: overlays/usr/lib/flim-imager/firmware/frequency_meter.flim
+      - description: FLIM firmware image
+        source-type: http-archive
+        url: https://github.com/flim-labs/flim-firmwares/archive/bc670b5ef3e03f3437d732fb92cc784b566480a0.tar.gz
+        source: imaging_f_10_chsma_in_sysma.flim
+        target: overlays/usr/lib/flim-imager/firmware/imaging_f_10_chsma_in_sysma.flim
+      - description: FLIM firmware image
+        source-type: http-archive
+        url: https://github.com/flim-labs/flim-firmwares/archive/bc670b5ef3e03f3437d732fb92cc784b566480a0.tar.gz
+        source: imaging_f_10_chsma_out_sysma.flim
+        target: overlays/usr/lib/flim-imager/firmware/imaging_f_10_chsma_out_sysma.flim
+      - description: FLIM firmware image
+        source-type: http-archive
+        url: https://github.com/flim-labs/flim-firmwares/archive/bc670b5ef3e03f3437d732fb92cc784b566480a0.tar.gz
+        source: imaging_f_20_chsma_in_sysma.flim
+        target: overlays/usr/lib/flim-imager/firmware/imaging_f_20_chsma_in_sysma.flim
+      - description: FLIM firmware image
+        source-type: http-archive
+        url: https://github.com/flim-labs/flim-firmwares/archive/bc670b5ef3e03f3437d732fb92cc784b566480a0.tar.gz
+        source: imaging_f_20_chsma_out_sysma.flim
+        target: overlays/usr/lib/flim-imager/firmware/imaging_f_20_chsma_out_sysma.flim
+      - description: FLIM firmware image
+        source-type: http-archive
+        url: https://github.com/flim-labs/flim-firmwares/archive/bc670b5ef3e03f3437d732fb92cc784b566480a0.tar.gz
+        source: imaging_f_40_chsma_in_sysma.flim
+        target: overlays/usr/lib/flim-imager/firmware/imaging_f_40_chsma_in_sysma.flim
+      - description: FLIM firmware image
+        source-type: http-archive
+        url: https://github.com/flim-labs/flim-firmwares/archive/bc670b5ef3e03f3437d732fb92cc784b566480a0.tar.gz
+        source: imaging_f_40_chsma_out_sysma.flim
+        target: overlays/usr/lib/flim-imager/firmware/imaging_f_40_chsma_out_sysma.flim
+      - description: FLIM firmware image
+        source-type: http-archive
+        url: https://github.com/flim-labs/flim-firmwares/archive/bc670b5ef3e03f3437d732fb92cc784b566480a0.tar.gz
+        source: imaging_f_80_100ps_chsma_in_sysma.flim
+        target: overlays/usr/lib/flim-imager/firmware/imaging_f_80_100ps_chsma_in_sysma.flim
+      - description: FLIM firmware image
+        source-type: http-archive
+        url: https://github.com/flim-labs/flim-firmwares/archive/bc670b5ef3e03f3437d732fb92cc784b566480a0.tar.gz
+        source: imaging_f_80_100ps_chsma_out_sysma.flim
+        target: overlays/usr/lib/flim-imager/firmware/imaging_f_80_100ps_chsma_out_sysma.flim
+      - description: FLIM firmware image
+        source-type: http-archive
+        url: https://github.com/flim-labs/flim-firmwares/archive/bc670b5ef3e03f3437d732fb92cc784b566480a0.tar.gz
+        source: imaging_f_80_100ps_chsma_in_sysma.flim
+        target: overlays/usr/lib/flim-imager/firmware/imaging_f_80_chsma_in_sysma.flim
+      - description: FLIM firmware image
+        source-type: http-archive
+        url: https://github.com/flim-labs/flim-firmwares/archive/bc670b5ef3e03f3437d732fb92cc784b566480a0.tar.gz
+        source: imaging_f_80_100ps_chsma_out_sysma.flim
+        target: overlays/usr/lib/flim-imager/firmware/imaging_f_80_chsma_out_sysma.flim
+      - description: FLIM firmware image
+        source-type: http-archive
+        url: https://github.com/flim-labs/flim-firmwares/archive/bc670b5ef3e03f3437d732fb92cc784b566480a0.tar.gz
+        source: imaging_lf_10_chsma_in_sysma.flim
+        target: overlays/usr/lib/flim-imager/firmware/imaging_lf_10_chsma_in_sysma.flim
+      - description: FLIM firmware image
+        source-type: http-archive
+        url: https://github.com/flim-labs/flim-firmwares/archive/bc670b5ef3e03f3437d732fb92cc784b566480a0.tar.gz
+        source: imaging_lf_10_chsma_out_sysma.flim
+        target: overlays/usr/lib/flim-imager/firmware/imaging_lf_10_chsma_out_sysma.flim
+      - description: FLIM firmware image
+        source-type: http-archive
+        url: https://github.com/flim-labs/flim-firmwares/archive/bc670b5ef3e03f3437d732fb92cc784b566480a0.tar.gz
+        source: imaging_lf_20_chsma_in_sysma.flim
+        target: overlays/usr/lib/flim-imager/firmware/imaging_lf_20_chsma_in_sysma.flim
+      - description: FLIM firmware image
+        source-type: http-archive
+        url: https://github.com/flim-labs/flim-firmwares/archive/bc670b5ef3e03f3437d732fb92cc784b566480a0.tar.gz
+        source: imaging_lf_20_chsma_out_sysma.flim
+        target: overlays/usr/lib/flim-imager/firmware/imaging_lf_20_chsma_out_sysma.flim
+      - description: FLIM firmware image
+        source-type: http-archive
+        url: https://github.com/flim-labs/flim-firmwares/archive/bc670b5ef3e03f3437d732fb92cc784b566480a0.tar.gz
+        source: imaging_lf_40_chsma_in_sysma.flim
+        target: overlays/usr/lib/flim-imager/firmware/imaging_lf_40_chsma_in_sysma.flim
+      - description: FLIM firmware image
+        source-type: http-archive
+        url: https://github.com/flim-labs/flim-firmwares/archive/bc670b5ef3e03f3437d732fb92cc784b566480a0.tar.gz
+        source: imaging_lf_40_chsma_out_sysma.flim
+        target: overlays/usr/lib/flim-imager/firmware/imaging_lf_40_chsma_out_sysma.flim
+      - description: FLIM firmware image
+        source-type: http-archive
+        url: https://github.com/flim-labs/flim-firmwares/archive/bc670b5ef3e03f3437d732fb92cc784b566480a0.tar.gz
+        source: imaging_lf_80_100ps_chsma_in_sysma.flim
+        target: overlays/usr/lib/flim-imager/firmware/imaging_lf_80_100ps_chsma_in_sysma.flim
+      - description: FLIM firmware image
+        source-type: http-archive
+        url: https://github.com/flim-labs/flim-firmwares/archive/bc670b5ef3e03f3437d732fb92cc784b566480a0.tar.gz
+        source: imaging_lf_80_100ps_chsma_out_sysma.flim
+        target: overlays/usr/lib/flim-imager/firmware/imaging_lf_80_100ps_chsma_out_sysma.flim
+      - description: FLIM firmware image
+        source-type: http-archive
+        url: https://github.com/flim-labs/flim-firmwares/archive/bc670b5ef3e03f3437d732fb92cc784b566480a0.tar.gz
+        source: imaging_lf_80_chsma_in_sysma.flim
+        target: overlays/usr/lib/flim-imager/firmware/imaging_lf_80_chsma_in_sysma.flim
+      - description: FLIM firmware image
+        source-type: http-archive
+        url: https://github.com/flim-labs/flim-firmwares/archive/bc670b5ef3e03f3437d732fb92cc784b566480a0.tar.gz
+        source: imaging_lf_80_chsma_out_sysma.flim
+        target: overlays/usr/lib/flim-imager/firmware/imaging_lf_80_chsma_out_sysma.flim
+      - description: FLIM firmware image
+        source-type: http-archive
+        url: https://github.com/flim-labs/flim-firmwares/archive/bc670b5ef3e03f3437d732fb92cc784b566480a0.tar.gz
+        source: imaging_plf_10_chsma_in_sysma.flim
+        target: overlays/usr/lib/flim-imager/firmware/imaging_plf_10_chsma_in_sysma.flim
+      - description: FLIM firmware image
+        source-type: http-archive
+        url: https://github.com/flim-labs/flim-firmwares/archive/bc670b5ef3e03f3437d732fb92cc784b566480a0.tar.gz
+        source: imaging_plf_10_chsma_out_sysma.flim
+        target: overlays/usr/lib/flim-imager/firmware/imaging_plf_10_chsma_out_sysma.flim
+      - description: FLIM firmware image
+        source-type: http-archive
+        url: https://github.com/flim-labs/flim-firmwares/archive/bc670b5ef3e03f3437d732fb92cc784b566480a0.tar.gz
+        source: imaging_plf_20_chsma_in_sysma.flim
+        target: overlays/usr/lib/flim-imager/firmware/imaging_plf_20_chsma_in_sysma.flim
+      - description: FLIM firmware image
+        source-type: http-archive
+        url: https://github.com/flim-labs/flim-firmwares/archive/bc670b5ef3e03f3437d732fb92cc784b566480a0.tar.gz
+        source: imaging_plf_20_chsma_out_sysma.flim
+        target: overlays/usr/lib/flim-imager/firmware/imaging_plf_20_chsma_out_sysma.flim
+      - description: FLIM firmware image
+        source-type: http-archive
+        url: https://github.com/flim-labs/flim-firmwares/archive/bc670b5ef3e03f3437d732fb92cc784b566480a0.tar.gz
+        source: imaging_plf_40_chsma_in_sysma.flim
+        target: overlays/usr/lib/flim-imager/firmware/imaging_plf_40_chsma_in_sysma.flim
+      - description: FLIM firmware image
+        source-type: http-archive
+        url: https://github.com/flim-labs/flim-firmwares/archive/bc670b5ef3e03f3437d732fb92cc784b566480a0.tar.gz
+        source: imaging_plf_40_chsma_out_sysma.flim
+        target: overlays/usr/lib/flim-imager/firmware/imaging_plf_40_chsma_out_sysma.flim
+      - description: FLIM firmware image
+        source-type: http-archive
+        url: https://github.com/flim-labs/flim-firmwares/archive/bc670b5ef3e03f3437d732fb92cc784b566480a0.tar.gz
+        source: imaging_plf_80_100ps_chsma_in_sysma.flim
+        target: overlays/usr/lib/flim-imager/firmware/imaging_plf_80_100ps_chsma_in_sysma.flim
+      - description: FLIM firmware image
+        source-type: http-archive
+        url: https://github.com/flim-labs/flim-firmwares/archive/bc670b5ef3e03f3437d732fb92cc784b566480a0.tar.gz
+        source: imaging_plf_80_100ps_chsma_out_sysma.flim
+        target: overlays/usr/lib/flim-imager/firmware/imaging_plf_80_100ps_chsma_out_sysma.flim
+      - description: FLIM firmware image
+        source-type: http-archive
+        url: https://github.com/flim-labs/flim-firmwares/archive/bc670b5ef3e03f3437d732fb92cc784b566480a0.tar.gz
+        source: imaging_plf_80_chsma_in_sysma.flim
+        target: overlays/usr/lib/flim-imager/firmware/imaging_plf_80_chsma_in_sysma.flim
+      - description: FLIM firmware image
+        source-type: http-archive
+        url: https://github.com/flim-labs/flim-firmwares/archive/bc670b5ef3e03f3437d732fb92cc784b566480a0.tar.gz
+        source: imaging_plf_80_chsma_out_sysma.flim
+        target: overlays/usr/lib/flim-imager/firmware/imaging_plf_80_chsma_out_sysma.flim
 
 features:
   firewall-allow-direct:
