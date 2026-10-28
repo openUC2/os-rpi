@@ -115,6 +115,4 @@ jobs:
           forklift dev plt ls-img | rush ".github/load-precached-image.sh" {} "$PRECACHE_PATH"
 
       - name: Try to stage the pallet
-        # Images were already loaded into Docker above; Forklift's own image download doesn't
-        # send registry credentials, so it would fail on images from private repositories.
         run: forklift dev plt stage
