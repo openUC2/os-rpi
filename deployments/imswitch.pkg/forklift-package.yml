@@ -121,13 +121,13 @@ features:
         - description: Kernel parameters
           target: overlays/etc/sysctl.d/80-hikrobot-cameras.conf
         - description: udev rules
-          target: overlays/usr/lib/udev/rules.d/80-hikrobot-cameras.rules
+          target: overlays/usr/lib/udev/rules.d/65-hikrobot-cameras.rules
   daheng-cameras:
     description: Support for Daheng cameras
     provides:
       file-exports:
         - description: udev rules
-          target: overlays/usr/lib/udev/rules.d/80-daheng-cameras.rules
+          target: overlays/usr/lib/udev/rules.d/65-daheng-cameras.rules
   tucsen-cameras:
     description: Support for Tucsen cameras
     provides:
@@ -135,7 +135,7 @@ features:
         - description: Tucsen camera configuration
           target: overlays/etc/tucam/tuusb.conf
         - description: udev rules
-          target: overlays/usr/lib/udev/rules.d/80-tucsen-cameras.rules
+          target: overlays/usr/lib/udev/rules.d/65-tucsen-cameras.rules
         - description: Compiled library file
           target: overlays/usr/lib/aarch64-linux-gnu/libTUCam.so
         - description: Compiled library file
@@ -149,7 +149,7 @@ features:
     provides:
       file-exports:
         - description: udev rules
-          target: overlays/usr/lib/udev/rules.d/80-touptek-cameras.rules
+          target: overlays/usr/lib/udev/rules.d/65-touptek-cameras.rules
         - description: Compiled library file
           source-type: http
           url: https://github.com/openUC2/ImSwitchDockerInstall/releases/download/imswitch-master/libtoupcam-arm64-glibc.so
@@ -160,7 +160,7 @@ features:
     provides:
       file-exports:
         - description: udev rules
-          target: overlays/usr/lib/udev/rules.d/80-alliedvision-cameras.rules
+          target: overlays/usr/lib/udev/rules.d/65-alliedvision-cameras.rules
   can-interface:
     description: Provides automatic enablement of the OS interface for an SPI CAN bus transceiver
     compose-files:

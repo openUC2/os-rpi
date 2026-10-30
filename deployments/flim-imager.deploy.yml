@@ -1,0 +1,5 @@
+package: /deployments/flim-imager.pkg
+features:
+  - firewall-allow-direct
+  - firewall-allow-public
+disabled: false
