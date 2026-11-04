@@ -5,6 +5,6 @@ services:
       - TEMPLATES_PATH=/web/templates
     volumes:
       - type: bind
-        source: ./templates-untrusted
+        source: ${FORKLIFT_EXPORTS}/shared/machine-portal-untrusted/templates
         target: /web/templates
         read_only: true

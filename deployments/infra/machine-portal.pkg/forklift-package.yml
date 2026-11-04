@@ -13,6 +13,10 @@ package:
 deployment:
   compose-files:
     - deployment.compose.yml
+  provides:
+    file-exports:
+      - description: Web page templates for the landing page
+        target: shared/machine-portal/templates
 
 features:
   frontend:
@@ -50,6 +54,10 @@ features:
     description: Provides a browser landing page for untrusted users
     compose-files:
       - untrusted.compose.yml
+    provides:
+      file-exports:
+        - description: Web page templates for the landing page
+          target: shared/machine-portal-untrusted/templates
   frontend-untrusted:
     description: Provides untrusted access to the untrusted browser landing page
     compose-files:
