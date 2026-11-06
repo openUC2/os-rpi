@@ -53,7 +53,7 @@ features:
   untrusted:
     description: Provides a browser landing page for untrusted users
     compose-files:
-      - untrusted.compose.yml
+      - deployment-untrusted.compose.yml
     provides:
       file-exports:
         - description: Web page templates for the landing page

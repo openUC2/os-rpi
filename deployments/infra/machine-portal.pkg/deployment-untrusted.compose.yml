@@ -1,6 +1,6 @@
 services:
   server-untrusted:
-    image: ghcr.io/openuc2/machine-portal:0.3.1-alpha.0@sha256:292a3793866574dff73e7ef05e05c7b73dec702d923e9522c7b4aa0049e5046e
+    image: ghcr.io/openuc2/machine-portal:0.3.1-alpha.1@sha256:b7cd47ec90c80d1061e5f7d420a235c2b700190103333f46631571378ee722e4
     environment:
       - TEMPLATES_PATH=/web/templates
     volumes:
