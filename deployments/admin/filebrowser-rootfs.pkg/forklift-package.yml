@@ -32,6 +32,9 @@ features:
           paths:
             - /admin/files
             - /admin/files/*
+      file-exports:
+        - source: shared/_machine-portal/templates/home/advanced/browser-apps/sysadmin/30-filebrowser-pi.item.partial.tmpl
+          target: shared/machine-portal/templates/home/advanced/browser-apps/sysadmin/30-filebrowser-pi.item.partial.tmpl
   frontend-untrusted:
     description: Provides untrusted access to the GUI
     compose-files:
@@ -52,3 +55,6 @@ features:
           paths:
             - /admin/files
             - /admin/files/*
+      file-exports:
+        - source: shared/_machine-portal/templates/home/advanced/browser-apps/sysadmin/30-filebrowser-pi.item.partial.tmpl
+          target: shared/machine-portal-untrusted/templates/home/advanced/browser-apps/sysadmin/30-filebrowser-pi.item.partial.tmpl

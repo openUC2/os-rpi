@@ -88,6 +88,9 @@ deployment:
           "Drop-in Cockpit origins template list for access via the machine name with a custom
           domain, e.g. 'metal-slope-23501.uc2'"
         target: overlays/etc/cockpit/origins-templates.d/20-custom-domain-machine-name
+      # Landing page template partials:
+      - source: shared/_machine-portal/templates/home/advanced/browser-apps/sysadmin/21-cockpit-direct.item.partial.tmpl
+        target: shared/machine-portal/templates/home/advanced/browser-apps/sysadmin/21-cockpit-direct.item.partial.tmpl
     filesets:
       - description: Drop-in directory for config file fragments to generate the Cockpit config file
         tags:
@@ -235,6 +238,9 @@ features:
       file-exports:
         - description: Drop-in config fragment to enable connection through a reverse-proxy
           target: overlays/etc/cockpit/cockpit.conf.d/20-webservice-20-reverse-proxy.conf
+        # Landing page template partials
+        - source: shared/_machine-portal/templates/home/advanced/browser-apps/sysadmin/20-cockpit.item.partial.tmpl
+          target: shared/machine-portal/templates/home/advanced/browser-apps/sysadmin/20-cockpit.item.partial.tmpl
   frontend-untrusted:
     description: Provides untrusted access to the GUI
     compose-files:
@@ -268,3 +274,8 @@ features:
       file-exports:
         - description: Drop-in config fragment to enable connection through a reverse-proxy
           target: overlays/etc/cockpit/cockpit.conf.d/20-webservice-20-reverse-proxy.conf
+        # Landing page template partials
+        - source: shared/_machine-portal/templates/home/advanced/browser-apps/sysadmin/20-cockpit.item.partial.tmpl
+          target: shared/machine-portal-untrusted/templates/home/advanced/browser-apps/sysadmin/20-cockpit.item.partial.tmpl
+        - source: shared/_machine-portal/templates/home/advanced/browser-apps/sysadmin/21-cockpit-direct.item.partial.tmpl
+          target: shared/machine-portal-untrusted/templates/home/advanced/browser-apps/sysadmin/21-cockpit-direct.item.partial.tmpl
