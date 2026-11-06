@@ -1,9 +1,0 @@
-{{$hostname := .Data.Hostname}}
-
-<p>System recovery:</p>
-<ul>
-  {{$data := .}}
-  {{range $template := templates "home/advanced/browser-apps/recovery/*.item.partial.tmpl"}}
-    {{partial $template $data}}
-  {{end}}
-</ul>
