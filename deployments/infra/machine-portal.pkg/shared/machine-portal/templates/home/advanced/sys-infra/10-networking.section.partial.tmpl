@@ -1,9 +1,0 @@
-{{$hostname := .Data.Hostname}}
-
-<p>Networking:</p>
-<ul>
-  {{$data := .}}
-  {{range $template := templates "home/advanced/sys-infra/networking/*.item.partial.tmpl"}}
-    {{partial $template $data}}
-  {{end}}
-</ul>
