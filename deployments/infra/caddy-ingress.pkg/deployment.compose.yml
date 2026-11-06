@@ -49,7 +49,7 @@ services:
   ensure-external-caddyfile:
     # This service ensures that a valid Caddyfile exists as a fallback even if
     # /run/caddy-ingress/external doesn't exist, so that the container can start successfully
-    image: docker.io/library/alpine:3.24.4@sha256:e2944c2947c8cabdd6b23a2ebcf8094a9f3d53ca9e0340edd065237ab74c18c0
+    image: docker.io/library/alpine:3.24.4@sha256:93b41ef40b1677fce8fcc64ff4af09daddfacf5040afde618bc46c1e2d1cc7d4
     volumes:
       - /run/caddy-ingress/external:/etc/caddy
       - ./external.Caddyfile-fallback:/run/caddy/Caddyfile-fallback
