@@ -1,0 +1,16 @@
+{{template "shared/base.layout.tmpl" .}}
+
+{{define "title" -}}
+  {{- $machineName := .Data.MachineName -}}
+  Machine {{$machineName}}
+{{- end}}
+{{define "description"}}Machine portal{{end}}
+
+{{define "content"}}
+  <main>
+    {{$data := .}}
+    {{range $template := templates "home/*.section.partial.tmpl"}}
+      {{partial $template $data}}
+    {{end}}
+  </main>
+{{end}}

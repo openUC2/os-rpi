@@ -23,6 +23,20 @@ host:
         paths:
           - /usr/bin/dockerd
 
+deployment:
+  provides:
+    file-exports:
+      # Trusted landing page template partials:
+      - source: shared/_machine-portal/templates/home/advanced/sys-infra/app-mgmt/20-docker-compose.item.partial.tmpl
+        target: shared/machine-portal/templates/home/advanced/sys-infra/app-mgmt/20-docker-compose.item.partial.tmpl
+      - source: shared/_machine-portal/templates/home/advanced/sys-infra/app-mgmt/30-docker.item.partial.tmpl
+        target: shared/machine-portal/templates/home/advanced/sys-infra/app-mgmt/30-docker.item.partial.tmpl
+      # Untrusted landing page template partials:
+      - source: shared/_machine-portal/templates/home/advanced/sys-infra/app-mgmt/20-docker-compose.item.partial.tmpl
+        target: shared/machine-portal-untrusted/templates/home/advanced/sys-infra/app-mgmt/20-docker-compose.item.partial.tmpl
+      - source: shared/_machine-portal/templates/home/advanced/sys-infra/app-mgmt/30-docker.item.partial.tmpl
+        target: shared/machine-portal-untrusted/templates/home/advanced/sys-infra/app-mgmt/30-docker.item.partial.tmpl
+
 features:
   start-before-network-online:
     description:

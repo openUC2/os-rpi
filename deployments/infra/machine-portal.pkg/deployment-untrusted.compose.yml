@@ -1,0 +1,10 @@
+services:
+  server-untrusted:
+    image: ghcr.io/openuc2/machine-portal:0.3.1-alpha.1@sha256:b7cd47ec90c80d1061e5f7d420a235c2b700190103333f46631571378ee722e4
+    environment:
+      - TEMPLATES_PATH=/web/templates
+    volumes:
+      - type: bind
+        source: ${FORKLIFT_EXPORTS}/shared/machine-portal-untrusted/templates
+        target: /web/templates
+        read_only: true
