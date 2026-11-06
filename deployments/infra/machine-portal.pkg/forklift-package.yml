@@ -66,6 +66,8 @@ deployment:
         target: shared/machine-portal/templates/home/advanced/browser-apps/sysadmin/30-filebrowser-pi.item.partial.tmpl
       - source: shared/_common/templates/home/advanced/sys-infra/10-networking.section.partial.tmpl
         target: shared/machine-portal/templates/home/advanced/sys-infra/10-networking.section.partial.tmpl
+      - source: shared/_common/templates/home/advanced/sys-infra/20-app-mgmt.section.partial.tmpl
+        target: shared/machine-portal/templates/home/advanced/sys-infra/20-app-mgmt.section.partial.tmpl
       - source: shared/_common/templates/home/advanced/sys-infra/networking/10-sshd.item.partial.tmpl
         target: shared/machine-portal/templates/home/advanced/sys-infra/networking/10-sshd.item.partial.tmpl
       - source: shared/_common/templates/home/advanced/sys-infra/networking/20-caddy-ingress.item.partial.tmpl
@@ -74,6 +76,12 @@ deployment:
         target: shared/machine-portal/templates/home/advanced/sys-infra/networking/30-caddy-ingress-untrusted.item.partial.tmpl
       - source: shared/_common/templates/home/advanced/sys-infra/networking/40-device-portal.item.partial.tmpl
         target: shared/machine-portal/templates/home/advanced/sys-infra/networking/40-device-portal.item.partial.tmpl
+      - source: shared/_common/templates/home/advanced/sys-infra/app-mgmt/10-forklift.item.partial.tmpl
+        target: shared/machine-portal/templates/home/advanced/sys-infra/app-mgmt/10-forklift.item.partial.tmpl
+      - source: shared/_common/templates/home/advanced/sys-infra/app-mgmt/20-docker-compose.item.partial.tmpl
+        target: shared/machine-portal/templates/home/advanced/sys-infra/app-mgmt/20-docker-compose.item.partial.tmpl
+      - source: shared/_common/templates/home/advanced/sys-infra/app-mgmt/30-docker.item.partial.tmpl
+        target: shared/machine-portal/templates/home/advanced/sys-infra/app-mgmt/30-docker.item.partial.tmpl
       # Trusted-only template partials
       - source: shared/_trusted/templates/home/10-overview.section.partial.tmpl
         target: shared/machine-portal/templates/home/10-overview.section.partial.tmpl
@@ -81,6 +89,8 @@ deployment:
         target: shared/machine-portal/templates/home/10-overview.section.advanced.partial.tmpl
       - source: shared/_trusted/templates/home/apps/20-machine-admin.item.partial.tmpl
         target: shared/machine-portal/templates/home/apps/20-machine-admin.item.partial.tmpl
+      - source: shared/_trusted/templates/home/apps/20-machine-admin.item.simple.partial.tmpl
+        target: shared/machine-portal/templates/home/apps/20-machine-admin.simple.item.partial.tmpl
       - source: shared/_trusted/templates/home/advanced/browser-apps/sysadmin/10-machine-admin.item.partial.tmpl
         target: shared/machine-portal/templates/home/advanced/browser-apps/sysadmin/10-machine-admin.item.partial.tmpl
       - source: shared/_trusted/templates/home/advanced/browser-apps/sysadmin/40-filebrowser-root.item.partial.tmpl
@@ -179,6 +189,8 @@ features:
           target: shared/machine-portal-untrusted/templates/home/advanced/browser-apps/sysadmin/30-filebrowser-pi.item.partial.tmpl
         - source: shared/_common/templates/home/advanced/sys-infra/10-networking.section.partial.tmpl
           target: shared/machine-portal-untrusted/templates/home/advanced/sys-infra/10-networking.section.partial.tmpl
+        - source: shared/_common/templates/home/advanced/sys-infra/20-app-mgmt.section.partial.tmpl
+          target: shared/machine-portal-untrusted/templates/home/advanced/sys-infra/20-app-mgmt.section.partial.tmpl
         - source: shared/_common/templates/home/advanced/sys-infra/networking/10-sshd.item.partial.tmpl
           target: shared/machine-portal-untrusted/templates/home/advanced/sys-infra/networking/10-sshd.item.partial.tmpl
         - source: shared/_common/templates/home/advanced/sys-infra/networking/20-caddy-ingress.item.partial.tmpl
@@ -187,7 +199,13 @@ features:
           target: shared/machine-portal-untrusted/templates/home/advanced/sys-infra/networking/30-caddy-ingress-untrusted.item.partial.tmpl
         - source: shared/_common/templates/home/advanced/sys-infra/networking/40-device-portal.item.partial.tmpl
           target: shared/machine-portal-untrusted/templates/home/advanced/sys-infra/networking/40-device-portal.item.partial.tmpl
-        # Trusted-only template partials
+        - source: shared/_common/templates/home/advanced/sys-infra/app-mgmt/10-forklift.item.partial.tmpl
+          target: shared/machine-portal-untrusted/templates/home/advanced/sys-infra/app-mgmt/10-forklift.item.partial.tmpl
+        - source: shared/_common/templates/home/advanced/sys-infra/app-mgmt/20-docker-compose.item.partial.tmpl
+          target: shared/machine-portal-untrusted/templates/home/advanced/sys-infra/app-mgmt/20-docker-compose.item.partial.tmpl
+        - source: shared/_common/templates/home/advanced/sys-infra/app-mgmt/30-docker.item.partial.tmpl
+          target: shared/machine-portal-untrusted/templates/home/advanced/sys-infra/app-mgmt/30-docker.item.partial.tmpl
+        # Untrusted-only template partials
         - source: shared/_untrusted/templates/home/10-overview.section.partial.tmpl
           target: shared/machine-portal-untrusted/templates/home/10-overview.section.partial.tmpl
         - source: shared/_untrusted/templates/home/10-overview.section.advanced.partial.tmpl
