@@ -7,9 +7,11 @@
       "Description" "This machine's microscope control interface (ImSwitch)"
     }}
   </p>
-  <article class="message is-info mb-3">
-    <div class="message-body">
-      If you don't know where to go, you're probably looking for the above link!
-    </div>
-  </article>
+  {{if gt (len (templates "home/apps/*.item.simple.partial.tmpl")) 1}}
+    <article class="message is-info mb-3">
+      <div class="message-body">
+        If you don't know where to go, you're probably looking for the above link!
+      </div>
+    </article>
+  {{end}}
 </li>
