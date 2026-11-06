@@ -87,12 +87,6 @@ deployment:
         target: shared/machine-portal/templates/home/10-overview.section.partial.tmpl
       - source: shared/_trusted/templates/home/10-overview.section.advanced.partial.tmpl
         target: shared/machine-portal/templates/home/10-overview.section.advanced.partial.tmpl
-      - source: shared/_trusted/templates/home/apps/20-machine-admin.item.partial.tmpl
-        target: shared/machine-portal/templates/home/apps/20-machine-admin.item.partial.tmpl
-      - source: shared/_trusted/templates/home/apps/20-machine-admin.item.simple.partial.tmpl
-        target: shared/machine-portal/templates/home/apps/20-machine-admin.item.simple.partial.tmpl
-      - source: shared/_trusted/templates/home/advanced/browser-apps/sysadmin/10-machine-admin.item.partial.tmpl
-        target: shared/machine-portal/templates/home/advanced/browser-apps/sysadmin/10-machine-admin.item.partial.tmpl
       - source: shared/_trusted/templates/home/advanced/browser-apps/sysadmin/40-filebrowser-root.item.partial.tmpl
         target: shared/machine-portal/templates/home/advanced/browser-apps/sysadmin/40-filebrowser-root.item.partial.tmpl
       - source: shared/_trusted/templates/home/advanced/browser-apps/sysadmin/50-dozzle.item.partial.tmpl
