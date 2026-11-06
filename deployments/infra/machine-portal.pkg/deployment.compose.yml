@@ -1,6 +1,6 @@
 services:
   server:
-    image: ghcr.io/openuc2/machine-portal:0.3.0-alpha.0@sha256:7ec1e2a7f3f07ae6d2bc25ec22a403afe0d5649179d599bdc1632a52926f551a
+    image: ghcr.io/openuc2/machine-portal:0.3.1-alpha.0@sha256:292a3793866574dff73e7ef05e05c7b73dec702d923e9522c7b4aa0049e5046e
     environment:
       - TEMPLATES_PATH=/web/templates
     volumes:

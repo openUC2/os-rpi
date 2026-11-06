@@ -1,0 +1,10 @@
+{{$hostname := .Data.Hostname}}
+
+<li>
+  {{
+    template "shared/link.partial.tmpl" dict
+    "Href" (print "//" $hostname ":9090/admin/cockpit/")
+    "Name" "Cockpit (direct-access fallback)"
+    "Description" "Fallback access to the Cockpit application, accessible even if the system's service proxy stops working"
+  }}
+</li>

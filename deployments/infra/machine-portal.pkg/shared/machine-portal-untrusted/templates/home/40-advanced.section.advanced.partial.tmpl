@@ -1,0 +1,9 @@
+<section class="section is-large">
+  <div class="container content is-max-desktop">
+    <h2>For advanced users</h2>
+    {{$data := .}}
+    {{range $template := templates "home/advanced/*.section.partial.tmpl"}}
+      {{partial $template $data}}
+    {{end}}
+  </div>
+</section>

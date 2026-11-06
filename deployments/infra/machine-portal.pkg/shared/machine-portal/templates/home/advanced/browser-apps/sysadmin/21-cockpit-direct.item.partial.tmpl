@@ -1,0 +1,8 @@
+<li>
+  {{
+    template "shared/link.partial.tmpl" dict
+    "Href" (print "//" $hostname ":9090/admin/cockpit/")
+    "Name" "Cockpit (direct access)"
+    "Description" "Direct access to Cockpit; needed for applying Forklift upgrades from the Cockpit terminal without rebooting"
+  }}
+</li>

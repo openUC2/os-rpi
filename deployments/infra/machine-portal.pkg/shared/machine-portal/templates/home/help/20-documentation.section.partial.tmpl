@@ -1,0 +1,5 @@
+<h3 class="is-size-5">Documentation</h3>
+{{$data := .}}
+{{range $template := templates "home/help/documentation/*.item.partial.tmpl"}}
+  {{partial $template $data}}
+{{end}}
