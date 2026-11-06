@@ -22,6 +22,9 @@ host:
       - description: Docker daemon binary
         paths:
           - /usr/bin/dockerd
+
+deployment:
+  provides:
     file-exports:
       # Trusted landing page template partials:
       - source: shared/_machine-portal/templates/home/advanced/sys-infra/app-mgmt/20-docker-compose.item.partial.tmpl
