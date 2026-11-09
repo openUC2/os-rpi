@@ -1,10 +1,23 @@
 services:
   server:
-    image: ghcr.io/openuc2/machine-portal:0.3.0-alpha.0@sha256:7ec1e2a7f3f07ae6d2bc25ec22a403afe0d5649179d599bdc1632a52926f551a
+    image: ghcr.io/openuc2/machine-portal:0.3.1-alpha.2@sha256:e0b29a390c4143ecb02916dbeb9cac7fb2891d7a473ca59a8ba1eb26504c3ecb
     environment:
-      - TEMPLATES_PATH=/web/templates
+      - TEMPLATES_PATH=/run/machine-portal/templates:/etc/machine-portal/templates:/web/templates:/web/templates-common
     volumes:
+      # Template overlays:
       - type: bind
-        source: ./templates
+        source: /run/machine-portal/templates
+        target: /run/machine-portal/templates
+        read_only: true
+      - type: bind
+        source: /etc/machine-portal/templates
+        target: /etc/machine-portal/templates
+        read_only: true
+      - type: bind
+        source: ${FORKLIFT_EXPORTS}/shared/machine-portal/templates
         target: /web/templates
+        read_only: true
+      - type: bind
+        source: ${FORKLIFT_EXPORTS}/shared/machine-portal-common/templates
+        target: /web/templates-common
         read_only: true

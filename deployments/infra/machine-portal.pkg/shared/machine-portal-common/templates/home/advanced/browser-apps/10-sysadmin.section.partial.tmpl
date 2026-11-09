@@ -1,0 +1,7 @@
+<p>System administration and troubleshooting:</p>
+<ul>
+  {{$data := .}}
+  {{range $template := templates "home/advanced/browser-apps/sysadmin/*.item.partial.tmpl"}}
+    {{partial $template $data}}
+  {{end}}
+</ul>

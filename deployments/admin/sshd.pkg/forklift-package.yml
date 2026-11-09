@@ -32,6 +32,7 @@ features:
       file-exports:
         - description: systemd service enablement for the system-provided ssh.service
           target: overlays/etc/systemd/system/multi-user.target.wants/ssh.service
+        - target: shared/machine-portal-common/templates/home/advanced/sys-infra/networking/10-sshd.item.partial.tmpl
   ensure-ssh-host-keys:
     description: Regenerates ssh host keys at boot if they're missing
     provides:
