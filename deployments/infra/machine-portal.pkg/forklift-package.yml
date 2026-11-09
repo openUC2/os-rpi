@@ -37,8 +37,8 @@ deployment:
       - target: shared/machine-portal-common/templates/home/advanced/sys-infra/20-app-mgmt.section.partial.tmpl
       - target: shared/machine-portal-common/templates/home/advanced/sys-infra/networking/40-device-portal.item.partial.tmpl
       # Trusted-only template partials
-      - target: shared/machine-portal-trusted/templates/home/10-overview.section.partial.tmpl
-      - target: shared/machine-portal-trusted/templates/home/10-overview.section.advanced.partial.tmpl
+      - target: shared/machine-portal/templates/home/10-overview.section.partial.tmpl
+      - target: shared/machine-portal/templates/home/10-overview.section.advanced.partial.tmpl
 
 features:
   frontend:
