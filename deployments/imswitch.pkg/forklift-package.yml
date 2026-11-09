@@ -49,16 +49,11 @@ features:
             - /jupyter
             - /jupyter/*
       file-exports:
-        - source: shared/_machine-portal/templates/home/apps/10-imswitch.item.partial.tmpl
-          target: shared/machine-portal/templates/home/apps/10-imswitch.item.partial.tmpl
-        - source: shared/_machine-portal/templates/home/apps/10-imswitch.item.simple.partial.tmpl
-          target: shared/machine-portal/templates/home/apps/10-imswitch.item.simple.partial.tmpl
-        - source: shared/_machine-portal/templates/home/advanced/network-apis/10-imswitch-http-api.item.partial.tmpl
-          target: shared/machine-portal/templates/home/advanced/network-apis/10-imswitch-http-api.item.partial.tmpl
-        - source: shared/_machine-portal/templates/home/advanced/network-apis/20-imswitch-http-api-docs.item.partial.tmpl
-          target: shared/machine-portal/templates/home/advanced/network-apis/20-imswitch-http-api-docs.item.partial.tmpl
-        - source: shared/_machine-portal/templates/home/advanced/network-apis/30-imswitch-http-api-spec.item.partial.tmpl
-          target: shared/machine-portal/templates/home/advanced/network-apis/30-imswitch-http-api-spec.item.partial.tmpl
+        - target: shared/machine-portal-common/templates/home/apps/10-imswitch.item.partial.tmpl
+        - target: shared/machine-portal-common/templates/home/apps/10-imswitch.item.simple.partial.tmpl
+        - target: shared/machine-portal-common/templates/home/advanced/network-apis/10-imswitch-http-api.item.partial.tmpl
+        - target: shared/machine-portal-common/templates/home/advanced/network-apis/20-imswitch-http-api-docs.item.partial.tmpl
+        - target: shared/machine-portal-common/templates/home/advanced/network-apis/30-imswitch-http-api-spec.item.partial.tmpl
   frontend-untrusted:
     description: Provides untrusted access to the microscope control server
     compose-files:
@@ -86,16 +81,11 @@ features:
         #     - /jupyter
         #     - /jupyter/*
       file-exports:
-        - source: shared/_machine-portal/templates/home/apps/10-imswitch.item.partial.tmpl
-          target: shared/machine-portal-untrusted/templates/home/apps/10-imswitch.item.partial.tmpl
-        - source: shared/_machine-portal/templates/home/apps/10-imswitch.item.simple.partial.tmpl
-          target: shared/machine-portal-untrusted/templates/home/apps/10-imswitch.item.simple.partial.tmpl
-        - source: shared/_machine-portal/templates/home/advanced/network-apis/10-imswitch-http-api.item.partial.tmpl
-          target: shared/machine-portal-untrusted/templates/home/advanced/network-apis/10-imswitch-http-api.item.partial.tmpl
-        - source: shared/_machine-portal/templates/home/advanced/network-apis/20-imswitch-http-api-docs.item.partial.tmpl
-          target: shared/machine-portal-untrusted/templates/home/advanced/network-apis/20-imswitch-http-api-docs.item.partial.tmpl
-        - source: shared/_machine-portal/templates/home/advanced/network-apis/30-imswitch-http-api-spec.item.partial.tmpl
-          target: shared/machine-portal-untrusted/templates/home/advanced/network-apis/30-imswitch-http-api-spec.item.partial.tmpl
+        - target: shared/machine-portal-common/templates/home/apps/10-imswitch.item.partial.tmpl
+        - target: shared/machine-portal-common/templates/home/apps/10-imswitch.item.simple.partial.tmpl
+        - target: shared/machine-portal-common/templates/home/advanced/network-apis/10-imswitch-http-api.item.partial.tmpl
+        - target: shared/machine-portal-common/templates/home/advanced/network-apis/20-imswitch-http-api-docs.item.partial.tmpl
+        - target: shared/machine-portal-common/templates/home/advanced/network-apis/30-imswitch-http-api-spec.item.partial.tmpl
   firewall-allow-direct:
     description:
       Firewall configuration to allow requests from directly-connected devices

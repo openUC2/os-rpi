@@ -30,10 +30,7 @@ deployment:
         port: 8000
         protocol: http
     file-exports:
-      - source: shared/_machine-portal/templates/home/advanced/sys-infra/networking/30-caddy-ingress-untrusted.item.partial.tmpl
-        target: shared/machine-portal/templates/home/advanced/sys-infra/networking/30-caddy-ingress-untrusted.item.partial.tmpl
-      - source: shared/_machine-portal/templates/home/advanced/sys-infra/networking/30-caddy-ingress-untrusted.item.partial.tmpl
-        target: shared/machine-portal-untrusted/templates/home/advanced/sys-infra/networking/30-caddy-ingress-untrusted.item.partial.tmpl
+      - target: shared/machine-portal-common/templates/home/advanced/sys-infra/networking/30-caddy-ingress-untrusted.item.partial.tmpl
 
 features:
   firewall-allow-direct:

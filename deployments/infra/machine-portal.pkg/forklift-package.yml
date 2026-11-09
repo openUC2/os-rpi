@@ -16,51 +16,29 @@ deployment:
   provides:
     file-exports:
       # Common template partials
-      - source: shared/_common/templates/home/index.page.tmpl
-        target: shared/machine-portal/templates/home/index.page.tmpl
-      - source: shared/_common/templates/home/index.advanced.page.tmpl
-        target: shared/machine-portal/templates/home/index.advanced.page.tmpl
-      - source: shared/_common/templates/home/20-apps.section.partial.tmpl
-        target: shared/machine-portal/templates/home/20-apps.section.partial.tmpl
-      - source: shared/_common/templates/home/20-apps.section.advanced.partial.tmpl
-        target: shared/machine-portal/templates/home/20-apps.section.advanced.partial.tmpl
-      - source: shared/_common/templates/home/30-help.section.advanced.partial.tmpl
-        target: shared/machine-portal/templates/home/30-help.section.advanced.partial.tmpl
-      - source: shared/_common/templates/home/40-advanced.section.advanced.partial.tmpl
-        target: shared/machine-portal/templates/home/40-advanced.section.advanced.partial.tmpl
-      - source: shared/_common/templates/home/help/10-wrong-machine.section.partial.tmpl
-        target: shared/machine-portal/templates/home/help/10-wrong-machine.section.partial.tmpl
-      - source: shared/_common/templates/home/help/20-documentation.section.partial.tmpl
-        target: shared/machine-portal/templates/home/help/20-documentation.section.partial.tmpl
-      - source: shared/_common/templates/home/help/30-community.section.partial.tmpl
-        target: shared/machine-portal/templates/home/help/30-community.section.partial.tmpl
-      - source: shared/_common/templates/home/help/community/10-openuc2-website.item.partial.tmpl
-        target: shared/machine-portal/templates/home/help/community/10-openuc2-website.item.partial.tmpl
-      - source: shared/_common/templates/home/help/community/20-openuc2-shop.item.partial.tmpl
-        target: shared/machine-portal/templates/home/help/community/20-openuc2-shop.item.partial.tmpl
-      - source: shared/_common/templates/home/help/community/30-openuc2-discourse.item.partial.tmpl
-        target: shared/machine-portal/templates/home/help/community/30-openuc2-discourse.item.partial.tmpl
-      - source: shared/_common/templates/home/help/community/40-openuc2-github.item.partial.tmpl
-        target: shared/machine-portal/templates/home/help/community/40-openuc2-github.item.partial.tmpl
-      - source: shared/_common/templates/home/advanced/10-browser-apps.section.partial.tmpl
-        target: shared/machine-portal/templates/home/advanced/10-browser-apps.section.partial.tmpl
-      - source: shared/_common/templates/home/advanced/20-network-apis.section.partial.tmpl
-        target: shared/machine-portal/templates/home/advanced/20-network-apis.section.partial.tmpl
-      - source: shared/_common/templates/home/advanced/30-sys-infra.section.partial.tmpl
-        target: shared/machine-portal/templates/home/advanced/30-sys-infra.section.partial.tmpl
-      - source: shared/_common/templates/home/advanced/browser-apps/10-sysadmin.section.partial.tmpl
-        target: shared/machine-portal/templates/home/advanced/browser-apps/10-sysadmin.section.partial.tmpl
-      - source: shared/_common/templates/home/advanced/sys-infra/10-networking.section.partial.tmpl
-        target: shared/machine-portal/templates/home/advanced/sys-infra/10-networking.section.partial.tmpl
-      - source: shared/_common/templates/home/advanced/sys-infra/20-app-mgmt.section.partial.tmpl
-        target: shared/machine-portal/templates/home/advanced/sys-infra/20-app-mgmt.section.partial.tmpl
-      - source: shared/_common/templates/home/advanced/sys-infra/networking/40-device-portal.item.partial.tmpl
-        target: shared/machine-portal/templates/home/advanced/sys-infra/networking/40-device-portal.item.partial.tmpl
+      - target: shared/machine-portal-common/templates/home/index.page.tmpl
+      - target: shared/machine-portal-common/templates/home/index.advanced.page.tmpl
+      - target: shared/machine-portal-common/templates/home/20-apps.section.partial.tmpl
+      - target: shared/machine-portal-common/templates/home/20-apps.section.advanced.partial.tmpl
+      - target: shared/machine-portal-common/templates/home/30-help.section.advanced.partial.tmpl
+      - target: shared/machine-portal-common/templates/home/40-advanced.section.advanced.partial.tmpl
+      - target: shared/machine-portal-common/templates/home/help/10-wrong-machine.section.partial.tmpl
+      - target: shared/machine-portal-common/templates/home/help/20-documentation.section.partial.tmpl
+      - target: shared/machine-portal-common/templates/home/help/30-community.section.partial.tmpl
+      - target: shared/machine-portal-common/templates/home/help/community/10-openuc2-website.item.partial.tmpl
+      - target: shared/machine-portal-common/templates/home/help/community/20-openuc2-shop.item.partial.tmpl
+      - target: shared/machine-portal-common/templates/home/help/community/30-openuc2-discourse.item.partial.tmpl
+      - target: shared/machine-portal-common/templates/home/help/community/40-openuc2-github.item.partial.tmpl
+      - target: shared/machine-portal-common/templates/home/advanced/10-browser-apps.section.partial.tmpl
+      - target: shared/machine-portal-common/templates/home/advanced/20-network-apis.section.partial.tmpl
+      - target: shared/machine-portal-common/templates/home/advanced/30-sys-infra.section.partial.tmpl
+      - target: shared/machine-portal-common/templates/home/advanced/browser-apps/10-sysadmin.section.partial.tmpl
+      - target: shared/machine-portal-common/templates/home/advanced/sys-infra/10-networking.section.partial.tmpl
+      - target: shared/machine-portal-common/templates/home/advanced/sys-infra/20-app-mgmt.section.partial.tmpl
+      - target: shared/machine-portal-common/templates/home/advanced/sys-infra/networking/40-device-portal.item.partial.tmpl
       # Trusted-only template partials
-      - source: shared/_trusted/templates/home/10-overview.section.partial.tmpl
-        target: shared/machine-portal/templates/home/10-overview.section.partial.tmpl
-      - source: shared/_trusted/templates/home/10-overview.section.advanced.partial.tmpl
-        target: shared/machine-portal/templates/home/10-overview.section.advanced.partial.tmpl
+      - target: shared/machine-portal-trusted/templates/home/10-overview.section.partial.tmpl
+      - target: shared/machine-portal-trusted/templates/home/10-overview.section.advanced.partial.tmpl
 
 features:
   frontend:
@@ -100,52 +78,9 @@ features:
       - deployment-untrusted.compose.yml
     provides:
       file-exports:
-        # Common template partials
-        - source: shared/_common/templates/home/index.page.tmpl
-          target: shared/machine-portal-untrusted/templates/home/index.page.tmpl
-        - source: shared/_common/templates/home/index.advanced.page.tmpl
-          target: shared/machine-portal-untrusted/templates/home/index.advanced.page.tmpl
-        - source: shared/_common/templates/home/20-apps.section.partial.tmpl
-          target: shared/machine-portal-untrusted/templates/home/20-apps.section.partial.tmpl
-        - source: shared/_common/templates/home/20-apps.section.advanced.partial.tmpl
-          target: shared/machine-portal-untrusted/templates/home/20-apps.section.advanced.partial.tmpl
-        - source: shared/_common/templates/home/30-help.section.advanced.partial.tmpl
-          target: shared/machine-portal-untrusted/templates/home/30-help.section.advanced.partial.tmpl
-        - source: shared/_common/templates/home/40-advanced.section.advanced.partial.tmpl
-          target: shared/machine-portal-untrusted/templates/home/40-advanced.section.advanced.partial.tmpl
-        - source: shared/_common/templates/home/help/10-wrong-machine.section.partial.tmpl
-          target: shared/machine-portal-untrusted/templates/home/help/10-wrong-machine.section.partial.tmpl
-        - source: shared/_common/templates/home/help/20-documentation.section.partial.tmpl
-          target: shared/machine-portal-untrusted/templates/home/help/20-documentation.section.partial.tmpl
-        - source: shared/_common/templates/home/help/30-community.section.partial.tmpl
-          target: shared/machine-portal-untrusted/templates/home/help/30-community.section.partial.tmpl
-        - source: shared/_common/templates/home/help/community/10-openuc2-website.item.partial.tmpl
-          target: shared/machine-portal-untrusted/templates/home/help/community/10-openuc2-website.item.partial.tmpl
-        - source: shared/_common/templates/home/help/community/20-openuc2-shop.item.partial.tmpl
-          target: shared/machine-portal-untrusted/templates/home/help/community/20-openuc2-shop.item.partial.tmpl
-        - source: shared/_common/templates/home/help/community/30-openuc2-discourse.item.partial.tmpl
-          target: shared/machine-portal-untrusted/templates/home/help/community/30-openuc2-discourse.item.partial.tmpl
-        - source: shared/_common/templates/home/help/community/40-openuc2-github.item.partial.tmpl
-          target: shared/machine-portal-untrusted/templates/home/help/community/40-openuc2-github.item.partial.tmpl
-        - source: shared/_common/templates/home/advanced/10-browser-apps.section.partial.tmpl
-          target: shared/machine-portal-untrusted/templates/home/advanced/10-browser-apps.section.partial.tmpl
-        - source: shared/_common/templates/home/advanced/20-network-apis.section.partial.tmpl
-          target: shared/machine-portal-untrusted/templates/home/advanced/20-network-apis.section.partial.tmpl
-        - source: shared/_common/templates/home/advanced/30-sys-infra.section.partial.tmpl
-          target: shared/machine-portal-untrusted/templates/home/advanced/30-sys-infra.section.partial.tmpl
-        - source: shared/_common/templates/home/advanced/browser-apps/10-sysadmin.section.partial.tmpl
-          target: shared/machine-portal-untrusted/templates/home/advanced/browser-apps/10-sysadmin.section.partial.tmpl
-        - source: shared/_common/templates/home/advanced/sys-infra/10-networking.section.partial.tmpl
-          target: shared/machine-portal-untrusted/templates/home/advanced/sys-infra/10-networking.section.partial.tmpl
-        - source: shared/_common/templates/home/advanced/sys-infra/20-app-mgmt.section.partial.tmpl
-          target: shared/machine-portal-untrusted/templates/home/advanced/sys-infra/20-app-mgmt.section.partial.tmpl
-        - source: shared/_common/templates/home/advanced/sys-infra/networking/40-device-portal.item.partial.tmpl
-          target: shared/machine-portal-untrusted/templates/home/advanced/sys-infra/networking/40-device-portal.item.partial.tmpl
         # Untrusted-only template partials
-        - source: shared/_untrusted/templates/home/10-overview.section.partial.tmpl
-          target: shared/machine-portal-untrusted/templates/home/10-overview.section.partial.tmpl
-        - source: shared/_untrusted/templates/home/10-overview.section.advanced.partial.tmpl
-          target: shared/machine-portal-untrusted/templates/home/10-overview.section.advanced.partial.tmpl
+        - target: shared/machine-portal-untrusted/templates/home/10-overview.section.partial.tmpl
+        - target: shared/machine-portal-untrusted/templates/home/10-overview.section.advanced.partial.tmpl
   frontend-untrusted:
     description: Provides untrusted access to the untrusted browser landing page
     compose-files:
