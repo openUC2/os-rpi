@@ -34,6 +34,11 @@ features:
           paths:
             - /openUC2
             - /openUC2/*
+      file-exports:
+        - target: shared/machine-portal-common/templates/home/help/documentation/10-project-docs.item.partial.tmpl
+        - target: shared/machine-portal-common/templates/home/help/documentation/20-frame-tutorials.item.partial.tmpl
+        - target: shared/machine-portal-common/templates/home/help/documentation/30-frame-guides.item.partial.tmpl
+        - target: shared/machine-portal-common/templates/home/help/documentation/40-discovery-line-usage.item.partial.tmpl
   website-untrusted:
     description: Provides untrusted access to the website
     compose-files:
@@ -54,6 +59,11 @@ features:
           paths:
             - /openUC2
             - /openUC2/*
+      file-exports:
+        - target: shared/machine-portal-common/templates/home/help/documentation/10-project-docs.item.partial.tmpl
+        - target: shared/machine-portal-common/templates/home/help/documentation/20-frame-tutorials.item.partial.tmpl
+        - target: shared/machine-portal-common/templates/home/help/documentation/30-frame-guides.item.partial.tmpl
+        - target: shared/machine-portal-common/templates/home/help/documentation/40-discovery-line-usage.item.partial.tmpl
   docs-full:
     description: Provides a complete copy of the openUC2 project documentation
     compose-files:

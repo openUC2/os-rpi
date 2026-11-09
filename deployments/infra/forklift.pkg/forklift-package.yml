@@ -20,6 +20,8 @@ deployment:
         target: overlays/usr/lib/systemd/system/report-versioning-forklift.timer
       - description: systemd service enablement for report-versioning-forklift.timer
         target: overlays/etc/systemd/system/multi-user.target.wants/report-versioning-forklift.timer
+      # Landing page template partials
+      - target: shared/machine-portal-common/templates/home/advanced/sys-infra/app-mgmt/10-forklift.item.partial.tmpl
 
 features:
   motd:
