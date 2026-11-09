@@ -165,9 +165,15 @@ features:
             which should be managed by NetworkManager instead
           target: overlays/etc/systemd/network/80-wifi-adhoc.network
         - target: overlays/etc/systemd/system/multi-user.target.wants/systemd-networkd.service
-  dev-edge:
-    description: >-
-      Uses the `edge` tag for the ImSwitch docker container image, for faster development
-      iteration but no build reproducibility
+  dev-upgrade-os:
+    description: Allows ImSwitch to upgrade the OS via Forklift
     compose-files:
-      - dev-edge.yml
+      - dev-upgrade-os.compose.yml
+    provides:
+      file-exports:
+        - description: >-
+            systemd service run by ImSwitch's (experimental) pallet upgrade button:
+            `forklift plt upgrade --force && forklift stage apply`
+          target: overlays/usr/lib/systemd/system/imswitch-pallet-upgrade.service
+        - description: polkit rule letting pi (the ImSwitch container user) start only that service
+          target: overlays/usr/share/polkit-1/rules.d/20-imswitch-pallet-upgrade.rules
