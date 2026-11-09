@@ -168,7 +168,7 @@ features:
   dev-upgrade-os:
     description: Allows ImSwitch to upgrade the OS via Forklift
     compose-files:
-      - dev-upgrade-os.yml
+      - dev-upgrade-os.compose.yml
     provides:
       file-exports:
         - description: >-
