@@ -15,6 +15,7 @@ deployment:
         port: 5249
         protocol: tcp
     file-exports:
+      # Firmware images:
       - description: udev rules for unprivileged access to hardware
         target: overlays/usr/lib/udev/rules.d/65-flim-zest-sc3.rules
       - description: FLIM firmware image
@@ -172,6 +173,8 @@ deployment:
         url: https://github.com/flim-labs/flim-firmwares/archive/bc670b5ef3e03f3437d732fb92cc784b566480a0.tar.gz
         source: flim-firmwares-bc670b5ef3e03f3437d732fb92cc784b566480a0/imaging_plf_80_chsma_out_sysma.flim
         target: shared/flim-imager/firmware/imaging_plf_80_chsma_out_sysma.flim
+      # Landing page template partials:
+      - target: shared/machine-portal-common/templates/home/apps/25-flim-imager.item.partial.tmpl
 
 features:
   firewall-allow-direct:
