@@ -174,7 +174,7 @@ deployment:
         source: flim-firmwares-bc670b5ef3e03f3437d732fb92cc784b566480a0/imaging_plf_80_chsma_out_sysma.flim
         target: shared/flim-imager/firmware/imaging_plf_80_chsma_out_sysma.flim
       # Landing page template partials:
-      - target: shared/machine-portal-common/templates/home/apps/25-flim-imager.item.partial.tmpl
+      - target: shared/machine-portal-common/templates/home/apps/15-flim-imager.item.partial.tmpl
 
 features:
   firewall-allow-direct:
