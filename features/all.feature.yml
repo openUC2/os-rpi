@@ -7,6 +7,8 @@ modifiers:
   - type: add-feature
     source: admin/all
   - type: add-feature
+    source: provisioning/all
+  - type: add-feature
     source: openuc2/all
   - type: add-feature
     source: dev/all

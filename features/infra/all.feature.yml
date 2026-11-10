@@ -7,4 +7,4 @@ modifiers:
   - type: add-feature
     source: base/identity
   - type: add-feature
-    source: base/storage
+    source: base/usb

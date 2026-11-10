@@ -1,0 +1,4 @@
+description: Remote access to the device via mesh VPN
+modifiers:
+  - target: /deployments/networking/tailscale.pkg
+  - target: /deployments/networking/tailscale.deploy.yml

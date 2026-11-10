@@ -1,0 +1,8 @@
+description: Tools for provisioning new devices
+modifiers:
+  - type: add-feature
+    source: base/init-root
+  - type: add-feature
+    source: base/wireless-access
+  - type: add-feature
+    source: base/remote-access

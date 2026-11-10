@@ -4,5 +4,7 @@ modifiers:
     source: base/firewall
   - target: /deployments/infra/caddy-ingress.pkg
   - target: /deployments/infra/caddy-ingress.deploy.yml
-  - target: /deployments/infra/device-portal.pkg
-  - target: /deployments/infra/device-portal.deploy.yml
+  - target: /deployments/infra/caddy-ingress-untrusted.pkg
+  - target: /deployments/infra/caddy-ingress-untrusted.deploy.yml
+  - target: /deployments/infra/machine-portal.pkg
+  - target: /deployments/infra/machine-portal.deploy.yml

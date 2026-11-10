@@ -10,5 +10,7 @@ modifiers:
     source: networking/wired-access
   - type: add-feature
     source: networking/wireless-access
-  - target: /packages/core/host/networking/mac-addresses
-  - target: /deployments/host/networking/mac-addresses.deploy.yml
+  - type: add-feature
+    source: networking/wireless-internet
+  - type: add-feature
+    source: networking/remote-access
