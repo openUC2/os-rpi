@@ -1,7 +1,7 @@
 description: All network configurations for device access
 modifiers:
   - type: add-feature
-    source: networking/machine-name
+    source: infra/identity
   - type: add-feature
     source: networking/firewall
   - type: add-feature
