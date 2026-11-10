@@ -1,10 +1,10 @@
 description: All base infrastructure to enable running apps
 modifiers:
   - type: add-feature
-    source: base/containers
+    source: infra/containers
   - type: add-feature
-    source: base/http
+    source: infra/http
   - type: add-feature
-    source: base/identity
+    source: infra/identity
   - type: add-feature
-    source: base/usb
+    source: infra/usb
