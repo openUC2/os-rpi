@@ -21,12 +21,15 @@ deployment:
         port: 3333
         protocol: tcp
     file-exports:
+      # Always installed, so that switching the slm-display feature off undoes its
+      # cmdline.txt change (the feature's own unit is gone then).
+      - description: Script adding (apply) or removing (revert) the SLM display kernel parameters
+        target: overlays/usr/libexec/imswitch-slm-display-cmdline
       - description: >-
-          systemd service run by ImSwitch's (experimental) pallet upgrade button:
-          `forklift plt upgrade --force && forklift stage apply`
-        target: overlays/usr/lib/systemd/system/imswitch-pallet-upgrade.service
-      - description: polkit rule letting pi (the ImSwitch container user) start only that service
-        target: overlays/usr/share/polkit-1/rules.d/20-imswitch-pallet-upgrade.rules
+          systemd service removing the SLM display kernel parameters once slm-display is disabled
+        target: overlays/usr/lib/systemd/system/imswitch-slm-display-revert.service
+      - description: systemd service enablement for imswitch-slm-display-revert.service
+        target: overlays/etc/systemd/system/multi-user.target.wants/imswitch-slm-display-revert.service
 
 features:
   frontend:
@@ -181,8 +184,7 @@ features:
       file-exports:
         - description: systemd service adding the SLM display kernel parameters to cmdline.txt
           target: overlays/usr/lib/systemd/system/imswitch-slm-display.service
-        - description: >-
-            systemd service enablement for imswitch-slm-display.service,
+        - description: systemd service enablement for imswitch-slm-display.service
           target: overlays/etc/systemd/system/multi-user.target.wants/imswitch-slm-display.service
   dev-upgrade-os:
     description: Allows ImSwitch to upgrade the OS via Forklift

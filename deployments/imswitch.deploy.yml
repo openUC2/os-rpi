@@ -12,5 +12,4 @@ features:
   - can-interface
   # - slm-display # HDMI output as an SLM/DMD display: detaches the text console from /dev/fb0
   - dev-upgrade-os
-
 disabled: false

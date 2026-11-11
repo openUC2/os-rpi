@@ -1,0 +1,63 @@
+#!/bin/bash -eu
+# imswitch-slm-display-cmdline apply|revert
+#
+# apply:  add the kernel parameters that keep the text console, its cursor and screen
+#         blanking off /dev/fb0 (HDMI output as an ImSwitch SLM/DMD display), plus an
+#         optional video mode (SLM_VIDEO_MODE, from /etc/imswitch-slm-display.conf).
+#         Each parameter it adds is recorded with the token it replaced (if any).
+# revert: undo exactly what apply recorded; parameters set by anyone else stay.
+# Both take effect at the next boot.
+
+cmdline="${SLM_CMDLINE:-/boot/firmware/cmdline.txt}"
+state="${SLM_STATE:-/var/lib/imswitch-slm-display/applied}"
+
+# A parameter's key: "video=HDMI-A-1" for video=HDMI-A-1:1920x1080@60D (one per output),
+# "fbcon=map" for fbcon=map:1, "consoleblank" for consoleblank=0.
+key() { case "$1" in *:*) echo "${1%%:*}" ;; *) echo "${1%%=*}" ;; esac; }
+without_key() {  # $1 = key, $2.. = tokens; prints the tokens whose key differs
+  local k="$1" t; shift
+  for t in "$@"; do [ "$(key "$t")" = "$k" ] || printf '%s ' "$t"; done
+}
+token_of_key() {
+  local k="$1" t; shift
+  for t in "$@"; do [ "$(key "$t")" = "$k" ] && { echo "$t"; return; }; done; true
+}
+
+read -r -a tokens <"$cmdline"
+original="${tokens[*]}"
+
+case "${1:-}" in
+apply)
+  params="consoleblank=0 vt.global_cursor_default=0 fbcon=map:1"
+  if [ -n "${SLM_VIDEO_MODE:-}" ]; then params="$params video=$SLM_VIDEO_MODE"; fi
+  mkdir -p "$(dirname "$state")"
+  touch "$state"
+  for p in $params; do
+    k="$(key "$p")"
+    case " ${tokens[*]} " in *" $p "*) continue ;; esac
+    # First time this key is touched: remember what was there, for revert
+    if ! cut -f1 "$state" | grep -qxF "$k"; then
+      printf '%s\t%s\n' "$k" "$(token_of_key "$k" "${tokens[@]}")" >>"$state"
+    fi
+    read -r -a tokens <<<"$(without_key "$k" "${tokens[@]}") $p"
+  done
+  ;;
+revert)
+  [ -f "$state" ] || { echo "Nothing to revert ($state missing)"; exit 0; }
+  while IFS=$'\t' read -r k previous; do
+    read -r -a tokens <<<"$(without_key "$k" "${tokens[@]}") $previous"
+  done <"$state"
+  ;;
+*)
+  echo "usage: $0 apply|revert" >&2
+  exit 2
+  ;;
+esac
+
+if [ "${tokens[*]}" = "$original" ]; then
+  echo "$cmdline unchanged"
+else
+  echo "$1: $cmdline: $original -> ${tokens[*]}"
+  echo "${tokens[*]}" >"$cmdline"
+fi
+if [ "$1" = revert ]; then rm -f "$state"; fi
