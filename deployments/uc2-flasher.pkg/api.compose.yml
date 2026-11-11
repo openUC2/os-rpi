@@ -4,8 +4,8 @@ services:
       - caddy-ingress
     labels:
       caddy: http://
-      caddy.redir: /flasher /flasher/
-      caddy.handle_path: /flasher/*
+      caddy.redir: /uc2-flasher /uc2-flasher/
+      caddy.handle_path: /uc2-flasher/*
       caddy.handle_path.reverse_proxy: "{{upstreams 8004}}"
 
 networks:

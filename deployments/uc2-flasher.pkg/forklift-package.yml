@@ -10,7 +10,7 @@ deployment:
 
 features:
   api:
-    description: Serves the flasher at /flasher
+    description: Serves the flasher at /uc2-flasher, linked from the landing page
     compose-files:
       - api.compose.yml
     requires:
@@ -27,5 +27,7 @@ features:
           port: 80
           protocol: http
           paths:
-            - /flasher
-            - /flasher/*
+            - /uc2-flasher
+            - /uc2-flasher/*
+      file-exports:
+        - target: shared/machine-portal-common/templates/home/apps/20-uc2-flasher.item.partial.tmpl
