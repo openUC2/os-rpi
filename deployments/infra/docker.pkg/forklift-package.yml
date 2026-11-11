@@ -23,6 +23,13 @@ host:
         paths:
           - /usr/bin/dockerd
 
+deployment:
+  provides:
+    file-exports:
+      # Landing page template partials:
+      - target: shared/machine-portal-common/templates/home/advanced/sys-infra/app-mgmt/20-docker-compose.item.partial.tmpl
+      - target: shared/machine-portal-common/templates/home/advanced/sys-infra/app-mgmt/30-docker.item.partial.tmpl
+
 features:
   start-before-network-online:
     description:

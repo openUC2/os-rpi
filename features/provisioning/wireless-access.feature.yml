@@ -1,0 +1,4 @@
+description: Support for initializing Wi-Fi settings
+modifiers:
+  - target: /deployments/infra/set-wifi-country.pkg
+  - target: /deployments/infra/set-wifi-country.deploy.yml
