@@ -24,6 +24,7 @@ jobs:
       matrix:
         forklift-version:
           - 0.8.0
+          - 0.9.0-alpha.1
         platform:
           - runner: ubuntu-24.04-arm
             arch: arm64
