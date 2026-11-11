@@ -1,0 +1,13 @@
+services:
+  server:
+    networks:
+      - caddy-ingress
+    labels:
+      caddy: http://
+      caddy.redir: /flasher /flasher/
+      caddy.handle_path: /flasher/*
+      caddy.handle_path.reverse_proxy: "{{upstreams 8004}}"
+
+networks:
+  caddy-ingress:
+    external: true

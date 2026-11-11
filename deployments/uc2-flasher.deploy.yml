@@ -1,0 +1,5 @@
+package: /deployments/uc2-flasher.pkg
+features:
+  - api
+# Opt-in: it shares the HAT's serial port with ImSwitch; stop ImSwitch before flashing.
+disabled: true
