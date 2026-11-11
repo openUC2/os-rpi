@@ -1,0 +1,6 @@
+description: Internet connectivity via Wi-Fi
+modifiers:
+  - target: /deployments/networking/fix-nmconnection-perms.pkg
+  - target: /deployments/networking/fix-nmconnection-perms.deploy.yml
+  - target: /deployments/networking/networkmanager/wifi-internet.pkg
+  - target: /deployments/networking/networkmanager/wifi-internet.deploy.yml

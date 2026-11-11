@@ -1,16 +1,35 @@
 services:
   server:
+    volumes:
+      - type: bind
+        source: frontend.filebrowser.yml
+        target: /configs/frontend.filebrowser.yml
+        bind:
+          create_host_path: false
     networks:
       - caddy-ingress
     environment:
-      - FB_PORT=80 # for some reason filebrowser doesn't work if this is port 8080
-      - FB_BASE_URL=/admin/fs
-      - FB_NOAUTH=true
+      - FILEBROWSER_CONFIG=/configs/frontend.filebrowser.yml
     labels:
       caddy: http://
       caddy.redir: /admin/fs /admin/fs/
-      caddy.handle: /admin/fs/*
-      caddy.handle.reverse_proxy: "{{upstreams 80}}"
+
+      # Public endpoints (no authentication)
+      caddy.handle_0: /admin/fs/public/*
+      caddy.handle_0.reverse_proxy: "{{upstreams 80}}"
+      caddy.handle_0.reverse_proxy.header_up_0: "Host {host}"
+      caddy.handle_0.reverse_proxy.header_up_1: "X-Forwarded-For {remote_host}"
+      caddy.handle_0.reverse_proxy.header_up_2: "X-Forwarded-Proto {scheme}"
+
+      # Private endpoints
+      caddy.handle_1: /admin/fs/*
+      caddy.handle_1.reverse_proxy: "{{upstreams 80}}"
+      caddy.handle_1.reverse_proxy.header_up_0: "Host {host}"
+      caddy.handle_1.reverse_proxy.header_up_1: "X-Forwarded-For {remote_host}"
+      caddy.handle_1.reverse_proxy.header_up_2: "X-Forwarded-Proto {scheme}"
+      # Support file uploads:
+      caddy.handle_1.reverse_proxy.header_up_3: "Connection {>Connection}"
+      caddy.handle_1.reverse_proxy.header_up_4: "Transfer-Encoding {>Transfer-Encoding}"
 
 networks:
   default:

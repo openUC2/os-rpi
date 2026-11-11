@@ -1,11 +1,13 @@
 services:
   server:
-    image: docker.io/amir20/dozzle:v10.7.4@sha256:068025ea622a1ce3e343a138dd9a962429b5187a133aca301bb4991fe7d2b708
+    image: docker.io/amir20/dozzle:v11.4.2@sha256:08cd5230e21e364241f3dcf26191f293166f7835654eb7e41168b9c685f0947b
     volumes:
       - type: bind
         source: /run/docker.sock
         target: /var/run/docker.sock
         bind:
           create_host_path: false
-    environment:
-      - DOZZLE_ENABLE_ACTIONS=true
+      - server-data:/data
+
+volumes:
+  server-data: {}

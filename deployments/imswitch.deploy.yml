@@ -8,5 +8,7 @@ features:
   - daheng-cameras
   - tucsen-cameras
   - touptek-cameras
+  - alliedvision-cameras
   - can-interface
+  - dev-upgrade-os
 disabled: false

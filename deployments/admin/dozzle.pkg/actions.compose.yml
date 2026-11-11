@@ -1,0 +1,4 @@
+services:
+  server:
+    environment:
+      - DOZZLE_ENABLE_ACTIONS=true
