@@ -214,8 +214,11 @@ jobs:
         with:
           image: ${{ steps.expand-image.outputs.destination }}
           user: ${{ env.SETUP_USER }}
+          # Note: the sudoers file is needed for RPi OS after the 2026-04-13 build of RPi OS Trixie,
+          # which disables passwordless sudo by default, since this step runs as user pi.
           args: >-
             --bind ${{ steps.setup-precaching.outputs.path }}:/run/container-images
+            --bind "$(pwd)/os-build/sudoers-pi":/etc/sudoers.d/010_pi-nopasswd
             --machine=raspberrypi
           run: |
             local_cache="$HOME/.cache/forklift/containers/docker-archives/"
@@ -274,8 +277,11 @@ jobs:
           # Note: CAP_NET_ADMIN is needed for iptables, which is needed for Docker (at least in an
           # unbooted container). Setting the machine ID (and therefore hostname) to `raspberrypi`
           # resolves noisy (but harmless) error messages from sudo.
+          # Note: the sudoers file is needed for RPi OS after the 2026-04-13 build of RPi OS Trixie,
+          # which disables passwordless sudo by default, since this step runs as user pi.
           args: >-
             --bind "$(pwd)":/run/pallet
+            --bind "$(pwd)/os-build/sudoers-pi":/etc/sudoers.d/010_pi-nopasswd
             --capability=CAP_NET_ADMIN
             --machine=raspberrypi
           run: |
