@@ -310,7 +310,7 @@ jobs:
             --machine=raspberrypi
           run: |
             apt update
-            apt upgrade ca-certificates libnss3
+            apt-get install ca-certificates libnss3
 
 
       - name: Prepare for a headless first boot on bare metal
