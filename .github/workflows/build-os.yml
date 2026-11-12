@@ -204,7 +204,7 @@ jobs:
       # Actions log outputs for setting up pinspawn-action for the first time from the logs for
       # pre-downloading container images
       - name: Install pinspawn-action dependencies
-        uses: ethanjli/pinspawn-action@db40697614fdb87a86803a375408ab55d68b008e
+        uses: ethanjli/pinspawn-action@v0.1.6-beta.0
         with:
           image: ${{ steps.expand-image.outputs.destination }}
           run: echo "Done!"
@@ -216,7 +216,7 @@ jobs:
           sudo chown root:root "$(pwd)/os-build/sudoers-pi"
 
       - name: Move pre-downloaded container images into OS image
-        uses: ethanjli/pinspawn-action@db40697614fdb87a86803a375408ab55d68b008e
+        uses: ethanjli/pinspawn-action@v0.1.6-beta.0
         with:
           image: ${{ steps.expand-image.outputs.destination }}
           user: ${{ env.SETUP_USER }}
@@ -270,13 +270,13 @@ jobs:
       # Actions log outputs for setting up pinspawn-action for the first time from the logs for
       # the OS installation script
       - name: Install pinspawn-action dependencies
-        uses: ethanjli/pinspawn-action@db40697614fdb87a86803a375408ab55d68b008e
+        uses: ethanjli/pinspawn-action@v0.1.6-beta.0
         with:
           image: ${{ steps.expand-image.outputs.destination }}
           run: echo "Done!"
 
       - name: Run OS setup scripts in an unbooted container
-        uses: ethanjli/pinspawn-action@db40697614fdb87a86803a375408ab55d68b008e
+        uses: ethanjli/pinspawn-action@v0.1.6-beta.0
         with:
           image: ${{ steps.expand-image.outputs.destination }}
           user: ${{ env.SETUP_USER }}
@@ -303,7 +303,7 @@ jobs:
       - name: Add temporary mitigation for eMudhra certificate compromise
         # Note: this is needed for RPi OS images from 2026-10-06 and earlier.
         # TODO: bump RPi OS to a newer version so that we can remove this step!
-        uses: ethanjli/pinspawn-action@db40697614fdb87a86803a375408ab55d68b008e
+        uses: ethanjli/pinspawn-action@v0.1.6-beta.0
         with:
           image: ${{ steps.expand-image.outputs.destination }}
           args: >-
@@ -314,7 +314,7 @@ jobs:
 
 
       - name: Prepare for a headless first boot on bare metal
-        uses: ethanjli/pinspawn-action@db40697614fdb87a86803a375408ab55d68b008e
+        uses: ethanjli/pinspawn-action@v0.1.6-beta.0
         env:
           DEFAULT_PASSWORD: youseetoo
           DEFAULT_KEYBOARD_LAYOUT: de
@@ -346,7 +346,7 @@ jobs:
             systemctl enable getty@tty1
 
       - name: Freeze snapshots for factory reset
-        uses: ethanjli/pinspawn-action@db40697614fdb87a86803a375408ab55d68b008e
+        uses: ethanjli/pinspawn-action@v0.1.6-beta.0
         with:
           image: ${{ steps.expand-image.outputs.destination }}
           args: >-
