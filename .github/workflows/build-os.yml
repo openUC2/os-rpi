@@ -41,7 +41,7 @@ on:
 jobs:
   build-os-image:
     name: Build image
-    runs-on: ubuntu-24.04-arm
+    runs-on: ubuntu-26.04-arm
     env:
       SETUP_USER: pi
       TAG_PREFIX: "v"
@@ -204,18 +204,27 @@ jobs:
       # Actions log outputs for setting up pinspawn-action for the first time from the logs for
       # pre-downloading container images
       - name: Install pinspawn-action dependencies
-        uses: ethanjli/pinspawn-action@v0.1.5
+        uses: ethanjli/pinspawn-action@v0.1.6-beta.0
         with:
           image: ${{ steps.expand-image.outputs.destination }}
           run: echo "Done!"
 
+      - name: Prepare to run sudo commands in OS image
+        # Note: the sudoers file is needed for RPi OS after the 2026-04-13 build of RPi OS Trixie,
+        # which disables passwordless sudo by default; the sudoers file must be owned by sudo
+        run: |
+          sudo chown root:root "$(pwd)/os-build/sudoers-pi"
+
       - name: Move pre-downloaded container images into OS image
-        uses: ethanjli/pinspawn-action@v0.1.5
+        uses: ethanjli/pinspawn-action@v0.1.6-beta.0
         with:
           image: ${{ steps.expand-image.outputs.destination }}
           user: ${{ env.SETUP_USER }}
+          # Note: the sudoers file is needed for RPi OS after the 2026-04-13 build of RPi OS Trixie,
+          # which disables passwordless sudo by default, since this step runs as user pi.
           args: >-
             --bind ${{ steps.setup-precaching.outputs.path }}:/run/container-images
+            --bind "$(pwd)/os-build/sudoers-pi":/etc/sudoers.d/010_pi-nopasswd
             --machine=raspberrypi
           run: |
             local_cache="$HOME/.cache/forklift/containers/docker-archives/"
@@ -261,21 +270,24 @@ jobs:
       # Actions log outputs for setting up pinspawn-action for the first time from the logs for
       # the OS installation script
       - name: Install pinspawn-action dependencies
-        uses: ethanjli/pinspawn-action@v0.1.5
+        uses: ethanjli/pinspawn-action@v0.1.6-beta.0
         with:
           image: ${{ steps.expand-image.outputs.destination }}
           run: echo "Done!"
 
       - name: Run OS setup scripts in an unbooted container
-        uses: ethanjli/pinspawn-action@v0.1.5
+        uses: ethanjli/pinspawn-action@v0.1.6-beta.0
         with:
           image: ${{ steps.expand-image.outputs.destination }}
           user: ${{ env.SETUP_USER }}
           # Note: CAP_NET_ADMIN is needed for iptables, which is needed for Docker (at least in an
           # unbooted container). Setting the machine ID (and therefore hostname) to `raspberrypi`
           # resolves noisy (but harmless) error messages from sudo.
+          # Note: the sudoers file is needed for RPi OS after the 2026-04-13 build of RPi OS Trixie,
+          # which disables passwordless sudo by default, since this step runs as user pi.
           args: >-
             --bind "$(pwd)":/run/pallet
+            --bind "$(pwd)/os-build/sudoers-pi":/etc/sudoers.d/010_pi-nopasswd
             --capability=CAP_NET_ADMIN
             --machine=raspberrypi
           run: |
@@ -288,8 +300,21 @@ jobs:
               "${{ inputs.build_variant }}" "${{ steps.pallet-upgrade.outputs.version_query }}"
             echo "Done!"
 
+      - name: Add temporary mitigation for eMudhra certificate compromise
+        # Note: this is needed for RPi OS images from 2026-10-06 and earlier.
+        # TODO: bump RPi OS to a newer version so that we can remove this step!
+        uses: ethanjli/pinspawn-action@v0.1.6-beta.0
+        with:
+          image: ${{ steps.expand-image.outputs.destination }}
+          args: >-
+            --machine=raspberrypi
+          run: |
+            apt-get -o Dpkg::Progress-Fancy=0 update
+            apt-get -o Dpkg::Progress-Fancy=0 install ca-certificates libnss3
+
+
       - name: Prepare for a headless first boot on bare metal
-        uses: ethanjli/pinspawn-action@v0.1.5
+        uses: ethanjli/pinspawn-action@v0.1.6-beta.0
         env:
           DEFAULT_PASSWORD: youseetoo
           DEFAULT_KEYBOARD_LAYOUT: de
@@ -321,7 +346,7 @@ jobs:
             systemctl enable getty@tty1
 
       - name: Freeze snapshots for factory reset
-        uses: ethanjli/pinspawn-action@v0.1.5
+        uses: ethanjli/pinspawn-action@v0.1.6-beta.0
         with:
           image: ${{ steps.expand-image.outputs.destination }}
           args: >-
