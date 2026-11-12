@@ -309,8 +309,8 @@ jobs:
           args: >-
             --machine=raspberrypi
           run: |
-            apt update
-            apt-get install ca-certificates libnss3
+            apt-get -o Dpkg::Progress-Fancy=0 update
+            apt-get -o Dpkg::Progress-Fancy=0 install ca-certificates libnss3
 
 
       - name: Prepare for a headless first boot on bare metal
