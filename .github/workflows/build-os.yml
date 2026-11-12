@@ -209,6 +209,12 @@ jobs:
           image: ${{ steps.expand-image.outputs.destination }}
           run: echo "Done!"
 
+      - name: Prepare to run sudo commands in OS image
+        # Note: the sudoers file is needed for RPi OS after the 2026-04-13 build of RPi OS Trixie,
+        # which disables passwordless sudo by default; the sudoers file must be owned by sudo
+        run: |
+          sudo chown root:root "$(pwd)/os-build/sudoers-pi"
+
       - name: Move pre-downloaded container images into OS image
         uses: ethanjli/pinspawn-action@v0.1.5
         with:
