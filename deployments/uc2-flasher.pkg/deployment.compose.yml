@@ -1,6 +1,6 @@
 services:
   server:
-    image: ghcr.io/youseetoo/uc2-flasher:sha-5737b58
+    image: ghcr.io/youseetoo/uc2-flasher:main
     volumes:
       - /dev:/dev
       - /run/udev:/run/udev:ro
