@@ -41,7 +41,7 @@ on:
 jobs:
   build-os-image:
     name: Build image
-    runs-on: ubuntu-26.04-arm
+    runs-on: ubuntu-24.04-arm
     env:
       SETUP_USER: pi
       TAG_PREFIX: "v"
@@ -204,13 +204,13 @@ jobs:
       # Actions log outputs for setting up pinspawn-action for the first time from the logs for
       # pre-downloading container images
       - name: Install pinspawn-action dependencies
-        uses: ethanjli/pinspawn-action@e31ffa4304f876513c407567dc3d3e08e133cad3
+        uses: ethanjli/pinspawn-action@v0.1.5
         with:
           image: ${{ steps.expand-image.outputs.destination }}
           run: echo "Done!"
 
       - name: Move pre-downloaded container images into OS image
-        uses: ethanjli/pinspawn-action@e31ffa4304f876513c407567dc3d3e08e133cad3
+        uses: ethanjli/pinspawn-action@v0.1.5
         with:
           image: ${{ steps.expand-image.outputs.destination }}
           user: ${{ env.SETUP_USER }}
@@ -261,13 +261,13 @@ jobs:
       # Actions log outputs for setting up pinspawn-action for the first time from the logs for
       # the OS installation script
       - name: Install pinspawn-action dependencies
-        uses: ethanjli/pinspawn-action@e31ffa4304f876513c407567dc3d3e08e133cad3
+        uses: ethanjli/pinspawn-action@v0.1.5
         with:
           image: ${{ steps.expand-image.outputs.destination }}
           run: echo "Done!"
 
       - name: Run OS setup scripts in an unbooted container
-        uses: ethanjli/pinspawn-action@e31ffa4304f876513c407567dc3d3e08e133cad3
+        uses: ethanjli/pinspawn-action@v0.1.5
         with:
           image: ${{ steps.expand-image.outputs.destination }}
           user: ${{ env.SETUP_USER }}
@@ -289,7 +289,7 @@ jobs:
             echo "Done!"
 
       - name: Prepare for a headless first boot on bare metal
-        uses: ethanjli/pinspawn-action@e31ffa4304f876513c407567dc3d3e08e133cad3
+        uses: ethanjli/pinspawn-action@v0.1.5
         env:
           DEFAULT_PASSWORD: youseetoo
           DEFAULT_KEYBOARD_LAYOUT: de
@@ -321,7 +321,7 @@ jobs:
             systemctl enable getty@tty1
 
       - name: Freeze snapshots for factory reset
-        uses: ethanjli/pinspawn-action@e31ffa4304f876513c407567dc3d3e08e133cad3
+        uses: ethanjli/pinspawn-action@v0.1.5
         with:
           image: ${{ steps.expand-image.outputs.destination }}
           args: >-
