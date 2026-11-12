@@ -26,9 +26,9 @@ jobs:
           - 0.8.0
           - 0.9.0-alpha.1
         platform:
-          - runner: ubuntu-26.04-arm
+          - runner: ubuntu-24.04-arm
             arch: arm64
-          - runner: ubuntu-26.04
+          - runner: ubuntu-24.04
             arch: amd64
     runs-on: ${{ matrix.platform.runner }}
     defaults:
