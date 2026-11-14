@@ -15,6 +15,15 @@ echo \
   "https://download.docker.com/linux/debian $DISTRO_VERSION_CODENAME stable" |
   sudo tee /etc/apt/sources.list.d/docker.list >/dev/null
 sudo -E apt-get update -y -o Dpkg::Progress-Fancy=0
+
+# Docker >= 29.9.0 (moby/moby#53615) makes `docker pull` download every compressed layer blob even
+# when the unpacked layers already exist. Because Forklift re-pulls the images which we've just
+# loaded from pre-downloaded tarballs, that adds a second (compressed) copy of every container image
+# (~2.7 GB) to the OS image. The `lazy-pull` feature (moby/moby#53877) restores the old behavior of
+# skipping layer content which the snapshotter already provides.
+sudo mkdir -p /etc/docker
+echo '{"features": {"lazy-pull": true}}' | sudo tee /etc/docker/daemon.json >/dev/null
+
 # The following command may fail with a post-install error if the system installed kernel updates
 # via apt upgrade but was not rebooted before installing docker-ce; however, even if this error
 # is reported, docker will work after reboot.
