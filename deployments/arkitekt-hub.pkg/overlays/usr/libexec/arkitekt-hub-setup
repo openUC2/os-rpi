@@ -1,0 +1,100 @@
+#!/bin/sh
+# Creates this machine's Arkitekt hub once, and writes the credentials its containers read.
+#
+# Run as root by arkitekt-hub-setup.service before Forklift starts the arkitekt-hub deployment.
+# konstruktor writes the per-machine files into $HUB (configs, the gateway's certificate, the
+# database and object-store credentials); Forklift owns the containers (deployment.compose.yml),
+# which read those credentials from $HUB/secrets. Connecting the hub to a coordination server is
+# left to a person, since it needs an approval in a browser:
+#   konstruktor hub connect --in /home/pi/arkitekt/arkitekt-hub --server go.arkitekt.live
+set -eu
+
+HUB=/home/pi/arkitekt/arkitekt-hub
+OWNER=pi
+KONSTRUKTOR=/usr/bin/konstruktor
+# konstruktor-v0.38.1/konstruktor-aarch64-unknown-linux-musl, as in that release's SHA256SUMS
+KONSTRUKTOR_SHA256=652d9ca53d4a218e90cb4ad4c22b3e251ebd28814b9819227a5c9a230c97bebc
+# The images deployment.compose.yml runs: the configs are written for exactly these.
+IMAGES="
+rekuest=jhnnsrs/rekuest:19@sha256:df456730c14bb1c92e85f241936245e91b8ae5adf2cdc5513c4fc4ca4be7a31e
+mikro=jhnnsrs/mikro:15@sha256:2e6069aa93b17bd9323ad7b131099ee68f882ed53b27e880dcd1c5abb9385b1f
+rekuest-takt=jhnnsrs/rekuest-takt:19@sha256:4b73f111499de61e2caea8e802f77b90e1f5e1fdc2e471e9b518a92d1fda1319
+db=jhnnsrs/daten:latest@sha256:5d00dc2000b833b9f9a7dea625d5d3516e9b5ee870f41c2381546040fcbaa043
+redis=redis:8.10.1@sha256:8a1efc5f479551822b47424ccae982026b633f28818eab0387348120a61e10e2
+rustfs=rustfs/rustfs:latest@sha256:b81d16a90ee25bd9511280127ca1471788c6e874cf0f0da759645f46b2dc1d74
+rustfs_init=jhnnsrs/init:latest@sha256:42acd97cb8368669c3673a289a64219bd5e162b1f10f81b72c4b540c2859cd45
+gateway=caddy:2.11.4@sha256:0c994536bddb66445885237f1a5dcc1916bccea922661c76b4e9fc24061f9b52
+"
+
+log() { echo "arkitekt-hub-setup: $*"; }
+
+if ! echo "$KONSTRUKTOR_SHA256  $KONSTRUKTOR" | sha256sum -c - >/dev/null 2>&1; then
+  log "$KONSTRUKTOR is missing or does not match its pinned checksum" >&2
+  exit 1
+fi
+
+mkdir -p "$HUB"
+chown "$OWNER:$OWNER" "$(dirname "$HUB")" "$HUB"
+
+if [ ! -f "$HUB/hub_config.yaml" ]; then
+  # Data without a hub profile is a broken or foreign hub: leave it alone.
+  for data in db_data rustfs_data; do
+    if [ -n "$(ls -A "$HUB/$data" 2>/dev/null)" ]; then
+      log "$HUB/$data holds data but there is no hub_config.yaml; not creating a hub over it" >&2
+      exit 1
+    fi
+  done
+  # Folders Docker made for the containers' mounts before the hub existed
+  find "$HUB" -mindepth 1 -depth -type d -empty -delete
+
+  # Advertised at this machine's addresses (not Docker's) and its mDNS name. Addresses that
+  # change later are advertised again with `konstruktor hub connect --reach this-network`.
+  hosts=""
+  for address in $(ip -4 -o addr show scope global |
+    awk '$2 !~ /^(docker|br-|veth|virbr)/ { split($4, a, "/"); print a[1] }'); do
+    hosts="$hosts --host $address"
+  done
+  hosts="$hosts --host $(hostname).local"
+  images=""
+  for image in $IMAGES; do
+    images="$images --image $image"
+  done
+
+  log "creating the hub in $HUB"
+  # shellcheck disable=SC2086 # the option lists are split on purpose
+  runuser -u "$OWNER" -- env HOME="/home/$OWNER" "$KONSTRUKTOR" hub create "$HUB" \
+    --name "$(hostname)" --identifier "$(hostname)" \
+    --services rekuest,mikro --no-plugin-engine --storage folder --mesh none \
+    $hosts $images --no-start --no-open --yes
+fi
+
+# The containers read the credentials from files, written from what konstruktor generated.
+umask 077
+mkdir -p "$HUB/secrets"
+for key in POSTGRES_USER POSTGRES_PASSWORD RUSTFS_ACCESS_KEY RUSTFS_SECRET_KEY; do
+  value=$(sed -n "s/^[[:space:]]*$key:[[:space:]]*//p" "$HUB/docker-compose.yaml" | head -n 1 |
+    tr -d "\"'")
+  if [ -z "$value" ]; then
+    log "no $key in $HUB/docker-compose.yaml" >&2
+    exit 1
+  fi
+  printf '%s' "$value" >"$HUB/secrets/$key.new"
+  mv "$HUB/secrets/$key.new" "$HUB/secrets/$key"
+done
+chown -R "$OWNER:$OWNER" "$HUB/secrets"
+chmod 700 "$HUB/secrets"
+
+# konstruktor writes these readable by everyone, but they hold tokens and keys. The containers
+# run as root and still read them.
+for file in hub_config.yaml hub_credentials.json docker-compose.yaml configs/rekuest.yaml \
+  configs/mikro.yaml configs/rustfs_init.yaml configs/gateway/hub.key; do
+  if [ -f "$HUB/$file" ]; then
+    chmod 600 "$HUB/$file"
+  fi
+done
+
+if [ -f "$HUB/hub_credentials.json" ]; then
+  log "ready"
+else
+  log "ready, not connected yet: konstruktor hub connect --in $HUB --server go.arkitekt.live"
+fi

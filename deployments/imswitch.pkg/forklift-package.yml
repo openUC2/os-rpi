@@ -194,6 +194,12 @@ features:
             which should be managed by NetworkManager instead
           target: overlays/etc/systemd/network/80-wifi-adhoc.network
         - target: overlays/etc/systemd/system/multi-user.target.wants/systemd-networkd.service
+  arkitekt:
+    description: >-
+      Keeps ImSwitch's Arkitekt login (in /home/pi/arkitekt/imswitch), so that a new container
+      reconnects to the Arkitekt server without asking for an approval again
+    compose-files:
+      - arkitekt.compose.yml
   dev-upgrade-os:
     description: Allows ImSwitch to upgrade the OS via Forklift
     compose-files:
