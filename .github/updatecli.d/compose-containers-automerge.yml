@@ -52,6 +52,8 @@ autodiscovery:
       ignore:
         - images:
           - ghcr.io/sargassum-world/pslocal # temporarily unmaintained; only used in a test package
+        # Moves only with the konstruktor release that writes the hub's configs (see the file)
+        - path: deployments/arkitekt-hub.pkg/deployment.compose.yml
       # -patch:
       versionfilter:
         kind: semver
