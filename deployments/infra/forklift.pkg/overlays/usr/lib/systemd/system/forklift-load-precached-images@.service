@@ -8,12 +8,15 @@ ConditionPathExists=%f/.cache/forklift/containers/docker-archives
 [Service]
 Type=oneshot
 Environment=CACHE_PATH=%f/.cache/forklift/containers/docker-archives
+Environment=FORKLIFT_WORKSPACE=%f
 ExecStart=bash -c -e 'forklift plt ls-img | while read image; do \
   precached_image="$CACHE_PATH/$image.tar"; \
-  echo "Loading $image from $precached_image..."; \
-  docker image load --quiet --input "$precached_image"; \
-  rm "$precached_image"; \
-done && rm -rf "$CACHE_PATH"'
+  if [ -f "$precached_image" ]; then \
+    echo "Loading $image from $precached_image..."; \
+    docker image load --quiet --input "$precached_image" && \
+      rm "$precached_image"; \
+  fi; \
+done'
 RemainAfterExit=yes
 
 [Install]

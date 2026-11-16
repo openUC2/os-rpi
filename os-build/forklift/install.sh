@@ -67,6 +67,7 @@ forklift plt ls-img |
 export FORKLIFT_STAGE_STORE=/var/lib/forklift/stages
 sudo -E forklift stage plan
 sudo -E forklift stage set-next --cache-img=false next
+sudo -E forklift stage set-next-result pending
 
 # Use forklift on future boot sequences
 sudo systemctl preset forklift-apply.service
