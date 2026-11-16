@@ -14,12 +14,13 @@ deployment:
         target: overlays/usr/libexec/report-versioning-forklift
       - description: systemd service to run the report-versioning-forklift script during boot
         target: overlays/usr/lib/systemd/system/report-versioning-forklift.service
-      - description: systemd service enablement for report-versioning-forklift.service
-        target: overlays/etc/systemd/system/multi-user.target.wants/report-versioning-forklift.service
+      - target: overlays/etc/systemd/system/multi-user.target.wants/report-versioning-forklift.service
       - description: systemdm timer to periodically regenerate Forklift-related versioning report
         target: overlays/usr/lib/systemd/system/report-versioning-forklift.timer
-      - description: systemd service enablement for report-versioning-forklift.timer
-        target: overlays/etc/systemd/system/multi-user.target.wants/report-versioning-forklift.timer
+      - target: overlays/etc/systemd/system/multi-user.target.wants/report-versioning-forklift.timer
+      - description: systemd service to load pre-downloaded container images into Docker during boot
+        target: overlays/usr/lib/systemd/system/forklift-load-precached-images@.service
+      - target: overlays/etc/systemd/system/forklift-apply.service.wants/forklift-load-precached-images@home-pi.service
       # Landing page template partials
       - target: shared/machine-portal-common/templates/home/advanced/sys-infra/app-mgmt/10-forklift.item.partial.tmpl
 

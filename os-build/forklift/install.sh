@@ -60,15 +60,9 @@ forklift plt ls-img |
     {} "$HOME/.cache/forklift/containers/docker-archives" "$container_platform"
 
 echo "Preparing to load pre-downloaded container images..."
-"$config_files_root/ensure-docker.sh"
-
-echo "Loading pre-downloaded container images..."
-forklift plt ls-img |
-  rush "$config_files_root/load-precached-image.sh" \
-    {} "$HOME/.cache/forklift/containers/docker-archives"
 
 # Prepare to apply the local pallet on the next boot
-# FIXME: containerd or runc always fails when we try to create containers (at least in a
+# Note: containerd or runc always fails when we try to create containers (at least in a
 # systemd-nspawn container), so we can't run `forklift stage apply here`
 
 export FORKLIFT_STAGE_STORE=/var/lib/forklift/stages
