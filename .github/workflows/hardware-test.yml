@@ -87,13 +87,23 @@ jobs:
 
       # After the swap the local pallet is what is tested, in both modes:
       # for an image it is the pallet the machine runs, with that one image replaced.
+      # The whole pallet goes into the log; the run's page and the tests get only its images.
       - name: Show the pallet under test
         id: pallet
         run: |
-          versions="$(forklift plt show; echo; forklift plt ls-img)"
-          echo "$versions"
-          { echo '```'; echo "$versions"; echo '```'; } >> $GITHUB_STEP_SUMMARY
-          { echo 'versions<<END_OF_VERSIONS'; echo "$versions"; echo END_OF_VERSIONS; } >> $GITHUB_OUTPUT
+          forklift plt show
+          images="$(forklift plt ls-img)"
+          echo "$images"
+          {
+            echo '<details><summary>Images under test</summary>'
+            echo
+            echo '```'
+            echo "$images"
+            echo '```'
+            echo '</details>'
+            echo
+          } >> $GITHUB_STEP_SUMMARY
+          { echo 'images<<END_OF_IMAGES'; echo "$images"; echo END_OF_IMAGES; } >> $GITHUB_OUTPUT
 
       # The tests are part of the ImSwitch image, so they always fit the ImSwitch under test.
       # This command line is all this repository knows about them.
@@ -103,10 +113,10 @@ jobs:
           TESTS: ${{ inputs.tests }}
           HIL_TARGET: ${{ steps.target.outputs.target }}
           HIL_RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
-          HIL_PALLET: ${{ steps.pallet.outputs.versions }}
+          HIL_IMAGES: ${{ steps.pallet.outputs.images }}
           SYNC_FIRMWARE: ${{ inputs.sync_firmware && '--sync-firmware' || '' }}
         run: |
-          docker exec -e HIL_TARGET -e HIL_RUN_URL -e HIL_PALLET "$CONTAINER" \
+          docker exec -e HIL_TARGET -e HIL_RUN_URL -e HIL_IMAGES "$CONTAINER" \
             python3 -m imswitch.imcontrol._test.hil "$CONTAINER_REPORT" $TESTS $SYNC_FIRMWARE
 
       # Not when the tests never started, e.g. because the swap failed: then there is no report.

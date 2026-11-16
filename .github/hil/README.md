@@ -18,8 +18,9 @@ It runs on a self-hosted GitHub Actions runner on the microscope's Raspberry Pi:
 - **Only an ImSwitch image:** run the workflow by hand from the *Actions* tab and enter the image's tag (e.g. `sha-7d3adda`) as `image`.
   The machine keeps the pallet it runs.
 
-The run's log and its page start with the pallet under test and every image in it, also when only an image was swapped in.
-The artifact `hil-report` contains `hil-report.pdf` (the results and photos of every test, then the FRAME calibration's own report), `summary.md` (also shown on the run's page) and `setup_before_frame_calibration.json`.
+The run's log starts with the pallet under test and every image in it, also when only an image was swapped in.
+The run's page shows only the images, folded, followed by the test results.
+The artifact `hil-report` contains `hil-report.pdf` (the results and photos of every test, then the FRAME calibration's own report), `summary.md` (also shown on the run's page), and, when the calibration ran, `frame_calibration.pdf` (its own report on its own) and `setup_before_frame_calibration.json`.
 It is uploaded before the machine is restored, with a three-minute timeout; the machine is restored also when the upload fails.
 
 The calibration starts only when the board, motor, camera and light tests before it passed.
