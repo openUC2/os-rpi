@@ -70,7 +70,6 @@ sudo -E forklift stage set-next --cache-img=false next
 
 # Use forklift on future boot sequences
 sudo systemctl preset forklift-apply.service
-sudo systemctl enable "forklift-load-precached-images@home-$USER.service"
 # Set up read-write filesystem overlays with forklift-managed layers for /etc and /usr
 # (see https://docs.kernel.org/filesystems/overlayfs.html):
 sudo systemctl preset \
