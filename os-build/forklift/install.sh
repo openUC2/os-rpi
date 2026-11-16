@@ -66,7 +66,7 @@ forklift plt ls-img |
 "$config_files_root/ensure-docker.sh"
 export FORKLIFT_STAGE_STORE=/var/lib/forklift/stages
 sudo -E forklift stage plan
-sudo -E forklift stage set-next next
+sudo -E forklift stage set-next --cache-img=false next
 
 # Use forklift on future boot sequences
 sudo systemctl preset forklift-apply.service
