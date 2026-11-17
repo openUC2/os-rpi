@@ -1,126 +1,152 @@
 name: hardware-test
 
+# Tests on the real microscope: swaps an ImSwitch image or this repository's pallet in,
+# runs the hardware tests which ship inside the ImSwitch image,
+# and always restores the machine afterwards.
+# See .github/hil/README.md.
 on:
   workflow_dispatch:
     inputs:
       image:
         description: >
-          Only swap this ImSwitch image in, on whatever pallet the rig runs.
-          Empty (the default) tests the whole os-rpi pallet of the commit this
-          run is on instead: every Docker deployment, the firmware server
-          included. A bare tag (e.g. sha-7d3adda) resolves against
-          ghcr.io/openuc2/imswitch; a full ref (repo/image:tag) is used as-is.
+          Test only this ImSwitch image, on the pallet the machine runs: a tag (e.g. sha-7d3adda)
+          or a full image reference. Empty tests the whole pallet of the commit this run is on.
         required: false
         default: ""
       tests:
         description: >
-          Space-separated e2e folders to run (e.g. "board firmware"). Empty
-          runs the whole suite, including motor/camera/laser/ledmatrix.
+          Space-separated tests (e.g. "board_link firmware_server"). Empty runs every test, which
+          moves the stage and switches light.
         required: false
         default: ""
-      suite_ref:
-        description: >
-          Branch, tag or SHA of the e2e suite to run. Empty takes the default
-          branch of the suite repository (the IMSWITCH_REPO variable, otherwise
-          LeonardPertsch/ImSwitch).
-        required: false
-        default: ""
-  # PRs with the "hardware-test" label: runs when the label is added and on
-  # every push to the PR while it is set.
+      sync_firmware:
+        description: Flash every board to the firmware server's version before the tests.
+        type: boolean
+        default: false
+  # Adding the "hardware-test" label to a PR tests the PR's pallet once.
+  # The label is removed afterwards; add it again to test again.
   pull_request:
-    types: [labeled, synchronize, reopened]
+    types: [labeled]
 
-# One rig, one run.
+# There is only one microscope, so only one run at a time:
 concurrency:
   group: hardware-test-${{ github.repository }}
   cancel-in-progress: false
 
+permissions:
+  contents: read
+  pull-requests: write # needed to remove the label
+
+env:
+  CONTAINER: imswitch-server-1
+  CONTAINER_REPORT: /tmp/hil-report-${{ github.run_id }}-${{ github.run_attempt }}
+
 jobs:
   hardware-test:
-    # PRs only from branches of this repository: the job runs on the rig, and
-    # code from someone else's fork must not get there. Adding any other label
-    # to a labelled PR does not start another run.
+    # PRs from forks are not tested: this job runs code from the PR on our own machine.
     if: >-
       github.event_name == 'workflow_dispatch' ||
-      (github.event.pull_request.head.repo.full_name == github.repository &&
-       contains(github.event.pull_request.labels.*.name, 'hardware-test') &&
-       (github.event.action != 'labeled' || github.event.label.name == 'hardware-test'))
+      (github.event.label.name == 'hardware-test' &&
+       github.event.pull_request.head.repo.full_name == github.repository)
     runs-on: [self-hosted, uc2-rig]
-
-    env:
-      # Where the e2e suite (hil-run.sh included) comes from. The HIL tooling
-      # is not in openUC2/ImSwitch yet, so the fork is the default; once it
-      # is, set the IMSWITCH_REPO repository variable to openUC2/ImSwitch.
-      SUITE_REPO: ${{ vars.IMSWITCH_REPO || 'LeonardPertsch/ImSwitch' }}
-
+    timeout-minutes: 120
+    defaults:
+      run:
+        shell: bash
     steps:
-      - name: Checkout ImSwitch
-        uses: actions/checkout@v7
+      - uses: actions/checkout@v7
         with:
-          repository: ${{ env.SUITE_REPO }}
-          # Empty takes that repository's default branch, and so does every PR
-          # run: inputs only exist for a manual run.
-          ref: ${{ inputs.suite_ref }}
-          path: ImSwitch
+          # For a PR, the PR's own commit instead of GitHub's merge commit:
+          # Forklift can only download commits which are on a branch.
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
 
       - name: Determine what to test
-        id: config
+        id: target
         env:
-          IMAGE_INPUT: ${{ inputs.image }}
-          TESTS_INPUT: ${{ inputs.tests }}
-          # A PR's head commit, not the merge commit GitHub makes for it: only
-          # commits on a branch can be fetched by forklift.
-          PALLET_COMMIT: ${{ github.event.pull_request.head.sha || github.sha }}
+          IMAGE: ${{ inputs.image }}
+          COMMIT: ${{ github.event.pull_request.head.sha || github.sha }}
         run: |
-          TESTS="$TESTS_INPUT"
-
-          # Only a manual run with an image swaps just that image. Everything
-          # else tests the os-rpi pallet of this run's commit as a whole.
-          if [ -n "$IMAGE_INPUT" ]; then
-            MODE=image
-            TARGET="$IMAGE_INPUT"
-            # Artifact names must not contain / or :, a full ref has both. The
-            # digest adds nothing a reader needs there.
-            NAME="${TARGET%@*}"
-            REPORT="hil-report-${NAME//[\/:]/-}"
+          if [ -n "$IMAGE" ]; then
+            echo "mode=image" >> $GITHUB_OUTPUT
+            echo "target=$IMAGE" >> $GITHUB_OUTPUT
           else
-            MODE=pallet
-            TARGET="github.com/$GITHUB_REPOSITORY@$PALLET_COMMIT"
-            REPORT="hil-report-pallet-${PALLET_COMMIT::7}"
+            echo "mode=pallet" >> $GITHUB_OUTPUT
+            echo "target=github.com/$GITHUB_REPOSITORY@$COMMIT" >> $GITHUB_OUTPUT
           fi
 
-          echo "mode=$MODE" >> "$GITHUB_OUTPUT"
-          echo "target=$TARGET" >> "$GITHUB_OUTPUT"
-          echo "tests=$TESTS" >> "$GITHUB_OUTPUT"
-          echo "report=$REPORT" >> "$GITHUB_OUTPUT"
+      - name: Restore the machine, if an earlier run could not
+        run: .github/hil/restore.sh
 
-          # The suite moves with its branch, so record the exact commit that ran.
-          SUITE="$SUITE_REPO@$(git -C ImSwitch rev-parse --short HEAD)"
-
-          echo "Runner:  $(hostname)"
-          echo "Testing: $MODE $TARGET"
-          echo "Suite:   $SUITE"
-          echo "Tests:   ${TESTS:-all}"
-          echo "Testing $MODE \`$TARGET\` on \`$(hostname)\` with suite \`$SUITE\`, tests: ${TESTS:-all}" >> "$GITHUB_STEP_SUMMARY"
-
-      - name: Run the e2e suite on the rig
-        working-directory: ImSwitch/imswitch/imcontrol/_test/e2e
+      - name: Swap in
         env:
-          MODE: ${{ steps.config.outputs.mode }}
-          TARGET: ${{ steps.config.outputs.target }}
-          TESTS: ${{ steps.config.outputs.tests }}
+          MODE: ${{ steps.target.outputs.mode }}
+          TARGET: ${{ steps.target.outputs.target }}
         run: |
-          ci/hil-run.sh \
-            "--$MODE" "$TARGET" \
-            --yes \
-            --out ci/reports \
-            --tests "$TESTS"
+          echo "Testing the $MODE \`$TARGET\` on \`$(hostname)\`" >> $GITHUB_STEP_SUMMARY
+          .github/hil/swap-in.sh "$MODE" "$TARGET"
 
-      - name: Upload report
-        if: always()
+      # After the swap the local pallet is what is tested, in both modes:
+      # for an image it is the pallet the machine runs, with that one image replaced.
+      # The whole pallet goes into the log; the run's page and the tests get only its images.
+      - name: Show the pallet under test
+        id: pallet
+        run: |
+          forklift plt show
+          images="$(forklift plt ls-img)"
+          echo "$images"
+          {
+            echo '<details><summary>Images under test</summary>'
+            echo
+            echo '```'
+            echo "$images"
+            echo '```'
+            echo '</details>'
+            echo
+          } >> $GITHUB_STEP_SUMMARY
+          { echo 'images<<END_OF_IMAGES'; echo "$images"; echo END_OF_IMAGES; } >> $GITHUB_OUTPUT
+
+      # The tests are part of the ImSwitch image, so they always fit the ImSwitch under test.
+      # This command line is all this repository knows about them.
+      - name: Run the hardware tests
+        id: tests
+        env:
+          TESTS: ${{ inputs.tests }}
+          HIL_TARGET: ${{ steps.target.outputs.target }}
+          HIL_RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+          HIL_IMAGES: ${{ steps.pallet.outputs.images }}
+          SYNC_FIRMWARE: ${{ inputs.sync_firmware && '--sync-firmware' || '' }}
+        run: |
+          docker exec -e HIL_TARGET -e HIL_RUN_URL -e HIL_IMAGES "$CONTAINER" \
+            python3 -m imswitch.imcontrol._test.hil "$CONTAINER_REPORT" $TESTS $SYNC_FIRMWARE
+
+      # Not when the tests never started, e.g. because the swap failed: then there is no report.
+      - name: Copy the report out of the container
+        if: always() && steps.tests.conclusion != 'skipped'
+        run: |
+          docker cp "$CONTAINER:$CONTAINER_REPORT/." hil-report
+          cat hil-report/summary.md >> $GITHUB_STEP_SUMMARY
+
+      - name: Upload the report
+        if: always() && steps.tests.conclusion != 'skipped'
+        timeout-minutes: 3
         uses: actions/upload-artifact@v7
         with:
-          name: ${{ steps.config.outputs.report || 'hil-report' }}
-          path: ImSwitch/imswitch/imcontrol/_test/e2e/ci/reports/
+          name: hil-report
+          path: hil-report
           if-no-files-found: warn
           retention-days: 30
+
+      - name: Restore the machine
+        if: always()
+        run: .github/hil/restore.sh
+
+      - name: Remove the label
+        if: always() && github.event_name == 'pull_request'
+        env:
+          TOKEN: ${{ github.token }}
+          PR: ${{ github.event.pull_request.number }}
+        run: |
+          curl -fsS -X DELETE \
+            -H "Authorization: Bearer $TOKEN" \
+            -H "Accept: application/vnd.github+json" \
+            "$GITHUB_API_URL/repos/$GITHUB_REPOSITORY/issues/$PR/labels/hardware-test"
