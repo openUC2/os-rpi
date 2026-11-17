@@ -59,15 +59,12 @@ forklift plt ls-img |
   rush "$config_files_root/precache-image.sh" \
     {} "$HOME/.cache/forklift/containers/docker-archives" "$container_platform"
 
-echo "Preparing to load pre-downloaded container images..."
-"$config_files_root/ensure-docker.sh"
-
 echo "Loading some of the pre-downloaded container images..."
+"$config_files_root/ensure-docker.sh"
 forklift plt ls-img |
   rush "$config_files_root/load-precached-image.sh" \
     {} "$HOME/.cache/forklift/containers/docker-archives"
-
-"$config_files_root/ensure-docker.sh"
+sudo ctr -n moby images ls -q
 
 # Prepare to apply the local pallet on the next boot
 # Note: containerd or runc always fails when we try to create containers (at least in a
