@@ -63,9 +63,7 @@ echo "Preparing to load pre-downloaded container images..."
 "$config_files_root/ensure-docker.sh"
 
 echo "Loading some of the pre-downloaded container images..."
-# Note: we only preload ImSwitch because it takes ~6 minutes to load on a real RPi during first
-# boot, which is unacceptably slow.
-forklift plt ls-img | grep imswitch |
+forklift plt ls-img |
   rush "$config_files_root/load-precached-image.sh" \
     {} "$HOME/.cache/forklift/containers/docker-archives"
 
@@ -77,6 +75,11 @@ forklift plt ls-img | grep imswitch |
 
 export FORKLIFT_STAGE_STORE=/var/lib/forklift/stages
 sudo -E forklift stage plan
+# Note: Docker >= 29.9.0 (moby/moby#53615) makes `docker pull` (which happens when forklift caches
+# images) download every compressed layer blob even when the unpacked layers already exist. That
+# results in a second (compressed) copy of every container image (~2.7 GB) to the OS image, which
+# increases the total OS image size to an unacceptable amount. This is avoided if we tell Forklift
+# not to cache images here:
 sudo -E forklift stage set-next --cache-img=false next
 sudo -E forklift stage set-next-result pending
 

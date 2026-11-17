@@ -29,10 +29,3 @@ sudo -E apt-get remove -y -o Dpkg::Progress-Fancy=0 \
 # still need to use sudo to run commands which interact with the Docker daemon
 # (see https://docs.docker.com/engine/install/linux-postinstall/):
 sudo usermod -aG docker "$USER"
-
-# Docker >= 29.9.0 (moby/moby#53615) makes `docker pull` download every compressed layer blob even
-# when the unpacked layers already exist. That results in a second (compressed) copy of every
-# container image (~2.7 GB) to the OS image. The `lazy-pull` feature (moby/moby#53877) restores the
-# old behavior of skipping layer content which the snapshotter already provides.
-file="/etc/docker/daemon.json"
-sudo bash -c "cat \"$config_files_root$file\" >> \"$file\""
