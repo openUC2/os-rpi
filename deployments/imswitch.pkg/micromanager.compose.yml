@@ -1,0 +1,6 @@
+# Swaps the ImSwitch container image for the variant built with Micro-Manager (pymmcore-plus).
+# Note: as of 2026-11-17 ImSwitch doesn't publish `-mm` tags yet, so enabling this feature makes the
+# image pull fail until it does.
+services:
+  server:
+    image: ghcr.io/openuc2/imswitch:sha-da4da06-mm

@@ -153,6 +153,11 @@ features:
     provides:
       file-exports:
         - target: overlays/usr/lib/udev/rules.d/65-alliedvision-cameras.rules
+  micromanager:
+    description: >-
+      Runs the ImSwitch container image variant which includes Micro-Manager (pymmcore-plus)
+    compose-files:
+      - micromanager.compose.yml
   can-interface:
     description: Provides automatic enablement of the OS interface for an SPI CAN bus transceiver
     compose-files:
