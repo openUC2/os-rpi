@@ -59,11 +59,22 @@ forklift plt ls-img |
   rush "$config_files_root/precache-image.sh" \
     {} "$HOME/.cache/forklift/containers/docker-archives" "$container_platform"
 
+echo "Preparing to load pre-downloaded container images..."
+"$config_files_root/ensure-docker.sh"
+
+echo "Loading some of the pre-downloaded container images..."
+# Note: we only preload ImSwitch because it takes ~6 minutes to load on a real RPi during first
+# boot, which is unacceptably slow.
+forklift plt ls-img | grep imswitch |
+  rush "$config_files_root/load-precached-image.sh" \
+    {} "$HOME/.cache/forklift/containers/docker-archives"
+
+"$config_files_root/ensure-docker.sh"
+
 # Prepare to apply the local pallet on the next boot
 # Note: containerd or runc always fails when we try to create containers (at least in a
 # systemd-nspawn container), so we can't run `forklift stage apply here`
 
-"$config_files_root/ensure-docker.sh"
 export FORKLIFT_STAGE_STORE=/var/lib/forklift/stages
 sudo -E forklift stage plan
 sudo -E forklift stage set-next --cache-img=false next
