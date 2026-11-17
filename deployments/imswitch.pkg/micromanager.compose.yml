@@ -3,4 +3,4 @@
 # image pull fail until it does.
 services:
   server:
-    image: ghcr.io/openuc2/imswitch:sha-da4da06-mm
+    image: ghcr.io/openuc2/imswitch:sha-d6d0d3c-mm
