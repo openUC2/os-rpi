@@ -61,7 +61,10 @@ forklift plt ls-img |
 
 echo "Loading some of the pre-downloaded container images..."
 "$config_files_root/ensure-docker.sh"
-forklift plt ls-img |
+# Note: we only preload ImSwitch because it takes ~6 minutes to load on a real RPi during first
+# boot, which is unacceptably slow. We don't preload any other container images because doing so
+# increases OS image size by ~1 GB, which is an unacceptable increase.
+forklift plt ls-img | grep imswitch |
   rush "$config_files_root/load-precached-image.sh" \
     {} "$HOME/.cache/forklift/containers/docker-archives"
 sudo ctr -n moby images ls -q
