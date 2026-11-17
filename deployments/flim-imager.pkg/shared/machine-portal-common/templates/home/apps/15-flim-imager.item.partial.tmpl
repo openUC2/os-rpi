@@ -1,0 +1,12 @@
+{{$hostname := .Data.Hostname}}
+
+<li>
+  <p>
+    {{
+      template "shared/link.partial.tmpl" dict
+      "Href" (print "//" $hostname ":5249")
+      "Name" "FLIM Imager"
+      "Description" "This machine's FLIM device management interface"
+    }}
+  </p>
+</li>

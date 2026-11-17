@@ -1,0 +1,16 @@
+{{$machineName := .Data.MachineName}}
+
+<section class="section">
+  <div class="container content is-max-desktop">
+    <h1>Machine {{$machineName}}</h1>
+    <article class="message is-info two-card-width">
+      <div class="message-body">
+        This is a simplified view of the home page. For helpful information and advanced usage, open the
+        <a href="{{urlJoin (dict
+          "path" .Meta.Path
+          "query" (.Meta.Form.WithInstead "mode" "advanced").Encode
+        )}}">advanced view</a> of this page.
+      </div>
+    </article>
+  </div>
+</section>

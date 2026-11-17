@@ -35,3 +35,5 @@ features:
           paths:
             - /firmware
             - /firmware/*
+      file-exports:
+        - target: shared/machine-portal/templates/home/advanced/network-apis/40-firmware-binaries.item.partial.tmpl

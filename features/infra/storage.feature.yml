@@ -1,4 +1,0 @@
-description: Generation of a machine-unique name
-modifiers:
-  - target: /deployments/infra/usb-automount.pkg
-  - target: /deployments/infra/usb-automount.deploy.yml

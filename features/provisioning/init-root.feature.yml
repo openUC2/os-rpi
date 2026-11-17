@@ -1,0 +1,4 @@
+description: Support for initializing the root filesystem
+modifiers:
+  - target: /deployments/infra/boot-init-root.pkg
+  - target: /deployments/infra/boot-init-root.deploy.yml

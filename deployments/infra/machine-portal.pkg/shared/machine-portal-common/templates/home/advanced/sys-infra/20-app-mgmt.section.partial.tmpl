@@ -1,0 +1,7 @@
+<p>App management:</p>
+<ul>
+  {{$data := .}}
+  {{range $template := templates "home/advanced/sys-infra/app-mgmt/*.item.partial.tmpl"}}
+    {{partial $template $data}}
+  {{end}}
+</ul>

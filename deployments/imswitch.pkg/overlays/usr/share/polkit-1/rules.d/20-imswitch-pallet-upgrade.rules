@@ -1,0 +1,11 @@
+polkit.addRule(function(action, subject) {
+  // The ImSwitch container runs as pi; it may only start the pallet upgrade unit, nothing else.
+  if (
+    action.id == "org.freedesktop.systemd1.manage-units" &&
+    action.lookup("unit") == "imswitch-pallet-upgrade.service" &&
+    action.lookup("verb") == "start" &&
+    subject.user == "pi"
+  ) {
+    return polkit.Result.YES;
+  }
+});

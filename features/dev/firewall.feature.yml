@@ -1,0 +1,6 @@
+description: Firewall configuration for developing container apps
+modifiers:
+  - type: add-feature
+    source: networking/firewall
+  - target: /deployments/dev/firewall-ports.pkg
+  - target: /deployments/dev/firewall-ports.deploy.yml

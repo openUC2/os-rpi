@@ -1,0 +1,4 @@
+description: Support for initializing mesh VPN agents for remote access
+modifiers:
+  - target: /deployments/infra/tailscale-auth-key.pkg
+  - target: /deployments/infra/tailscale-auth-key.deploy.yml

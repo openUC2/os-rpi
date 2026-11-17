@@ -32,3 +32,5 @@ features:
           paths:
             - /admin/fs-su
             - /admin/fs-su/*
+      file-exports:
+        - target: shared/machine-portal/templates/home/advanced/browser-apps/sysadmin/40-filebrowser-root.item.partial.tmpl

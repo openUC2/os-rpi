@@ -1,0 +1,6 @@
+description: Handling of USB devices
+modifiers:
+  - target: /deployments/infra/udev.pkg
+  - target: /deployments/infra/udev.deploy.yml
+  - target: /deployments/infra/usb-automount.pkg
+  - target: /deployments/infra/usb-automount.deploy.yml

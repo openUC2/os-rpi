@@ -1,0 +1,6 @@
+services:
+  server:
+    volumes:
+      # Lets ImSwitch start the host's imswitch-pallet-upgrade.service (experimental pallet upgrade
+      # button), the same way machine-admin talks to the host over D-Bus:
+      - /run/dbus/system_bus_socket:/var/run/dbus/system_bus_socket

@@ -31,6 +31,17 @@ This will set up a development environment for locally developing and testing Im
 Note that you should only do this once per OS installation: if you run it multiple times on the
 same OS installation, things might break in weird ways.
 
+### Enabling kiosk mode
+
+You can set up a fullscreen Chromium kiosk which boots straight into the ImSwitch web UI by running:
+```bash
+bash "$(forklift plt locate-file kiosk/setup.sh)"
+```
+
+System control:`sudo kioskctl {enable,disable,status,uninstall}`.
+
+You can connect an HDMI monitor or the original DSI display. Have fun!
+
 ### Integrating changes in ImSwitch
 
 1. Commit and push your changes to the [openUC2/ImSwitch](https://github.com/openUC2/ImSwitch) repo.

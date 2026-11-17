@@ -42,3 +42,7 @@ features:
           paths:
             - /admin/panel
             - /admin/panel/*
+      file-exports:
+        - target: shared/machine-portal/templates/home/apps/20-machine-admin.item.partial.tmpl
+        - target: shared/machine-portal/templates/home/apps/20-machine-admin.item.simple.partial.tmpl
+        - target: shared/machine-portal/templates/home/advanced/browser-apps/sysadmin/10-machine-admin.item.partial.tmpl

@@ -1,0 +1,44 @@
+services:
+  server:
+    image: ghcr.io/flim-labs/flim-imager-2.0:sha-b6fb0fba92545072695fa1c1f712ebbb6f731b91@sha256:defdbc064845d9e8e683952e2ca12e23a0563fff73b22b0516ca223fc776ab79
+    ports:
+      - 5249:5249
+    volumes:
+      - ${FORKLIFT_EXPORTS}/shared/flim-imager/firmware:/app/data/firmwares:ro
+      - flim-data:/app/data
+      - flim-logs:/app/logs
+      # Acquisition data & calibration references go into the ImSwitch data tree, so that the
+      # ImSwitch container sees them under its DATA_PATH without any additional mounts. Host uid
+      # 1000 (pi) matches container uid 1000 (appuser).
+      - /home/pi/Datasets/flim-labs:/home/appuser/.flim-labs
+      # /dev/bus/usb must be a bind mount rather than a `devices:` entry, so that the container
+      # sees the new device node when the ZestSC3 drops off the bus and re-enumerates.
+      - /dev/bus/usb:/dev/bus/usb
+    device_cgroup_rules:
+      - 'a 189:* rwm' # USB devices, e.g. /dev/bus/usb/004/002
+      # - 'a *:* rwm' # allow all devices; only use this for debugging! Don't use this in production, because it's a massive security backdoor!
+    environment:
+      - RUST_LOG=info
+      - RUST_BACKTRACE=1
+    healthcheck:
+      test: ['CMD', 'curl', '-f', 'http://localhost:5249/health']
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    depends_on:
+      volume-setup:
+        condition: service_completed_successfully
+    restart: always
+
+  volume-setup:
+    # This service ensures that root isn't the owner of /home/pi/Datasets/flim-labs, since Docker
+    # auto-creates that path with root ownership if it didn't exist before for the bind mount.
+    image: docker.io/library/alpine:3.24.4@sha256:f59abe656b692d901e184be3445e084786602108599d2a51d229c0f5a48c71bf
+    volumes:
+      - /home/pi/Datasets/flim-labs:/home/appuser/.flim-labs
+    command: 'sh -c "chown -R 1000:1000 /home/appuser/.flim-labs"'
+
+volumes:
+  flim-data:
+  flim-logs:

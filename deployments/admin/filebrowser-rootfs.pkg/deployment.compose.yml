@@ -1,6 +1,6 @@
 services:
   server:
-    image: ghcr.io/gtsteffaniak/filebrowser:2.1.0-beta-slim@sha256:47379d59d64ce2b124311f81c920d305fb8b8610b086a7478f95c16dd0cd2744
+    image: ghcr.io/gtsteffaniak/filebrowser:2.1.5-beta-slim@sha256:e7b7663e7f6e33aac8627af30e2225445e2c675359787692836b727074d9de9c
     volumes:
       - type: bind
         source: /
@@ -15,6 +15,18 @@ services:
       - server-data:/data
     environment:
       - FILEBROWSER_CONFIG=/configs/deployment.filebrowser.yml
+    depends_on:
+      volume-setup:
+        condition: service_completed_successfully
+
+  volume-setup:
+    # This service ensures that root isn't the owner of /data, since Docker auto-creates those paths
+    # with root ownership.
+    image: docker.io/library/alpine:3.24.4@sha256:f59abe656b692d901e184be3445e084786602108599d2a51d229c0f5a48c71bf
+    network_mode: none
+    volumes:
+      - server-data:/data
+    command: 'sh -c "chown -R 1000:1000 /data"'
 
 volumes:
   server-data: {}

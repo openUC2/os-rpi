@@ -63,6 +63,8 @@ deployment:
         target: overlays/usr/lib/systemd/system/generate-caddy-ingress-external-config.timer
       - description: systemd timer enablement for generate-caddy-ingress-external-config.timer
         target: overlays/etc/systemd/system/multi-user.target.wants/generate-caddy-ingress-external-config.timer
+      # Landing page template partials:
+      - target: shared/machine-portal-common/templates/home/advanced/sys-infra/networking/20-caddy-ingress.item.partial.tmpl
 
 features:
   firewall-allow-direct:

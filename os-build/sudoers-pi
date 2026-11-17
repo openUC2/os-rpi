@@ -1,0 +1,2 @@
+# Allow running sudo commands without a password, for headless setup:
+pi ALL=(ALL) NOPASSWD: ALL

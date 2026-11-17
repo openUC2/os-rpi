@@ -45,3 +45,5 @@ features:
           paths:
             - /admin/dozzle
             - /admin/dozzle/*
+      file-exports:
+        - target: shared/machine-portal/templates/home/advanced/browser-apps/sysadmin/50-dozzle.item.partial.tmpl

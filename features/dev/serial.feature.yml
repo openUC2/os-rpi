@@ -1,0 +1,4 @@
+description: Tools for developing with serial devices
+modifiers:
+  - target: /deployments/dev/serial-monitor.pkg
+  - target: /deployments/dev/serial-monitor.deploy.yml

@@ -4,5 +4,5 @@ modifiers:
     source: infra/http
   - target: /deployments/admin/cockpit.pkg
   - target: /deployments/admin/cockpit.deploy.yml
-  - target: /deployments/admin/device-admin.pkg
-  - target: /deployments/admin/device-admin.deploy.yml
+  - target: /deployments/admin/machine-admin.pkg
+  - target: /deployments/admin/machine-admin.deploy.yml
