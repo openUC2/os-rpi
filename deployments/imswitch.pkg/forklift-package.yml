@@ -171,7 +171,8 @@ features:
   andor-cameras:
     description: >-
       Support for Andor SDK2 cameras (iXon) through the andor-server sidecar container, used by
-      ImSwitch's AndorServerManager (host andor-server, port 8000). Raspberry Pi 5 needs the
+      ImSwitch's AndorServerManager (host andor-server, port 8000). The Andor SDK is not part of
+      the image: upload the SDK archive from Andor once on /andor/. Raspberry Pi 5 needs the
       4K-page kernel (kernel=kernel8.img in /boot/firmware/config.txt).
     compose-files:
       - andor-cameras.compose.yml
