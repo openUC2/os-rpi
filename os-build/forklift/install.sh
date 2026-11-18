@@ -57,7 +57,7 @@ container_platform="linux/$(
 )"
 forklift plt ls-img |
   rush "$config_files_root/precache-image.sh" \
-    {} "$HOME/.cache/forklift/containers/docker-archives" "$container_platform"
+    {} "$HOME/.cache/forklift/containers/oci-archives" "$container_platform"
 
 echo "Loading some of the pre-downloaded container images..."
 "$config_files_root/ensure-docker.sh"
@@ -66,7 +66,7 @@ echo "Loading some of the pre-downloaded container images..."
 # increases OS image size by ~1 GB, which is an unacceptable increase.
 forklift plt ls-img | grep imswitch |
   rush "$config_files_root/load-precached-image.sh" \
-    {} "$HOME/.cache/forklift/containers/docker-archives"
+    {} "$HOME/.cache/forklift/containers/oci-archives"
 sudo ctr -n moby images ls -q
 
 # Prepare to apply the local pallet on the next boot

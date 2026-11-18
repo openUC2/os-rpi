@@ -3,39 +3,39 @@ on:
   workflow_call:
     inputs:
       name:
-        description: 'The name of the OS image to build'
+        description: "The name of the OS image to build"
         required: true
         type: string
       build_variant:
-        description: 'The variant of the OS image to build'
+        description: "The variant of the OS image to build"
         required: false
         type: string
       base_release_name:
-        description: 'The release name of the RPi OS base image (bullseye, bookworm)'
+        description: "The release name of the RPi OS base image (bullseye, bookworm)"
         required: true
         type: string
       base_image_variant:
-        description: 'The name of the RPi OS base image variant (lite, desktop, or full)'
+        description: "The name of the RPi OS base image variant (lite, desktop, or full)"
         required: true
         type: string
       base_release_date:
-        description: 'The release date of the RPi OS base image'
+        description: "The release date of the RPi OS base image"
         required: true
         type: string
       base_file_release_date:
-        description: 'The release date of the RPi OS base image file, if different from the group release date'
+        description: "The release date of the RPi OS base image file, if different from the group release date"
         required: false
         type: string
       arch:
-        description: 'The CPU architecture of the OS (armhf, arm64)'
+        description: "The CPU architecture of the OS (armhf, arm64)"
         required: true
         type: string
     outputs:
       image_name:
-        description: 'Name of the built OS image'
+        description: "Name of the built OS image"
         value: ${{ jobs.build-os-image.outputs.image_name }}
       artifact_id:
-        description: 'Artifact ID of the GitHub Artifacts upload of the built OS image'
+        description: "Artifact ID of the GitHub Artifacts upload of the built OS image"
         value: ${{ jobs.build-os-image.outputs.artifact_id }}
 
 jobs:
@@ -227,7 +227,7 @@ jobs:
             --bind "$(pwd)/os-build/sudoers-pi":/etc/sudoers.d/010_pi-nopasswd
             --machine=raspberrypi
           run: |
-            local_cache="$HOME/.cache/forklift/containers/docker-archives/"
+            local_cache="$HOME/.cache/forklift/containers/oci-archives/"
             mkdir -p "$local_cache"
             sudo mv /run/container-images/* "$local_cache"
             sudo chown $USER -R "$local_cache"
@@ -311,7 +311,6 @@ jobs:
           run: |
             apt-get -o Dpkg::Progress-Fancy=0 update
             apt-get -o Dpkg::Progress-Fancy=0 install ca-certificates libnss3
-
 
       - name: Prepare for a headless first boot on bare metal
         uses: ethanjli/pinspawn-action@v0.1.6-beta.0

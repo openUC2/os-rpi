@@ -3,11 +3,11 @@ Description=Load pre-downloaded container images from %f's cache into Docker
 Requires=docker.service
 After=docker.service
 Before=forklift-apply.service
-ConditionPathExists=%f/.cache/forklift/containers/docker-archives
+ConditionPathExists=%f/.cache/forklift/containers/oci-archives
 
 [Service]
 Type=oneshot
-Environment=CACHE_PATH=%f/.cache/forklift/containers/docker-archives
+Environment=CACHE_PATH=%f/.cache/forklift/containers/oci-archives
 Environment=FORKLIFT_WORKSPACE=%f
 ExecStart=bash -c -e 'forklift plt ls-img | while read image; do \
   precached_image="$CACHE_PATH/$image.tar"; \
