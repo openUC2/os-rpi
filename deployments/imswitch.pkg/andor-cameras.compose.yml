@@ -14,7 +14,7 @@
 # Its runtime is kept in the andor-sdk volume, across restarts and upgrades.
 services:
   andor-server:
-    image: ghcr.io/openuc2/andor-server:sha-e4aaba8@sha256:3ea4f7b423c8359fa1c5b025767f6ce068d3a322e00eee90676f88706b8e974d
+    image: ghcr.io/openuc2/andor-server:sha-e4aaba8@sha256:404d3e78e30d41e344424c969284f0c13ab07bee05943c0c8bf371fe90ad7208
     volumes:
       # bind-mounted rather than a `devices:` entry, so the node that appears when the camera
       # re-enumerates (power cycle, USB reset) is visible without restarting the container
