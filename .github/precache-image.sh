@@ -3,10 +3,10 @@ image="$1"
 cache_path="$2" # e.g. ~/.cache/containers
 platform="$3"   # e.g. `linux/arm64`
 
-precached_image="$cache_path/$image.tar"
+precached_image="$cache_path/$image"
 
-if [ -f "$precached_image" ]; then
-  echo "Skipping $image, which was already downloaded to $precached_image!"
+if [ -f "$precached_image.tar" ]; then
+  echo "Skipping $image, which was already downloaded to $precached_image.tar!"
   exit 0
 fi
 
@@ -16,13 +16,14 @@ if ! mkdir -p "$(dirname "$precached_image")" &>/dev/null; then
   crane="sudo $crane"
 fi
 
-echo "Downloading $image to $precached_image..."
-# We pull images as Docker (legacy) tarballs so that they can be inspected with `dive` (which does
-# not support OCI tarballs) - see https://github.com/google/go-containerregistry/issues/621 for
-# details:
-if ! $crane --platform "$platform" pull --format legacy "$image" "$precached_image"; then
+echo "Downloading $image to $precached_image.tar..."
+# We need --annotate-ref to preserve image references in the pulled archives of digest-pinned image
+# references, so that they'll be loaded into Docker correctly:
+if ! $crane --platform "$platform" pull --format oci --annotate-ref "$image" "$precached_image"; then
   echo "Encountered error, trying one more time to download $image..."
   rm -f "$precached_image" || sudo rm -f "$precached_image"
-  $crane --platform "$platform" pull --format legacy "$image" "$precached_image"
+  $crane --platform "$platform" pull --format oci --annotate-ref "$image" "$precached_image"
 fi
+tar -cf "$precached_image.tar" -C "$precached_image" .
+rm -rf "$precached_image"
 echo "Finished downloading $image!"
