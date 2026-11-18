@@ -42,6 +42,34 @@ System control:`sudo kioskctl {enable,disable,status,uninstall}`.
 
 You can connect an HDMI monitor or the original DSI display. Have fun!
 
+### Setting up Andor cameras
+
+Andor SDK2 cameras (e.g. iXon) are driven by the `andor-server` sidecar container (the
+`andor-cameras` feature of the `imswitch` deployment), which ImSwitch's `AndorServerManager` reaches
+at `http://andor-server:8000`. To set it up, run:
+```bash
+bash "$(forklift plt locate-file andor/setup.sh)"
+```
+
+The script:
+1. enables the `andor-cameras` feature and stages the change,
+2. on a Raspberry Pi 5, switches to the 4K-page kernel (`kernel=kernel8.img` in
+   `/boot/firmware/config.txt`), which the x86_64 emulator inside `andor-server` needs. This
+   reboots the Pi: run the script again afterwards,
+3. installs the Andor SDK into `andor-server`.
+
+The Andor SDK is licensed per camera and not redistributable, so it is not part of this repo or the
+container image. By default, the script downloads it from a release of the private
+`openUC2/andor-arm64-emulator` repo, and asks for a
+[GitHub token](https://github.com/settings/tokens) with read access to that repo (fine-grained:
+"Contents: read"; classic: `repo` scope). The token is not stored; you can also pass it as
+`GITHUB_TOKEN=... bash ...`. If you have the SDK archive Andor supplied with your camera, pass it
+instead: `bash "$(forklift plt locate-file andor/setup.sh)" andor-2.104.30091.0.tar.gz`. You can
+also upload the archive by hand on `http://<machine>/andor/`.
+
+The SDK is kept in the `andor-sdk` Docker volume, across restarts and OS updates. The Swagger UI and
+a live view of the camera are at `http://<machine>/andor/`.
+
 ### Integrating changes in ImSwitch
 
 1. Commit and push your changes to the [openUC2/ImSwitch](https://github.com/openUC2/ImSwitch) repo.
