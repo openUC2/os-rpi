@@ -16,7 +16,7 @@ if ! mkdir -p "$(dirname "$precached_image")" &>/dev/null; then
   crane="sudo $crane"
 fi
 
-image_ref="$(sed -e 's~@sha256:.*$~~' -e 's~docker.io/library/~~' <<<"$image")"
+image_ref="$(sed -e 's~docker.io/library/~~' <<<"$image")"
 echo "Downloading $image for $image_ref to $precached_image.tar..."
 # We need --annotate-ref to preserve image references in the pulled archives of digest-pinned image
 # references, so that they'll be loaded into Docker correctly:
