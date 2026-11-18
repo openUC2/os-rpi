@@ -164,9 +164,9 @@ jobs:
         id: restore-precache
         uses: actions/cache/restore@v6
         with:
-          key: "container-images-${{ matrix.platform.arch }}-${{ steps.setup-precaching.outputs.container_list_hash }}"
+          key: "container-images-${{ inputs.arch }}-${{ steps.setup-precaching.outputs.container_list_hash }}"
           restore-keys: |
-            "container-images-${{ matrix.platform.arch }}"
+            "container-images-${{ inputs.arch }}"
           path: ${{ steps.setup-precaching.outputs.path }}
 
       - name: Pre-download container images
@@ -197,7 +197,7 @@ jobs:
         if: "!steps.restore-precache.outputs.cache-hit"
         uses: actions/cache/save@v6
         with:
-          key: "container-images-${{ matrix.platform.arch }}-${{ steps.setup-precaching.outputs.container_list_hash }}"
+          key: "container-images-${{ inputs.arch }}-${{ steps.setup-precaching.outputs.container_list_hash }}"
           path: ${{ steps.setup-precaching.outputs.path }}
 
       # Note: the following step isn't strictly necessary, but it's nice to separate the GitHub
