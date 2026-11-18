@@ -19,10 +19,11 @@ fi
 echo "Downloading $image to $precached_image.tar..."
 # We need --annotate-ref to preserve image references in the pulled archives of digest-pinned image
 # references, so that they'll be loaded into Docker correctly:
-if ! $crane --platform "$platform" pull --format oci --annotate-ref "$image" "$precached_image"; then
+image_ref="$(sed 's~@sha256:.*$~~' <<<"$image")"
+if ! $crane --platform "$platform" pull --format oci --annotate-ref "$image_ref" "$precached_image"; then
   echo "Encountered error, trying one more time to download $image..."
   rm -f "$precached_image" || sudo rm -f "$precached_image"
-  $crane --platform "$platform" pull --format oci --annotate-ref "$image" "$precached_image"
+  $crane --platform "$platform" pull --format oci --annotate-ref "$image_ref" "$precached_image"
 fi
 tar -cf "$precached_image.tar" -C "$precached_image" .
 rm -rf "$precached_image"
