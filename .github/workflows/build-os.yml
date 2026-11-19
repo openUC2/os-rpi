@@ -222,16 +222,9 @@ jobs:
           user: ${{ env.SETUP_USER }}
           # Note: the sudoers file is needed for RPi OS after the 2026-04-13 build of RPi OS Trixie,
           # which disables passwordless sudo by default, since this step runs as user pi.
-          # Note: Docker >= 29.9.0 (moby/moby#53615) makes `docker pull` download every compressed
-          # layer blob even when the unpacked layers already exist. That results in a second
-          # (compressed) copy of every container image (~2.7 GB) on the OS image. The `lazy-pull`
-          # feature (moby/moby#53877) restores the old behavior of skipping layer content which the
-          # containerd snapshotter already provides. The bind-mount of the /etc/docker/daemon.json
-          # file temporarily enables that feature for building OS images to reduce OS image size.
           args: >-
             --bind ${{ steps.setup-precaching.outputs.path }}:/run/container-images
             --bind "$(pwd)/os-build/etc-sudoers.d-010_pi-nopasswd":/etc/sudoers.d/010_pi-nopasswd
-            --bind "$(pwd)/os-build/etc-docker-daemon.json":/etc/docker/daemon.json
             --machine=raspberrypi
           run: |
             local_cache="$HOME/.cache/forklift/containers/docker-archives/"
@@ -292,9 +285,16 @@ jobs:
           # resolves noisy (but harmless) error messages from sudo.
           # Note: the sudoers file is needed for RPi OS after the 2026-04-13 build of RPi OS Trixie,
           # which disables passwordless sudo by default, since this step runs as user pi.
+          # Note: Docker >= 29.9.0 (moby/moby#53615) makes `docker pull` download every compressed
+          # layer blob even when the unpacked layers already exist. That results in a second
+          # (compressed) copy of every container image (~2.7 GB) on the OS image. The `lazy-pull`
+          # feature (moby/moby#53877) restores the old behavior of skipping layer content which the
+          # containerd snapshotter already provides. The bind-mount of the /etc/docker/daemon.json
+          # file temporarily enables that feature for building OS images to reduce OS image size.
           args: >-
             --bind "$(pwd)":/run/pallet
             --bind "$(pwd)/os-build/etc-sudoers.d-010_pi-nopasswd":/etc/sudoers.d/010_pi-nopasswd
+            --bind "$(pwd)/os-build/etc-docker-daemon.json":/etc/docker/daemon.json
             --capability=CAP_NET_ADMIN
             --machine=raspberrypi
           run: |
