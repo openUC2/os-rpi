@@ -1,0 +1,44 @@
+# Andor SDK2 cameras (iXon) through andor-server, a sidecar container that owns the camera and
+# serves an HTTP API. ImSwitch's AndorServerManager reaches it at http://andor-server:8000 on the
+# private "andor" network; its Swagger UI and live view are behind Caddy at /andor/ (no extra
+# firewall port: Caddy's port 80 is already open, and container-to-container traffic is not
+# filtered).
+#
+# The image brings its own x86_64 emulator (the Andor SDK is x86_64-only), so the host needs no
+# qemu or binfmt_misc. A Raspberry Pi 5 must boot the 4K-page kernel: kernel=kernel8.img in
+# /boot/firmware/config.txt (`getconf PAGESIZE` = 4096).
+services:
+  andor-server:
+    image:  ghcr.io/openuc2/andor-server:sha-75c9011
+    volumes:
+      # bind-mounted rather than a `devices:` entry, so the node that appears when the camera
+      # re-enumerates (power cycle, USB reset) is visible without restarting the container
+      - /dev/bus/usb:/dev/bus/usb
+      - /run/udev:/run/udev:ro
+      - /home/pi/Datasets/andor-server:/data
+    device_cgroup_rules:
+      - 'c 189:* rwm' # USB devices, e.g. /dev/bus/usb/004/002
+    environment:
+      - ANDOR_SAVE_DIR=/data/snaps # every snap also lands here as TIFF
+      - ANDOR_STATE_DIR=/data/state # camera settings survive restarts
+      - ANDOR_FILE_OWNER=1000:1000 # the ImSwitch user
+      - ANDOR_SERVER_ROOT_PATH=/andor
+    networks:
+      - andor
+      - caddy-ingress
+    labels:
+      caddy: http://
+      caddy.redir_6: /andor /andor/
+      caddy.handle_0: /andor/*
+      caddy.handle_0.reverse_proxy: "{{upstreams 8000}}"
+    stop_grace_period: 30s # abort a running exposure and ShutDown the SDK
+    restart: always
+
+  server:
+    networks:
+      - andor
+
+networks:
+  andor: {}
+  caddy-ingress:
+    external: true
