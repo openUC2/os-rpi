@@ -57,17 +57,13 @@ container_platform="linux/$(
 )"
 forklift plt ls-img |
   rush "$config_files_root/precache-image.sh" \
-    {} "$HOME/.cache/forklift/containers/oci-archives" "$container_platform"
+    {} "$HOME/.cache/forklift/containers/docker-archives" "$container_platform"
 
-echo "Loading some of the pre-downloaded container images..."
+echo "Loading pre-downloaded container images..."
 "$config_files_root/ensure-docker.sh"
-# Note: we only preload ImSwitch because it takes ~6 minutes to load on a real RPi during first
-# boot, which is unacceptably slow. We don't preload any other container images because doing so
-# increases OS image size by ~1 GB, which is an unacceptable increase.
-forklift plt ls-img | grep imswitch |
+forklift plt ls-img |
   rush "$config_files_root/load-precached-image.sh" \
-    {} "$HOME/.cache/forklift/containers/oci-archives"
-sudo ctr -n moby images ls -q
+    {} "$HOME/.cache/forklift/containers/docker-archives"
 
 # Prepare to apply the local pallet on the next boot
 # Note: containerd or runc always fails when we try to create containers (at least in a
@@ -75,13 +71,7 @@ sudo ctr -n moby images ls -q
 
 export FORKLIFT_STAGE_STORE=/var/lib/forklift/stages
 sudo -E forklift stage plan
-# Note: Docker >= 29.9.0 (moby/moby#53615) makes `docker pull` (which happens when forklift caches
-# images) download every compressed layer blob even when the unpacked layers already exist. That
-# results in a second (compressed) copy of every container image (~2.7 GB) to the OS image, which
-# increases the total OS image size to an unacceptable amount. This is avoided if we tell Forklift
-# not to cache images here:
-sudo -E forklift stage set-next --cache-img=false next
-sudo -E forklift stage set-next-result pending
+sudo -E forklift stage set-next next
 
 # Use forklift on future boot sequences
 sudo systemctl preset forklift-apply.service
