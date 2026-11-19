@@ -3,39 +3,39 @@ on:
   workflow_call:
     inputs:
       name:
-        description: 'The name of the OS image to build'
+        description: "The name of the OS image to build"
         required: true
         type: string
       build_variant:
-        description: 'The variant of the OS image to build'
+        description: "The variant of the OS image to build"
         required: false
         type: string
       base_release_name:
-        description: 'The release name of the RPi OS base image (bullseye, bookworm)'
+        description: "The release name of the RPi OS base image (bullseye, bookworm)"
         required: true
         type: string
       base_image_variant:
-        description: 'The name of the RPi OS base image variant (lite, desktop, or full)'
+        description: "The name of the RPi OS base image variant (lite, desktop, or full)"
         required: true
         type: string
       base_release_date:
-        description: 'The release date of the RPi OS base image'
+        description: "The release date of the RPi OS base image"
         required: true
         type: string
       base_file_release_date:
-        description: 'The release date of the RPi OS base image file, if different from the group release date'
+        description: "The release date of the RPi OS base image file, if different from the group release date"
         required: false
         type: string
       arch:
-        description: 'The CPU architecture of the OS (armhf, arm64)'
+        description: "The CPU architecture of the OS (armhf, arm64)"
         required: true
         type: string
     outputs:
       image_name:
-        description: 'Name of the built OS image'
+        description: "Name of the built OS image"
         value: ${{ jobs.build-os-image.outputs.image_name }}
       artifact_id:
-        description: 'Artifact ID of the GitHub Artifacts upload of the built OS image'
+        description: "Artifact ID of the GitHub Artifacts upload of the built OS image"
         value: ${{ jobs.build-os-image.outputs.artifact_id }}
 
 jobs:
@@ -164,9 +164,9 @@ jobs:
         id: restore-precache
         uses: actions/cache/restore@v6
         with:
-          key: "container-images-${{ matrix.platform.arch }}-${{ steps.setup-precaching.outputs.container_list_hash }}"
+          key: "container-images-${{ inputs.arch }}-${{ steps.setup-precaching.outputs.container_list_hash }}"
           restore-keys: |
-            "container-images-${{ matrix.platform.arch }}"
+            "container-images-${{ inputs.arch }}"
           path: ${{ steps.setup-precaching.outputs.path }}
 
       - name: Pre-download container images
@@ -197,7 +197,7 @@ jobs:
         if: "!steps.restore-precache.outputs.cache-hit"
         uses: actions/cache/save@v6
         with:
-          key: "container-images-${{ matrix.platform.arch }}-${{ steps.setup-precaching.outputs.container_list_hash }}"
+          key: "container-images-${{ inputs.arch }}-${{ steps.setup-precaching.outputs.container_list_hash }}"
           path: ${{ steps.setup-precaching.outputs.path }}
 
       # Note: the following step isn't strictly necessary, but it's nice to separate the GitHub
@@ -213,7 +213,7 @@ jobs:
         # Note: the sudoers file is needed for RPi OS after the 2026-04-13 build of RPi OS Trixie,
         # which disables passwordless sudo by default; the sudoers file must be owned by sudo
         run: |
-          sudo chown root:root "$(pwd)/os-build/sudoers-pi"
+          sudo chown root:root "$(pwd)/os-build/etc-sudoers.d-010_pi-nopasswd"
 
       - name: Move pre-downloaded container images into OS image
         uses: ethanjli/pinspawn-action@v0.1.6-beta.0
@@ -224,7 +224,7 @@ jobs:
           # which disables passwordless sudo by default, since this step runs as user pi.
           args: >-
             --bind ${{ steps.setup-precaching.outputs.path }}:/run/container-images
-            --bind "$(pwd)/os-build/sudoers-pi":/etc/sudoers.d/010_pi-nopasswd
+            --bind "$(pwd)/os-build/etc-sudoers.d-010_pi-nopasswd":/etc/sudoers.d/010_pi-nopasswd
             --machine=raspberrypi
           run: |
             local_cache="$HOME/.cache/forklift/containers/docker-archives/"
@@ -285,9 +285,16 @@ jobs:
           # resolves noisy (but harmless) error messages from sudo.
           # Note: the sudoers file is needed for RPi OS after the 2026-04-13 build of RPi OS Trixie,
           # which disables passwordless sudo by default, since this step runs as user pi.
+          # Note: Docker >= 29.9.0 (moby/moby#53615) makes `docker pull` download every compressed
+          # layer blob even when the unpacked layers already exist. That results in a second
+          # (compressed) copy of every container image (~2.7 GB) on the OS image. The `lazy-pull`
+          # feature (moby/moby#53877) restores the old behavior of skipping layer content which the
+          # containerd snapshotter already provides. The bind-mount of the /etc/docker/daemon.json
+          # file temporarily enables that feature for building OS images to reduce OS image size.
           args: >-
             --bind "$(pwd)":/run/pallet
-            --bind "$(pwd)/os-build/sudoers-pi":/etc/sudoers.d/010_pi-nopasswd
+            --bind "$(pwd)/os-build/etc-sudoers.d-010_pi-nopasswd":/etc/sudoers.d/010_pi-nopasswd
+            --bind "$(pwd)/os-build/etc-docker-daemon.json":/etc/docker/daemon.json
             --capability=CAP_NET_ADMIN
             --machine=raspberrypi
           run: |
@@ -311,7 +318,6 @@ jobs:
           run: |
             apt-get -o Dpkg::Progress-Fancy=0 update
             apt-get -o Dpkg::Progress-Fancy=0 install ca-certificates libnss3
-
 
       - name: Prepare for a headless first boot on bare metal
         uses: ethanjli/pinspawn-action@v0.1.6-beta.0
@@ -344,6 +350,10 @@ jobs:
             # userconfig.service. See
             # https://forums.raspberrypi.com/viewtopic.php?p=2032694#p2032694
             systemctl enable getty@tty1
+
+            # This is a workaround for a change announced in https://github.com/raspberrypi/trixie-feedback/issues/60
+            # to prevent the `pi` user from being usable for login/ssh by default.
+            usermod --shell /usr/bin/bash pi
 
       - name: Freeze snapshots for factory reset
         uses: ethanjli/pinspawn-action@v0.1.6-beta.0
