@@ -7,15 +7,21 @@
 # The image brings its own x86_64 emulator (the Andor SDK is x86_64-only), so the host needs no
 # qemu or binfmt_misc. A Raspberry Pi 5 must boot the 4K-page kernel: kernel=kernel8.img in
 # /boot/firmware/config.txt (`getconf PAGESIZE` = 4096).
+#
+# The image does not contain the Andor SDK (licensed with the camera). Install it once per
+# machine from the SDK archive Andor supplies (andor-*.tar.gz): upload it on
+# http://<machine>/andor/, or `curl --data-binary @andor-*.tar.gz http://<machine>/andor/sdk`.
+# Its runtime is kept in the andor-sdk volume, across restarts and upgrades.
 services:
   andor-server:
-    image:  ghcr.io/openuc2/andor-server:sha-75c9011
+    image: ghcr.io/openuc2/andor-server:sha-e4aaba8@sha256:404d3e78e30d41e344424c969284f0c13ab07bee05943c0c8bf371fe90ad7208
     volumes:
       # bind-mounted rather than a `devices:` entry, so the node that appears when the camera
       # re-enumerates (power cycle, USB reset) is visible without restarting the container
       - /dev/bus/usb:/dev/bus/usb
       - /run/udev:/run/udev:ro
       - /home/pi/Datasets/andor-server:/data
+      - andor-sdk:/sdk # the Andor SDK runtime, installed at run time (not in the image)
     device_cgroup_rules:
       - 'c 189:* rwm' # USB devices, e.g. /dev/bus/usb/004/002
     environment:
@@ -37,6 +43,9 @@ services:
   server:
     networks:
       - andor
+
+volumes:
+  andor-sdk: {}
 
 networks:
   andor: {}

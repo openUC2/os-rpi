@@ -20,13 +20,6 @@ deployment:
       - description: Firmware binary transfer service
         port: 3333
         protocol: tcp
-    file-exports:
-      - description: >-
-          systemd service run by ImSwitch's (experimental) pallet upgrade button:
-          `forklift plt upgrade --force && forklift stage apply`
-        target: overlays/usr/lib/systemd/system/imswitch-pallet-upgrade.service
-      - description: polkit rule letting pi (the ImSwitch container user) start only that service
-        target: overlays/usr/share/polkit-1/rules.d/20-imswitch-pallet-upgrade.rules
 
 features:
   frontend:
@@ -163,7 +156,8 @@ features:
   andor-cameras:
     description: >-
       Support for Andor SDK2 cameras (iXon) through the andor-server sidecar container, used by
-      ImSwitch's AndorServerManager (host andor-server, port 8000). Raspberry Pi 5 needs the
+      ImSwitch's AndorServerManager (host andor-server, port 8000). The Andor SDK is not part of
+      the image: upload the SDK archive from Andor once on /andor/. Raspberry Pi 5 needs the
       4K-page kernel (kernel=kernel8.img in /boot/firmware/config.txt).
     compose-files:
       - andor-cameras.compose.yml
@@ -183,6 +177,11 @@ features:
           paths:
             - /andor
             - /andor/*
+  micromanager:
+    description: >-
+      Runs the ImSwitch container image variant which includes Micro-Manager (pymmcore-plus)
+    compose-files:
+      - micromanager.compose.yml
   can-interface:
     description: Provides automatic enablement of the OS interface for an SPI CAN bus transceiver
     compose-files:
