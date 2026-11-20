@@ -8,7 +8,7 @@ on:
       - edge
   workflow_dispatch:
   schedule:
-    - cron: '0 16 * * *'  # 16:00 UTC every day
+    - cron: "0 16 * * 1" # 16:00 UTC every Monday
 
 env:
   REPO_OWNER: ${{ github.repository_owner }}
