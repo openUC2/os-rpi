@@ -3,10 +3,11 @@
 # and prints what to do next in ImSwitch and Orkestrator. Run it once as pi, after enabling the
 # arkitekt-hub deployment and rebooting:
 #
-#   arkitekt-hub-connect                                    # go.arkitekt.live
-#   arkitekt-hub-connect go.arkitekt.live --reach this-network   # again, after an address change
+#   arkitekt-hub-connect                     # go.arkitekt.live
+#   arkitekt-hub-connect <server>            # another coordination server
 #
-# Further options go to `konstruktor hub connect` (see `konstruktor hub connect --help`).
+# It advertises the addresses this machine has now (run it again after they change). Further
+# options go to `konstruktor hub connect`; --host or --reach replace the address list.
 set -eu
 
 HUB=/home/pi/arkitekt/arkitekt-hub
@@ -24,10 +25,27 @@ if [ ! -f "$HUB/hub_config.yaml" ]; then
   exit 1
 fi
 
+addresses=$(ip -4 -o addr show scope global |
+  awk '$2 !~ /^(docker|br-|veth|virbr)/ { split($4, a, "/"); printf "%s ", a[1] }')
+
+# Advertise the addresses this machine has now, unless told otherwise: at boot, when the hub was
+# created, the tailnet address is often not up yet.
+case " $* " in
+*" --host"* | *" --reach"*) hosts="" ;;
+*)
+  hosts=""
+  for address in $addresses; do
+    hosts="$hosts --host $address"
+  done
+  hosts="$hosts --host $(hostname).local"
+  ;;
+esac
+
 echo "Open the link below, sign in, and accept the hub into your organization."
 echo "The code is valid for about 10 minutes."
 echo
-konstruktor hub connect --in "$HUB" --server "$SERVER" --no-open "$@"
+# shellcheck disable=SC2086 # the host list is split on purpose
+konstruktor hub connect --in "$HUB" --server "$SERVER" --no-open $hosts "$@"
 
 echo
 echo "Waiting for the hub's services to answer..."
@@ -44,8 +62,6 @@ for path in rekuest/ht mikro/ht rustfs/health; do
   echo "  $path: ok"
 done
 
-addresses=$(ip -4 -o addr show scope global |
-  awk '$2 !~ /^(docker|br-|veth|virbr)/ { split($4, a, "/"); printf "%s ", a[1] }')
 cat <<EOF
 
 The hub "$(hostname)" is connected to $SERVER.
@@ -62,5 +78,5 @@ Next:
                Orkestrator under Settings > Privacy > Local Network. From that computer,
                https://<one of the addresses above>:2755/mikro/ht must answer.
 
-If this machine's address changes, run again with --reach this-network.
+If this machine's addresses change, run this again: it advertises the current ones.
 EOF
