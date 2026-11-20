@@ -30,6 +30,10 @@ deployment:
         permissions: 0755
       - description: Creates the hub's per-machine files once and writes the credentials its containers read
         target: overlays/usr/libexec/arkitekt-hub-setup
+      - description: >-
+          Connects the hub to a coordination server (one approval in a browser), waits for its
+          services and prints the next steps for ImSwitch and Orkestrator
+        target: overlays/usr/bin/arkitekt-hub-connect
       - description: systemd service running arkitekt-hub-setup before Forklift starts the containers
         target: overlays/usr/lib/systemd/system/arkitekt-hub-setup.service
       - description: systemd service enablement for arkitekt-hub-setup.service
