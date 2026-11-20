@@ -319,6 +319,17 @@ jobs:
             apt-get -o Dpkg::Progress-Fancy=0 update
             apt-get -o Dpkg::Progress-Fancy=0 install ca-certificates libnss3
 
+      - name: Clean up unneeded files
+        uses: ethanjli/pinspawn-action@v0.1.6-beta.0
+        with:
+          image: ${{ steps.expand-image.outputs.destination }}
+          args: >-
+            --bind "$(pwd)":/run/pallet
+            --machine=raspberrypi
+          run: |
+            du -sh /var/cache/apt/archives || true
+            /run/pallet/os-build/cleanup.sh
+
       - name: Prepare for a headless first boot on bare metal
         uses: ethanjli/pinspawn-action@v0.1.6-beta.0
         env:
