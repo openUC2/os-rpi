@@ -38,8 +38,6 @@ sudo -E apt-get install -y -o Dpkg::Progress-Fancy=0 \
   tailscale
 
 # Install netbird
-sudo -E apt-get install -o Dpkg::Progress-Fancy=0 \
-  ca-certificates curl gnupg
 curl -sSL https://pkgs.netbird.io/debian/public.key |
   sudo gpg --dearmor --output /usr/share/keyrings/netbird-archive-keyring.gpg
 echo 'deb [signed-by=/usr/share/keyrings/netbird-archive-keyring.gpg] https://pkgs.netbird.io/debian stable main' |
