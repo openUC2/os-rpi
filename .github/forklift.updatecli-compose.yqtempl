@@ -2,11 +2,9 @@
 # repo_root: the filesystem path of the git repository root
 # req_path: the path of the requirement (Forklift pallet or Forklift repository) to upgrade
 # forklift_upgrade_file: the filesystem path of the updatecli policy values file for the requirement
-# type_plural: either `pallets` or `repositories`
-# type_singular: either `pallet` or `repository`
 
-name: Upgrade ${type_singular} ${req_path}
+name: Upgrade pallet ${req_path}
 config:
-  - ${repo_root}/.github/updatecli.d/forklift-${type_plural}.yml
+  - ${repo_root}/.github/updatecli.d/forklift-pallets.yml
 values:
   - ${forklift_upgrade_file}
