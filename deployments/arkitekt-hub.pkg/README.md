@@ -49,8 +49,9 @@ Then, as the script prints at the end:
    Orkestrator under Settings → Privacy → Local Network. From that computer,
    `curl -k https://<machine address>:2755/mikro/ht` must print `200`.
 
-The hub's addresses are fixed when it connects. After an address change run
-`arkitekt-hub-connect go.arkitekt.live --reach this-network`, or reserve the DHCP lease.
+The hub advertises the addresses the machine has when it connects (LAN, hotspot, tailnet and
+`<hostname>.local`). After an address change run `arkitekt-hub-connect` again, or reserve the
+DHCP lease.
 
 ## Who owns what
 
