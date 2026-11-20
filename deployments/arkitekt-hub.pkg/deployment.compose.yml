@@ -130,6 +130,11 @@ services:
     environment:
       HUB_CONFIG: rekuest.yaml
       TAKT_INTERNAL_BIND: unix:/run/takt/internal.sock
+    healthcheck:
+      # The image's check (`takt healthcheck`) reads the config that `hub connect` writes. Until
+      # then the container only waits, and "unhealthy" would make Forklift fail the whole apply
+      # (and fall back to the previous pallet at the next boot).
+      test: [CMD-SHELL, test ! -e /workspace/config.yaml || takt healthcheck]
     depends_on:
       db:
         condition: service_healthy

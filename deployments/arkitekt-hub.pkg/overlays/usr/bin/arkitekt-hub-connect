@@ -1,0 +1,66 @@
+#!/bin/sh
+# Connects this machine's Arkitekt hub to a coordination server, waits until its services answer,
+# and prints what to do next in ImSwitch and Orkestrator. Run it once as pi, after enabling the
+# arkitekt-hub deployment and rebooting:
+#
+#   arkitekt-hub-connect                                    # go.arkitekt.live
+#   arkitekt-hub-connect go.arkitekt.live --reach this-network   # again, after an address change
+#
+# Further options go to `konstruktor hub connect` (see `konstruktor hub connect --help`).
+set -eu
+
+HUB=/home/pi/arkitekt/arkitekt-hub
+SERVER=${1:-go.arkitekt.live}
+[ $# -gt 0 ] && shift
+
+if [ "$(id -u)" = 0 ]; then
+  echo "Run this as pi, not as root: konstruktor writes the hub's files as pi." >&2
+  exit 1
+fi
+if [ ! -f "$HUB/hub_config.yaml" ]; then
+  echo "There is no hub in $HUB yet." >&2
+  echo "Enable the arkitekt-hub deployment, stage the pallet and reboot; then see" >&2
+  echo "  journalctl -u arkitekt-hub-setup" >&2
+  exit 1
+fi
+
+echo "Open the link below, sign in, and accept the hub into your organization."
+echo "The code is valid for about 10 minutes."
+echo
+konstruktor hub connect --in "$HUB" --server "$SERVER" --no-open "$@"
+
+echo
+echo "Waiting for the hub's services to answer..."
+for path in rekuest/ht mikro/ht rustfs/health; do
+  tries=0
+  until [ "$(curl -sk -o /dev/null -w '%{http_code}' "https://localhost:2755/$path")" = 200 ]; do
+    tries=$((tries + 1))
+    if [ "$tries" -ge 60 ]; then
+      echo "  $path does not answer after 5 minutes: konstruktor logs --in $HUB" >&2
+      exit 1
+    fi
+    sleep 5
+  done
+  echo "  $path: ok"
+done
+
+addresses=$(ip -4 -o addr show scope global |
+  awk '$2 !~ /^(docker|br-|veth|virbr)/ { split($4, a, "/"); printf "%s ", a[1] }')
+cat <<EOF
+
+The hub "$(hostname)" is connected to $SERVER.
+It is reached at port 2755 on: ${addresses}$(hostname).local
+
+Next:
+  ImSwitch     In the setup file, set
+                 "arkitekt": {"enabled": true, "appName": "frame-<name>",
+                              "url": "https://$SERVER", "autoConnect": true,
+                              "useMikro": true, "uploadExperiments": true}
+               restart ImSwitch, press Connect in its Arkitekt panel, and on the approval
+               page choose the hub "$(hostname)".
+  Orkestrator  Log in at $SERVER and pick the hub "$(hostname)". On macOS, allow
+               Orkestrator under Settings > Privacy > Local Network. From that computer,
+               https://<one of the addresses above>:2755/mikro/ht must answer.
+
+If this machine's address changes, run again with --reach this-network.
+EOF
