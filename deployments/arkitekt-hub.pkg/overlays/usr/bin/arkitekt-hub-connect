@@ -47,6 +47,15 @@ echo
 # shellcheck disable=SC2086 # the host list is split on purpose
 konstruktor hub connect --in "$HUB" --server "$SERVER" --no-open $hosts "$@"
 
+# konstruktor writes these readable by everyone, but they hold tokens and keys (arkitekt-hub-setup
+# does the same at every boot). The containers run as root and still read them.
+for file in hub_config.yaml hub_credentials.json docker-compose.yaml configs/rekuest.yaml \
+  configs/mikro.yaml configs/rustfs_init.yaml configs/gateway/hub.key; do
+  if [ -f "$HUB/$file" ]; then
+    chmod 600 "$HUB/$file"
+  fi
+done
+
 echo
 echo "Waiting for the hub's services to answer..."
 for path in rekuest/ht mikro/ht rustfs/health; do
