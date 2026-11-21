@@ -1,0 +1,15 @@
+[Unit]
+Description=Write the state of this machine's Arkitekt hub for ImSwitch
+Documentation=file:/usr/bin/arkitekt-hub-connect
+After=forklift-apply.service docker.service arkitekt-hub-setup.service
+
+[Service]
+# At boot, once Forklift has started the hub; again whenever ImSwitch's Arkitekt panel asks
+# (allowed by 20-arkitekt-hub.rules). Writes /home/pi/arkitekt/status/hub.json.
+Type=oneshot
+User=pi
+Environment=HOME=/home/pi
+ExecStart=/usr/bin/arkitekt-hub-connect --status
+
+[Install]
+WantedBy=forklift-apply.service

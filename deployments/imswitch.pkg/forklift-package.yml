@@ -197,7 +197,8 @@ features:
   arkitekt:
     description: >-
       Keeps ImSwitch's Arkitekt login (in /home/pi/arkitekt/imswitch), so that a new container
-      reconnects to the Arkitekt server without asking for an approval again
+      reconnects to the Arkitekt server without asking for an approval again, and lets its
+      Arkitekt panel show and connect this machine's hub (the arkitekt-hub deployment)
     compose-files:
       - arkitekt.compose.yml
   dev-upgrade-os:

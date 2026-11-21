@@ -26,32 +26,43 @@ with "ready, not connected yet", and `docker ps | grep arkitekt-hub` lists eight
 
 ## After enabling it: connect the hub
 
-Once, as pi, on the machine (it needs an approval in a browser, on any computer):
+Once, with an approval in a browser on any computer. Easiest from **ImSwitch**: with the
+`arkitekt` feature of the `imswitch` deployment, its Arkitekt panel starts with a card *This
+machine's hub*. Press **Connect hub to go.arkitekt.live**, open **Accept the hub**, sign in and
+accept the hub into your organization. The card follows it to *Connected*. **Bind microscope**
+then preselects this hub on ImSwitch's own approval page.
+
+Or as pi on the machine (SSH, or the terminal at `http://<machine>/admin/cockpit`):
 
 ```sh
 arkitekt-hub-connect                 # go.arkitekt.live; or name another coordination server
 ```
 
-It runs `konstruktor hub connect`, prints a link, and waits until rekuest, mikro and the object
-store answer on port 2755. Open the link, sign in and accept the hub into your organization.
-rekuest, mikro and the reporter wait for the configs this writes, then start by themselves.
+Both run `konstruktor hub connect`, show a link, and wait until rekuest, mikro and the object
+store answer on port 2755 with the certificate the hub registered. rekuest, mikro and the reporter
+wait for the configs this writes, then start by themselves.
 
-Then, as the script prints at the end:
+How the panel does it: ImSwitch starts `arkitekt-hub-connect@<server>.service` on the host over the
+system D-Bus, and reads `/home/pi/arkitekt/status/hub.json`, which the script writes (nothing
+secret: name, organization, addresses, the pending link). `20-arkitekt-hub.rules` lets pi start and
+stop only that unit and start `arkitekt-hub-status.service`, which refreshes the state (also at
+every boot).
 
-1. **ImSwitch:** add an `arkitekt` block to the setup file and restart ImSwitch:
+Then:
+
+1. **ImSwitch:** with an `arkitekt` block in the setup file, press **Bind microscope** in its
+   Arkitekt panel and keep the preselected hub on the approval page:
    ```json
    "arkitekt": {"enabled": true, "appName": "frame-<name>", "url": "https://go.arkitekt.live",
                 "autoConnect": true, "useMikro": true, "uploadExperiments": true}
    ```
-   Press **Connect** in its Arkitekt panel. On the approval page choose **this machine's hub**
-   (named like its hostname). Choosing another hub works only while that machine is reachable.
 2. **Orkestrator:** log in at go.arkitekt.live and pick this machine's hub. On macOS allow
    Orkestrator under Settings → Privacy → Local Network. From that computer,
    `curl -k https://<machine address>:2755/mikro/ht` must print `200`.
 
 The hub advertises the addresses the machine has when it connects (LAN, hotspot, tailnet and
-`<hostname>.local`). After an address change run `arkitekt-hub-connect` again, or reserve the
-DHCP lease.
+`<hostname>.local`). After an address change connect again (the card's **Connect again**, or
+`arkitekt-hub-connect`), or reserve the DHCP lease.
 
 ## Who owns what
 

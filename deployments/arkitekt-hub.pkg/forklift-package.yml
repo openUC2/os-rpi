@@ -32,11 +32,23 @@ deployment:
         target: overlays/usr/libexec/arkitekt-hub-setup
       - description: >-
           Connects the hub to a coordination server (one approval in a browser), waits for its
-          services and prints the next steps for ImSwitch and Orkestrator
+          services, and writes the hub's state (nothing secret) for ImSwitch's Arkitekt panel
         target: overlays/usr/bin/arkitekt-hub-connect
       - description: systemd service running arkitekt-hub-setup before Forklift starts the containers
         target: overlays/usr/lib/systemd/system/arkitekt-hub-setup.service
       - description: systemd service enablement for arkitekt-hub-setup.service
         target: overlays/etc/systemd/system/forklift-apply.service.wants/arkitekt-hub-setup.service
+      - description: >-
+          systemd service connecting the hub to the coordination server in its instance name,
+          started from ImSwitch's Arkitekt panel
+        target: overlays/usr/lib/systemd/system/arkitekt-hub-connect@.service
+      - description: systemd service writing the hub's state at boot and when ImSwitch asks
+        target: overlays/usr/lib/systemd/system/arkitekt-hub-status.service
+      - description: systemd service enablement for arkitekt-hub-status.service
+        target: overlays/etc/systemd/system/forklift-apply.service.wants/arkitekt-hub-status.service
+      - description: >-
+          polkit rule letting pi (ImSwitch, also in its container) start and stop only
+          arkitekt-hub-connect@*.service and start arkitekt-hub-status.service
+        target: overlays/usr/share/polkit-1/rules.d/20-arkitekt-hub.rules
       # Landing page template partials:
       - target: shared/machine-portal-common/templates/home/advanced/network-apis/40-arkitekt-hub.item.partial.tmpl

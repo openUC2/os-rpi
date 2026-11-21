@@ -1,107 +1,282 @@
-#!/bin/sh
-# Connects this machine's Arkitekt hub to a coordination server, waits until its services answer,
-# and prints what to do next in ImSwitch and Orkestrator. Run it once as pi, after enabling the
-# arkitekt-hub deployment and rebooting:
-#
-#   arkitekt-hub-connect                     # go.arkitekt.live
-#   arkitekt-hub-connect <server>            # another coordination server
-#
-# It advertises the addresses this machine has now (run it again after they change). Further
-# options go to `konstruktor hub connect`; --host or --reach replace the address list.
-set -eu
+#!/usr/bin/python3
+"""Connects this machine's Arkitekt hub to a coordination server, and reports the hub's state.
 
-HUB=/home/pi/arkitekt/arkitekt-hub
-SERVER=${1:-go.arkitekt.live}
-[ $# -gt 0 ] && shift
+    arkitekt-hub-connect                   connect to go.arkitekt.live (one approval in a browser)
+    arkitekt-hub-connect <server> [...]    another coordination server; further options go to
+                                           `konstruktor hub connect` (--host or --reach replace
+                                           the address list)
+    arkitekt-hub-connect --status          only write the state file
 
-if [ "$(id -u)" = 0 ]; then
-  echo "Run this as pi, not as root: konstruktor writes the hub's files as pi." >&2
-  exit 1
-fi
-if [ ! -f "$HUB/hub_config.yaml" ]; then
-  echo "There is no hub in $HUB yet." >&2
-  echo "Enable the arkitekt-hub deployment, stage the pallet and reboot; then see" >&2
-  echo "  journalctl -u arkitekt-hub-setup" >&2
-  exit 1
-fi
+Run it as pi, after enabling the arkitekt-hub deployment and rebooting: by hand, or from
+ImSwitch's Arkitekt panel, which starts arkitekt-hub-connect@<server>.service over D-Bus (see
+20-arkitekt-hub.rules). It advertises the addresses this machine has now (at boot, when the hub
+was created, the tailnet address is often not up yet), prints the approval link, waits until the
+hub's services answer with the certificate it registered, and keeps its tokens and keys readable
+by pi only.
 
-addresses=$(ip -4 -o addr show scope global |
-  awk '$2 !~ /^(docker|br-|veth|virbr)/ { split($4, a, "/"); printf "%s ", a[1] }')
+The state goes to $ARKITEKT_HUB_STATUS (/home/pi/arkitekt/status/hub.json), for the panel. It
+holds nothing secret: the hub's name, organization and addresses, and the approval link while
+one is pending.
+"""
+import datetime
+import json
+import os
+import re
+import signal
+import socket
+import ssl
+import subprocess
+import sys
+import time
+import urllib.request
 
-# Advertise the addresses this machine has now, unless told otherwise: at boot, when the hub was
-# created, the tailnet address is often not up yet.
-case " $* " in
-*" --host"* | *" --reach"*) hosts="" ;;
-*)
-  hosts=""
-  for address in $addresses; do
-    hosts="$hosts --host $address"
-  done
-  hosts="$hosts --host $(hostname).local"
-  ;;
-esac
+HUB = "/home/pi/arkitekt/arkitekt-hub"
+STATUS = os.environ.get("ARKITEKT_HUB_STATUS", "/home/pi/arkitekt/status/hub.json")
+KONSTRUKTOR = os.environ.get("KONSTRUKTOR", "konstruktor")
+DEFAULT_SERVER = "go.arkitekt.live"
+GATEWAY_PORT = 2755
+SERVER = re.compile(r"^[A-Za-z0-9.-]+(:[0-9]{1,5})?$")
+# Hold tokens and keys; konstruktor writes some of them readable by everyone.
+PRIVATE = ("hub_config.yaml", "hub_credentials.json", "docker-compose.yaml",
+           "configs/rekuest.yaml", "configs/mikro.yaml", "configs/rustfs_init.yaml",
+           "configs/gateway/hub.key")
+IN_PROGRESS = ("connecting", "awaiting_approval", "starting")
 
-echo "Open the link below, sign in, and accept the hub into your organization."
-echo "The code is valid for about 10 minutes."
-echo
-# shellcheck disable=SC2086 # the host list is split on purpose
-konstruktor hub connect --in "$HUB" --server "$SERVER" --no-open $hosts "$@"
+child = None
 
-# konstruktor writes these readable by everyone, but they hold tokens and keys (arkitekt-hub-setup
-# does the same at every boot). The containers run as root and still read them.
-for file in hub_config.yaml hub_credentials.json docker-compose.yaml configs/rekuest.yaml \
-  configs/mikro.yaml configs/rustfs_init.yaml configs/gateway/hub.key; do
-  if [ -f "$HUB/$file" ]; then
-    chmod 600 "$HUB/$file"
-  fi
-done
 
-echo
-echo "Waiting for the hub's services to answer..."
-for path in rekuest/ht mikro/ht rustfs/health; do
-  tries=0
-  until [ "$(curl -sk -o /dev/null -w '%{http_code}' "https://localhost:2755/$path")" = 200 ]; do
-    tries=$((tries + 1))
-    if [ "$tries" -ge 60 ]; then
-      echo "  $path does not answer after 5 minutes: konstruktor logs --in $HUB" >&2
-      exit 1
-    fi
-    sleep 5
-  done
-  echo "  $path: ok"
-done
+def now(offset_s=0.0):
+    moment = datetime.datetime.now(datetime.timezone.utc) + datetime.timedelta(seconds=offset_s)
+    return moment.isoformat(timespec="seconds").replace("+00:00", "Z")
 
-# `hub connect` writes and registers a new gateway certificate, and clients accept only that one.
-# The old gateway serves the previous certificate until it is recreated: a client connecting in
-# between fails with "certificate verify failed".
-fingerprint() { openssl x509 -noout -fingerprint -sha256 2>/dev/null; }
-registered=$(fingerprint <"$HUB/configs/gateway/hub.crt")
-tries=0
-until [ "$(openssl s_client -connect localhost:2755 </dev/null 2>/dev/null | fingerprint)" = "$registered" ]; do
-  tries=$((tries + 1))
-  if [ "$tries" -ge 60 ]; then
-    echo "  The gateway still serves an old certificate: konstruktor logs --in $HUB gateway" >&2
-    exit 1
-  fi
-  sleep 5
-done
-echo "  certificate: the registered one"
 
-cat <<EOF
+def say(text=""):
+    print(text, flush=True)
 
-The hub "$(hostname)" is connected to $SERVER.
-It is reached at port 2755 on: ${addresses}$(hostname).local
+
+def addresses():
+    """This machine's IPv4 addresses (not Docker's), and its mDNS name."""
+    try:
+        out = subprocess.run(["ip", "-4", "-o", "addr", "show", "scope", "global"],
+                             capture_output=True, text=True, timeout=10).stdout
+    except (OSError, subprocess.SubprocessError):
+        out = ""
+    found = []
+    for line in out.splitlines():
+        fields = line.split()
+        if len(fields) > 3 and not re.match(r"(docker|br-|veth|virbr)", fields[1]):
+            found.append(fields[3].split("/")[0])
+    return found + [f"{socket.gethostname()}.local"]
+
+
+def hub_facts():
+    """What the panel shows of the hub: nothing secret."""
+    facts = {"identifier": socket.gethostname(), "connected": False}
+    try:
+        out = subprocess.run([KONSTRUKTOR, "status", "--json", "--in", HUB],
+                             capture_output=True, text=True, timeout=120).stdout
+        status = json.loads(out)
+        hub, run = status.get("hub") or {}, status.get("run") or {}
+        organizations = [str(c.get("organization")) for c in hub.get("connected") or []]
+        facts.update(identifier=hub.get("identifier") or facts["identifier"],
+                     server=hub.get("coord_server"), connected=bool(hub.get("authorized")),
+                     organizations=organizations,
+                     addresses=list(status.get("advertised") or []),
+                     services={"running": run.get("running"), "total": run.get("total"),
+                               "state": run.get("state")})
+    except (OSError, ValueError, subprocess.SubprocessError) as e:
+        facts["message"] = f"konstruktor status failed: {e}"
+    try:
+        with open(os.path.join(HUB, "hub_credentials.json")) as f:
+            own = (json.load(f).get("envelope") or {}).get("self") or {}
+        facts.update(hubId=own.get("hub"), name=own.get("deployment_name"))
+    except (OSError, ValueError, AttributeError):
+        pass
+    return facts
+
+
+def write_status(state, **fields):
+    """Atomically, readable by everyone (the ImSwitch container mounts the folder)."""
+    doc = {"version": 1, "state": state, "updatedAt": now(), **fields}
+    folder = os.path.dirname(STATUS)
+    try:
+        os.makedirs(folder, mode=0o755, exist_ok=True)
+        temporary = f"{STATUS}.{os.getpid()}"
+        with open(temporary, "w") as f:
+            json.dump(doc, f, indent=1)
+        os.chmod(temporary, 0o644)
+        os.replace(temporary, STATUS)
+    except OSError as e:
+        say(f"(could not write {STATUS}: {e})")
+    return doc
+
+
+def settled(message=None, error=None):
+    """The state when nothing is running: connected or not, from the hub itself."""
+    facts = hub_facts()
+    problem = facts.pop("message", None)
+    state = "connected" if facts.get("connected") else "not_connected"
+    return write_status(state, **facts, message=message or problem, error=error)
+
+
+def keep_private():
+    for name in PRIVATE:
+        path = os.path.join(HUB, name)
+        if os.path.isfile(path):
+            os.chmod(path, 0o600)
+
+
+def answers(path):
+    context = ssl._create_unverified_context()  # the gateway's own certificate: checked below
+    try:
+        with urllib.request.urlopen(f"https://localhost:{GATEWAY_PORT}/{path}", timeout=5,
+                                    context=context) as response:
+            return response.status == 200
+    except OSError:
+        return False
+
+
+def serves_registered_certificate():
+    """`hub connect` writes and registers a new certificate, but the gateway serves the old one
+    until it is recreated: a client connecting in between fails with "certificate verify failed"."""
+    try:
+        with open(os.path.join(HUB, "configs", "gateway", "hub.crt")) as f:
+            registered = ssl.PEM_cert_to_DER_cert(f.read())
+        served = ssl.PEM_cert_to_DER_cert(ssl.get_server_certificate(("localhost", GATEWAY_PORT)))
+        return served == registered
+    except (OSError, ValueError):
+        return False
+
+
+def wait_until_ready(timeout_s=300):
+    deadline = time.time() + timeout_s
+    for path in ("rekuest/ht", "mikro/ht", "rustfs/health"):
+        while not answers(path):
+            if time.time() > deadline:
+                return f"{path} does not answer after {timeout_s // 60} minutes"
+            time.sleep(5)
+        say(f"  {path}: ok")
+    while not serves_registered_certificate():
+        if time.time() > deadline:
+            return "the gateway still serves an old certificate"
+        time.sleep(5)
+    say("  certificate: the registered one")
+    return None
+
+
+def on_signal(signum, _frame):
+    if child is not None and child.poll() is None:
+        child.terminate()
+    settled(message="Cancelled.")
+    sys.exit(128 + signum)
+
+
+def connect(server, extra):
+    global child
+    hosts = []
+    if not any(a.startswith(("--host", "--reach")) for a in extra):
+        for address in addresses():
+            hosts += ["--host", address]
+    command = [KONSTRUKTOR, "hub", "connect", "--in", HUB, "--server", server, "--no-open",
+               *hosts, *extra]
+    progress = {"server": server, "pid": os.getpid(), "identifier": socket.gethostname()}
+    write_status("connecting", **progress, message=f"Asking {server} for an approval code…")
+    say("Open the link below, sign in, and accept the hub into your organization.")
+    say("The code is valid for about 10 minutes.")
+    say()
+
+    approval = {}
+    tail = []
+    child = subprocess.Popen(command, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, text=True,
+                             bufsize=1)
+    for line in child.stdout:
+        say(line.rstrip())
+        tail = (tail + [line.strip()])[-5:]
+        link = re.search(r"(https?://\S+/hubconfigure/\S+)", line)
+        code = re.search(r"^\s*code\s+(\S+)\s*$", line)
+        left = re.search(r"(\d+)m(\d+)s left", line)
+        if link:
+            approval["approveUrl"] = link.group(1)
+        if code:
+            approval["code"] = code.group(1)
+        if left and "expiresAt" not in approval:
+            approval["expiresAt"] = now(int(left.group(1)) * 60 + int(left.group(2)))
+        if (link or code or left) and "approveUrl" in approval and "code" in approval:
+            write_status("awaiting_approval", **progress, **approval,
+                         message="Open the link, sign in and accept the hub.")
+    if child.wait() != 0:
+        reason = next((t.lstrip("✗ ").strip() for t in reversed(tail) if t), "")
+        return f"konstruktor hub connect failed: {reason or f'exit code {child.returncode}'}"
+
+    keep_private()
+    write_status("starting", **progress, message="Accepted. The hub's services restart…")
+    say()
+    say("Waiting for the hub's services to answer...")
+    return wait_until_ready()
+
+
+def next_steps(doc):
+    name = doc.get("name") or doc.get("identifier")
+    reach = ", ".join(doc.get("addresses") or addresses())
+    server = doc.get("server") or DEFAULT_SERVER
+    say(f"""
+The hub "{name}" is connected to {server}.
+It is reached at: {reach}
 
 Next:
-  ImSwitch     In the setup file, set
-                 "arkitekt": {"enabled": true, "appName": "frame-<name>",
-                              "url": "https://$SERVER", "autoConnect": true,
-                              "useMikro": true, "uploadExperiments": true}
-               restart ImSwitch, press Connect in its Arkitekt panel, and on the approval
-               page choose the hub "$(hostname)".
-  Orkestrator  Log in at $SERVER and pick the hub "$(hostname)". On macOS, allow
-               Orkestrator under Settings > Privacy > Local Network. From that computer,
-               https://<one of the addresses above>:2755/mikro/ht must answer.
+  ImSwitch     In its Arkitekt panel press Bind microscope (or Connect); on the approval page
+               choose the hub "{name}".
+  Orkestrator  Log in at {server} and pick the hub "{name}". On macOS, allow Orkestrator
+               under Settings > Privacy > Local Network.
 
-If this machine's addresses change, run this again: it advertises the current ones.
-EOF
+If this machine's addresses change, run this again: it advertises the current ones.""")
+
+
+def main(argv):
+    signal.signal(signal.SIGTERM, on_signal)
+    signal.signal(signal.SIGINT, on_signal)
+    if os.geteuid() == 0:
+        say("Run this as pi, not as root: konstruktor writes the hub's files as pi.")
+        return 1
+    if not os.path.isfile(os.path.join(HUB, "hub_config.yaml")):
+        write_status("absent", message="There is no hub on this machine yet: enable the "
+                     "arkitekt-hub deployment, stage the pallet and reboot.")
+        say(f"There is no hub in {HUB} yet. Enable the arkitekt-hub deployment, stage the pallet")
+        say("and reboot; then see: journalctl -u arkitekt-hub-setup")
+        return 1
+
+    if argv[:1] == ["--status"]:
+        try:
+            with open(STATUS) as f:
+                current = json.load(f)
+            pid = int(current.get("pid") or 0)
+            if pid > 0 and current.get("state") in IN_PROGRESS:
+                os.kill(pid, 0)  # raises unless that connect still runs: then it reports itself
+                return 0
+        except (OSError, ValueError, TypeError):
+            pass
+        doc = settled()
+        say(f"{doc['state']}: {doc.get('name') or doc.get('identifier')} "
+            f"({', '.join(doc.get('organizations') or []) or 'no organization'})")
+        return 0
+
+    server, extra = DEFAULT_SERVER, list(argv)
+    if extra and not extra[0].startswith("-"):
+        server = extra.pop(0)
+    if not SERVER.match(server):
+        settled(error=f"Not a server name: {server!r}")
+        say(f"Not a server name: {server!r}")
+        return 2
+
+    failure = connect(server, extra)
+    if failure:
+        settled(error=failure)
+        say(failure)
+        return 1
+    doc = settled(message=f"Connected to {server}.")
+    next_steps(doc)
+    return 0
+
+
+if __name__ == "__main__":
+    sys.exit(main(sys.argv[1:]))

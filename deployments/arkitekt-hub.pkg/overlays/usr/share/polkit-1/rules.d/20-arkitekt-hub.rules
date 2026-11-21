@@ -1,0 +1,18 @@
+polkit.addRule(function(action, subject) {
+  // ImSwitch's Arkitekt panel (user pi, also inside its container) may connect this machine's
+  // hub and refresh the hub's state, and nothing else: start or stop
+  // arkitekt-hub-connect@<server>.service, and start arkitekt-hub-status.service.
+  if (action.id != "org.freedesktop.systemd1.manage-units" || subject.user != "pi") {
+    return polkit.Result.NOT_HANDLED;
+  }
+  var unit = action.lookup("unit");
+  var verb = action.lookup("verb");
+  if (/^arkitekt-hub-connect@[A-Za-z0-9.:-]+\.service$/.test(unit) &&
+      (verb == "start" || verb == "stop")) {
+    return polkit.Result.YES;
+  }
+  if (unit == "arkitekt-hub-status.service" && verb == "start") {
+    return polkit.Result.YES;
+  }
+  return polkit.Result.NOT_HANDLED;
+});
