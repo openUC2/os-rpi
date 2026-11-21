@@ -71,6 +71,22 @@ for path in rekuest/ht mikro/ht rustfs/health; do
   echo "  $path: ok"
 done
 
+# `hub connect` writes and registers a new gateway certificate, and clients accept only that one.
+# The old gateway serves the previous certificate until it is recreated: a client connecting in
+# between fails with "certificate verify failed".
+fingerprint() { openssl x509 -noout -fingerprint -sha256 2>/dev/null; }
+registered=$(fingerprint <"$HUB/configs/gateway/hub.crt")
+tries=0
+until [ "$(openssl s_client -connect localhost:2755 </dev/null 2>/dev/null | fingerprint)" = "$registered" ]; do
+  tries=$((tries + 1))
+  if [ "$tries" -ge 60 ]; then
+    echo "  The gateway still serves an old certificate: konstruktor logs --in $HUB gateway" >&2
+    exit 1
+  fi
+  sleep 5
+done
+echo "  certificate: the registered one"
+
 cat <<EOF
 
 The hub "$(hostname)" is connected to $SERVER.
