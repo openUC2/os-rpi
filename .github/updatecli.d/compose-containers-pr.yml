@@ -49,6 +49,8 @@ autodiscovery:
       ignore:
         - images:
           - ghcr.io/sargassum-world/pslocal # temporarily unmaintained; only used in a test package
+        # Moves only with the konstruktor release that writes the hub's configs (see the file)
+        - path: deployments/arkitekt-hub.pkg/deployment.compose.yml
 
     # updatecli provides no easy way to only enable specified crawlers, so instead we have to
     # disable all other crawlers. Refer to the "enumerating badness" section of

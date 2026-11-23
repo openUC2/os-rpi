@@ -1,0 +1,185 @@
+# This machine's Arkitekt hub: rekuest (remote actions) and mikro (images), with Postgres, Redis,
+# RustFS (object storage) and a Caddy gateway on ports 2754 (HTTP) and 2755 (HTTPS). Logins and
+# organizations stay on the coordination server the hub is connected to (e.g. go.arkitekt.live).
+#
+# Forklift owns these containers. konstruktor only writes the per-machine files, once, into
+# /home/pi/arkitekt/arkitekt-hub (arkitekt-hub-setup.service): the service configs, the gateway's
+# certificate, and the credentials this file reads from secrets/. Services, images and mounts follow
+# what the konstruktor release pinned in forklift-package.yml generates for
+# `--services rekuest,mikro --storage folder`: move the images only together with that release.
+#
+# The compose project is named like that folder (arkitekt-hub), so konstruktor's own commands
+# (`konstruktor status|logs|check|backup --in /home/pi/arkitekt/arkitekt-hub`) act on these same
+# containers, and `konstruktor up` cannot start a second stack on the same data.
+#
+# rekuest, mikro, rekuest-takt and the reporter get their configs from `konstruktor hub connect`
+# (one approval in a browser). Until then they wait instead of failing. Folders are mounted, never
+# single files that may not exist yet: Docker would make an empty folder in a missing file's place.
+
+x-wait-for-config: &wait-for-config
+  - /bin/sh
+  - -c
+  - |
+    until test -s "/hub/configs/$$HUB_CONFIG"; do sleep 10; done
+    mkdir -p /workspace
+    ln -sf "/hub/configs/$$HUB_CONFIG" /workspace/config.yaml
+    exec "$$@"
+  - --
+
+services:
+  db:
+    image: jhnnsrs/daten:latest@sha256:5d00dc2000b833b9f9a7dea625d5d3516e9b5ee870f41c2381546040fcbaa043
+    environment:
+      POSTGRES_MULTIPLE_DATABASES: rekuest_main,mikro_main
+      POSTGRES_USER_FILE: /run/hub-secrets/POSTGRES_USER
+      POSTGRES_PASSWORD_FILE: /run/hub-secrets/POSTGRES_PASSWORD
+    healthcheck:
+      test: [CMD-SHELL, 'pg_isready -h 127.0.0.1 -U "$$(cat /run/hub-secrets/POSTGRES_USER)"']
+      interval: 3s
+      timeout: 5s
+      retries: 40
+    volumes:
+      - /home/pi/arkitekt/arkitekt-hub/db_data:/var/lib/postgresql/data
+      - /home/pi/arkitekt/arkitekt-hub/secrets:/run/hub-secrets:ro
+    restart: unless-stopped
+
+  redis:
+    image: redis:8.10.1@sha256:8a1efc5f479551822b47424ccae982026b633f28818eab0387348120a61e10e2
+    restart: unless-stopped
+
+  rustfs:
+    image: rustfs/rustfs:latest@sha256:b81d16a90ee25bd9511280127ca1471788c6e874cf0f0da759645f46b2dc1d74
+    environment:
+      RUSTFS_ACCESS_KEY_FILE: /run/hub-secrets/RUSTFS_ACCESS_KEY
+      RUSTFS_SECRET_KEY_FILE: /run/hub-secrets/RUSTFS_SECRET_KEY
+      RUSTFS_VOLUMES: /data
+      RUSTFS_ADDRESS: :9000
+    user: 0:0
+    stop_grace_period: 2s
+    volumes:
+      - /home/pi/arkitekt/arkitekt-hub/rustfs_data:/data
+      - /home/pi/arkitekt/arkitekt-hub/secrets:/run/hub-secrets:ro
+    restart: unless-stopped
+
+  rustfs_init:
+    # Creates the buckets and the services' user in RustFS, then exits.
+    image: jhnnsrs/init:latest@sha256:42acd97cb8368669c3673a289a64219bd5e162b1f10f81b72c4b540c2859cd45
+    entrypoint:
+      - /bin/sh
+      - -c
+      - |
+        set -e
+        if ! test -s /hub/configs/rustfs_init.yaml; then
+          echo "No hub configs in /home/pi/arkitekt/arkitekt-hub: see arkitekt-hub-setup.service" >&2
+          exit 1
+        fi
+        ln -sf /hub/configs/rustfs_init.yaml /workspace/config.yaml
+        RUSTFS_ACCESS_KEY="$$(cat /run/hub-secrets/RUSTFS_ACCESS_KEY)"
+        RUSTFS_SECRET_KEY="$$(cat /run/hub-secrets/RUSTFS_SECRET_KEY)"
+        export RUSTFS_ACCESS_KEY RUSTFS_SECRET_KEY
+        exec "$$@"
+      - --
+    command: [python, init.py]
+    environment:
+      RUSTFS_HOST: http://rustfs:9000
+    volumes:
+      - /home/pi/arkitekt/arkitekt-hub/configs:/hub/configs:ro
+      - /home/pi/arkitekt/arkitekt-hub/secrets:/run/hub-secrets:ro
+    stop_grace_period: 2s
+    depends_on:
+      rustfs:
+        condition: service_started
+
+  rekuest:
+    image: jhnnsrs/rekuest:19@sha256:df456730c14bb1c92e85f241936245e91b8ae5adf2cdc5513c4fc4ca4be7a31e
+    entrypoint: *wait-for-config
+    command: [arkitekt-service, serve]
+    environment:
+      HUB_CONFIG: rekuest.yaml
+    depends_on: &on-storage
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_started
+      rustfs:
+        condition: service_started
+      rustfs_init:
+        condition: service_completed_successfully
+    stop_grace_period: 2s
+    volumes:
+      - /home/pi/arkitekt/arkitekt-hub/configs:/hub/configs:ro
+      - takt_run:/run/takt
+    restart: unless-stopped
+
+  mikro:
+    image: jhnnsrs/mikro:15@sha256:2e6069aa93b17bd9323ad7b131099ee68f882ed53b27e880dcd1c5abb9385b1f
+    entrypoint: *wait-for-config
+    command: [arkitekt-service, serve]
+    environment:
+      HUB_CONFIG: mikro.yaml
+    depends_on: *on-storage
+    stop_grace_period: 2s
+    volumes:
+      - /home/pi/arkitekt/arkitekt-hub/configs:/hub/configs:ro
+    restart: unless-stopped
+
+  rekuest-takt:
+    image: jhnnsrs/rekuest-takt:19@sha256:4b73f111499de61e2caea8e802f77b90e1f5e1fdc2e471e9b518a92d1fda1319
+    entrypoint: *wait-for-config
+    command: [takt]
+    environment:
+      HUB_CONFIG: rekuest.yaml
+      TAKT_INTERNAL_BIND: unix:/run/takt/internal.sock
+    healthcheck:
+      # The image's check (`takt healthcheck`) reads the config that `hub connect` writes. Until
+      # then the container only waits, and "unhealthy" would make Forklift fail the whole apply
+      # (and fall back to the previous pallet at the next boot).
+      test: [CMD-SHELL, test ! -e /workspace/config.yaml || takt healthcheck]
+    depends_on:
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_started
+      rekuest:
+        condition: service_started
+    stop_grace_period: 2s
+    volumes:
+      - /home/pi/arkitekt/arkitekt-hub/configs:/hub/configs:ro
+      - takt_run:/run/takt
+    restart: unless-stopped
+
+  gateway:
+    image: caddy:2.11.4@sha256:0c994536bddb66445885237f1a5dcc1916bccea922661c76b4e9fc24061f9b52
+    command: [caddy, run, --config, /hub/configs/Caddyfile, --adapter, caddyfile]
+    ports:
+      - 2754:80
+      - 2755:443
+    volumes:
+      - /home/pi/arkitekt/arkitekt-hub/configs:/hub/configs:ro
+      - /home/pi/arkitekt/arkitekt-hub/configs/gateway:/etc/caddy/tls:ro
+    restart: unless-stopped
+
+  reporter:
+    # Tells the coordination server how the hub is doing, once the hub is connected to it.
+    image: jhnnsrs/reporter:latest@sha256:f4dc575a4c8af2b1860e2c3c65b17bd7c6f2ac0843e7c489e8d14029e9a8af6b
+    entrypoint:
+      - /bin/sh
+      - -c
+      - |
+        until test -s /hub/hub_credentials.json; do sleep 30; done
+        mkdir -p /seed
+        ln -sf /hub/hub_credentials.json /seed/hub_credentials.json
+        ln -sf /hub/hub_config.yaml /seed/hub_config.yaml
+        exec "$$@"
+      - --
+    command: [konstruktor, hub-report]
+    volumes:
+      - /home/pi/arkitekt/arkitekt-hub:/hub:ro
+      - reporter_state:/state
+    depends_on:
+      - gateway
+    restart: unless-stopped
+
+volumes:
+  reporter_state: {}
+  takt_run: {}

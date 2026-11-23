@@ -1,0 +1,20 @@
+[Unit]
+Description=Connect this machine's Arkitekt hub to the coordination server %i
+Documentation=file:/usr/bin/arkitekt-hub-connect
+Wants=network-online.target
+After=network-online.target docker.service arkitekt-hub-setup.service
+
+[Service]
+# Started by ImSwitch's Arkitekt panel over D-Bus (allowed by 20-arkitekt-hub.rules), or by hand:
+#   sudo systemctl start arkitekt-hub-connect@go.arkitekt.live
+# It waits for an approval in a browser, so it runs in the background; its state goes to
+# /home/pi/arkitekt/status/hub.json, its output to the journal.
+Type=exec
+User=pi
+Environment=HOME=/home/pi
+# %i, not %I: the instance is a host name, and %I would turn its dashes into slashes
+ExecStart=/usr/bin/arkitekt-hub-connect %i
+# An approval code lives about 10 minutes; then the services restart (up to 5 minutes)
+RuntimeMaxSec=30min
+# Stopped from the panel (Cancel): the script reports it and exits with 128 + SIGTERM
+SuccessExitStatus=143

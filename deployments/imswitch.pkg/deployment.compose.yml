@@ -1,8 +1,11 @@
 services:
   server:
-    image: ghcr.io/openuc2/imswitch:sha-d6d0d3c@sha256:d5156356923a9d7a98d18bd818131fa38018743a0b00a2b6eff150b99d53fe09
+    image: ghcr.io/openuc2/imswitch:sha-6e793c7
     volumes:
       - /etc/machine-id:/etc/machine-id:ro
+      # The host's name (= the Wi-Fi hotspot SSID), shown on the HAT's status display. Without this
+      # the container's /etc/hostname is just the container id.
+      - /etc/hostname:/etc/hostname:ro
       - /home/pi/ImSwitchConfig:/home/pi/ImSwitchConfig
       - /home/pi/Datasets:/home/pi/Datasets
       - /media:/media

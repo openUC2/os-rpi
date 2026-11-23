@@ -1,0 +1,17 @@
+[Unit]
+Description=Create this machine's Arkitekt hub once, and write the credentials its containers read
+Documentation=https://github.com/arkitektio/konstruktor
+Wants=network-online.target
+After=network-online.target docker.service tailscaled.service
+Requires=docker.service
+Before=forklift-apply.service
+ConditionFileIsExecutable=/usr/libexec/arkitekt-hub-setup
+
+[Service]
+Type=oneshot
+ExecStart=/usr/libexec/arkitekt-hub-setup
+# Creating the hub asks Docker about the images, which Forklift has normally cached already.
+TimeoutStartSec=15min
+
+[Install]
+WantedBy=forklift-apply.service

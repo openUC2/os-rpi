@@ -42,6 +42,34 @@ System control:`sudo kioskctl {enable,disable,status,uninstall}`.
 
 You can connect an HDMI monitor or the original DSI display. Have fun!
 
+### Setting up Andor cameras
+
+Andor SDK2 cameras (e.g. iXon) are driven by the `andor-server` sidecar container (the
+`andor-cameras` feature of the `imswitch` deployment), which ImSwitch's `AndorServerManager` reaches
+at `http://andor-server:8000`. To set it up, run:
+```bash
+bash "$(forklift plt locate-file andor/setup.sh)"
+```
+
+The script:
+1. enables the `andor-cameras` feature and stages the change,
+2. on a Raspberry Pi 5, switches to the 4K-page kernel (`kernel=kernel8.img` in
+   `/boot/firmware/config.txt`), which the x86_64 emulator inside `andor-server` needs. This
+   reboots the Pi: run the script again afterwards,
+3. installs the Andor SDK into `andor-server`.
+
+The Andor SDK is licensed per camera and not redistributable, so it is not part of this repo or the
+container image. By default, the script downloads it from a release of the private
+`openUC2/andor-arm64-emulator` repo, and asks for a
+[GitHub token](https://github.com/settings/tokens) with read access to that repo (fine-grained:
+"Contents: read"; classic: `repo` scope). The token is not stored; you can also pass it as
+`GITHUB_TOKEN=... bash ...`. If you have the SDK archive Andor supplied with your camera, pass it
+instead: `bash "$(forklift plt locate-file andor/setup.sh)" andor-2.104.30091.0.tar.gz`. You can
+also upload the archive by hand on `http://<machine>/andor/`.
+
+The SDK is kept in the `andor-sdk` Docker volume, across restarts and OS updates. The Swagger UI and
+a live view of the camera are at `http://<machine>/andor/`.
+
 ### Integrating changes in ImSwitch
 
 1. Commit and push your changes to the [openUC2/ImSwitch](https://github.com/openUC2/ImSwitch) repo.
@@ -142,6 +170,62 @@ To see the full list of deployments you can disable or enable, run `forklift plt
 for some deployments, especially some deployments whose names begin with `provisioning/`,
 `networking/`, `infra/`, and `dev/`, you will have to reboot/soft-reboot in order for changes to actually take
 effect.
+
+#### Optional features of a deployment
+
+A deployment can also have optional features. `forklift plt show-depl imswitch` lists the ones
+that are enabled and the ones that are available. To switch one on or off, run:
+
+```bash
+forklift plt enable-depl-feat imswitch andor-cameras   # or: disable-depl-feat
+forklift plt stage && sudo reboot                     # or: forklift plt apply
+```
+
+The change is written to `deployments/imswitch.deploy.yml` in the local pallet. Like any local
+change, `forklift plt upgrade --force` overwrites it, so enable the feature again after an
+upgrade, or commit it to the pallet for all machines.
+
+Opt-in features and deployments:
+
+| What | How to turn it on | Notes |
+|---|---|---|
+| Andor SDK2 cameras (iXon) | `bash "$(forklift plt locate-file andor/setup.sh)"` | See [Setting up Andor cameras](#setting-up-andor-cameras) |
+| ImSwitch with Micro-Manager (pymmcore-plus) | `enable-depl-feat imswitch micromanager` | Larger ImSwitch image |
+| Arkitekt hub on this machine | `enable-depl arkitekt-hub` and `enable-depl-feat imswitch arkitekt` | See [Running an Arkitekt hub](#running-an-arkitekt-hub) |
+| ImSwitch's Arkitekt login kept across restarts | `enable-depl-feat imswitch arkitekt` | Also needed for the hub panel |
+| HDMI output as an SLM/DMD display | `enable-depl-feat imswitch slm-display` | Changes `/boot/firmware/cmdline.txt` at the next boot. Disabling it undoes the change. Video mode: `SLM_VIDEO_MODE=HDMI-A-1:1920x1080@60D` in `/etc/imswitch-slm-display.conf` |
+| FLIM imager | `enable-depl flim-imager` | |
+
+On by default (switch off with `disable-depl-feat` or `disable-depl`):
+
+- `imswitch` feature `processing-worker`: the
+  [uc2-deconvolution](https://github.com/openUC2/uc2-deconvolution) worker runs in a sidecar
+  container. ImSwitch sends it the whole-stack jobs from the OME-Zarr viewer's **Deconvolve**
+  button (`IMSWITCH_PROCESSING_WORKER_URL`). It is only reachable from the ImSwitch container. It
+  refuses a job that does not fit in the free memory, and the kernel kills it before ImSwitch if
+  memory runs out.
+- `uc2-flasher` deployment: a web flasher at `http://<machine>/uc2-flasher/` for the HAT and the
+  CAN boards on the USB ports. Stop ImSwitch before you flash.
+
+### Running an Arkitekt hub
+
+The `arkitekt-hub` deployment runs this machine's own [Arkitekt](https://arkitekt.live) hub
+(rekuest and mikro). Logins stay on a coordination server such as go.arkitekt.live. It is off by
+default and needs about 3 GB of images, so on a 32 GB SD card, move Docker's storage and
+`/home/pi/arkitekt` to an NVMe or USB SSD first.
+
+```bash
+forklift plt enable-depl arkitekt-hub
+forklift plt enable-depl-feat imswitch arkitekt
+forklift plt stage && sudo reboot
+```
+
+Then connect the hub once from ImSwitch: in the Arkitekt panel, the *This machine's hub* card has
+a **Connect hub** button. Alternatively, run `arkitekt-hub-connect` as pi. Approve the hub in a
+browser, then press **Bind microscope**.
+[deployments/arkitekt-hub.pkg/README.md](./deployments/arkitekt-hub.pkg/README.md) has the details:
+the ImSwitch setup-file block, Orkestrator, address changes, and moving a hub that konstruktor
+started.
 
 ## Exceptional operation
 

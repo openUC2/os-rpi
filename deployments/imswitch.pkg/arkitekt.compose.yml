@@ -1,0 +1,26 @@
+services:
+  server:
+    volumes:
+      # ImSwitch's Arkitekt login (the session fakts keeps per app and server), so that a new
+      # container reconnects without asking for an approval again
+      - /home/pi/arkitekt/imswitch:/home/pi/.local/state/arkitekt
+      # This machine's Arkitekt hub (the arkitekt-hub deployment), for the Arkitekt panel: its
+      # state as arkitekt-hub-connect writes it (nothing secret), and the host's D-Bus, so the
+      # panel can connect the hub. polkit lets pi start only the hub's units over it (see
+      # 20-arkitekt-hub.rules in the arkitekt-hub deployment).
+      - /home/pi/arkitekt/status:/home/pi/arkitekt/status:ro
+      - /run/dbus/system_bus_socket:/var/run/dbus/system_bus_socket
+    depends_on:
+      arkitekt-volume-setup:
+        condition: service_completed_successfully
+
+  arkitekt-volume-setup:
+    # Docker creates a missing bind-mount path owned by root; the container runs as pi.
+    image: docker.io/library/alpine:3.24.4@sha256:f59abe656b692d901e184be3445e084786602108599d2a51d229c0f5a48c71bf
+    network_mode: none
+    volumes:
+      - /home/pi/arkitekt:/home/pi/arkitekt
+    command:
+      'sh -c "mkdir -p /home/pi/arkitekt/imswitch /home/pi/arkitekt/status &&
+      chown 1000:1000 /home/pi/arkitekt /home/pi/arkitekt/status &&
+      chown -R 1000:1000 /home/pi/arkitekt/imswitch && chmod 700 /home/pi/arkitekt/imswitch"'

@@ -1,0 +1,17 @@
+[Unit]
+Description=Remove the ImSwitch SLM/DMD display kernel parameters after slm-display was disabled
+# Runs only when the slm-display feature is off (its unit is gone) and its record of the
+# parameters it added exists. Restores cmdline.txt; the console is back after the next boot.
+ConditionPathExists=!/usr/lib/systemd/system/imswitch-slm-display.service
+ConditionPathExists=/var/lib/imswitch-slm-display/applied
+ConditionPathExists=/boot/firmware/cmdline.txt
+ConditionFileIsExecutable=/usr/libexec/imswitch-slm-display-cmdline
+After=boot-init-root.service
+
+[Service]
+Type=oneshot
+ExecStart=/usr/libexec/imswitch-slm-display-cmdline revert
+RemainAfterExit=yes
+
+[Install]
+WantedBy=multi-user.target

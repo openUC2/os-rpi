@@ -20,6 +20,16 @@ deployment:
       - description: Firmware binary transfer service
         port: 3333
         protocol: tcp
+    file-exports:
+      # Always installed, so that switching the slm-display feature off undoes its
+      # cmdline.txt change (the feature's own unit is gone then).
+      - description: Script adding (apply) or removing (revert) the SLM display kernel parameters
+        target: overlays/usr/libexec/imswitch-slm-display-cmdline
+      - description: >-
+          systemd service removing the SLM display kernel parameters once slm-display is disabled
+        target: overlays/usr/lib/systemd/system/imswitch-slm-display-revert.service
+      - description: systemd service enablement for imswitch-slm-display-revert.service
+        target: overlays/etc/systemd/system/multi-user.target.wants/imswitch-slm-display-revert.service
 
 features:
   frontend:
@@ -182,6 +192,13 @@ features:
       Runs the ImSwitch container image variant which includes Micro-Manager (pymmcore-plus)
     compose-files:
       - micromanager.compose.yml
+  processing-worker:
+    description: >-
+      Deconvolution beside ImSwitch: the uc2-deconvolution worker in a sidecar container, which
+      ImSwitch uses for whole-stack jobs of the OME-Zarr viewer's Deconvolve button without any
+      setting (IMSWITCH_PROCESSING_WORKER_URL). Only reachable from the ImSwitch container.
+    compose-files:
+      - processing-worker.compose.yml
   can-interface:
     description: Provides automatic enablement of the OS interface for an SPI CAN bus transceiver
     compose-files:
@@ -194,6 +211,24 @@ features:
             which should be managed by NetworkManager instead
           target: overlays/etc/systemd/network/80-wifi-adhoc.network
         - target: overlays/etc/systemd/system/multi-user.target.wants/systemd-networkd.service
+  arkitekt:
+    description: >-
+      Keeps ImSwitch's Arkitekt login (in /home/pi/arkitekt/imswitch), so that a new container
+      reconnects to the Arkitekt server without asking for an approval again, and lets its
+      Arkitekt panel show and connect this machine's hub (the arkitekt-hub deployment)
+    compose-files:
+      - arkitekt.compose.yml
+  slm-display:
+    description: >-
+      Dedicates the HDMI output to an SLM/DMD driven by ImSwitch (setup "slm": {"display":
+      "framebuffer"}): keeps the text console, its cursor and screen blanking off /dev/fb0
+      (kernel parameters in /boot/firmware/cmdline.txt, applied at the next boot)
+    provides:
+      file-exports:
+        - description: systemd service adding the SLM display kernel parameters to cmdline.txt
+          target: overlays/usr/lib/systemd/system/imswitch-slm-display.service
+        - description: systemd service enablement for imswitch-slm-display.service
+          target: overlays/etc/systemd/system/multi-user.target.wants/imswitch-slm-display.service
   dev-upgrade-os:
     description: Allows ImSwitch to upgrade the OS via Forklift
     compose-files:
