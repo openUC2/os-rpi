@@ -48,7 +48,7 @@ services:
     restart: unless-stopped
 
   rustfs:
-    image: rustfs/rustfs:latest@sha256:b81d16a90ee25bd9511280127ca1471788c6e874cf0f0da759645f46b2dc1d74
+    image: rustfs/rustfs:latest@sha256:ee717072290bec9b11abfc0365f8310b00df1cd9b3639943edae47bdef05044a
     environment:
       RUSTFS_ACCESS_KEY_FILE: /run/hub-secrets/RUSTFS_ACCESS_KEY
       RUSTFS_SECRET_KEY_FILE: /run/hub-secrets/RUSTFS_SECRET_KEY
