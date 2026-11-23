@@ -1,0 +1,26 @@
+# Deconvolution for the "Deconvolve" button of ImSwitch's OME-Zarr viewer, in a sidecar container:
+# the uc2-deconvolution worker (https://github.com/openUC2/uc2-deconvolution). ImSwitch reaches it at
+# http://processing-worker:8090 on the private "processing" network and sends it the planes of
+# whole-stack jobs; previews still run inside ImSwitch. Nothing is exposed outside the machine (no
+# firewall port: container-to-container traffic is not filtered).
+#
+# A large job must not take the microscope down: the worker refuses a job that does not fit in the
+# free memory, the kernel kills the worker rather than ImSwitch if memory still runs out
+# (oom_score_adj), and it gets a quarter of ImSwitch's CPU weight while both are busy (cpu_shares).
+services:
+  processing-worker:
+    image: ghcr.io/openuc2/uc2-deconvolution:sha-78f9174@sha256:8086d7e0ec99e32a27eea4a1e23f7d513d0ac67c04dec17d0ff15e8fa82936e0
+    networks:
+      - processing
+    oom_score_adj: 1000
+    cpu_shares: 256
+    restart: always
+
+  server:
+    environment:
+      - IMSWITCH_PROCESSING_WORKER_URL=http://processing-worker:8090
+    networks:
+      - processing
+
+networks:
+  processing: {}

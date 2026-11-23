@@ -10,5 +10,6 @@ features:
   - touptek-cameras
   - alliedvision-cameras
   - can-interface
+  - processing-worker
   - dev-upgrade-os
 disabled: false

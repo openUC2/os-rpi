@@ -182,6 +182,13 @@ features:
       Runs the ImSwitch container image variant which includes Micro-Manager (pymmcore-plus)
     compose-files:
       - micromanager.compose.yml
+  processing-worker:
+    description: >-
+      Deconvolution beside ImSwitch: the uc2-deconvolution worker in a sidecar container, which
+      ImSwitch uses for whole-stack jobs of the OME-Zarr viewer's Deconvolve button without any
+      setting (IMSWITCH_PROCESSING_WORKER_URL). Only reachable from the ImSwitch container.
+    compose-files:
+      - processing-worker.compose.yml
   can-interface:
     description: Provides automatic enablement of the OS interface for an SPI CAN bus transceiver
     compose-files:
