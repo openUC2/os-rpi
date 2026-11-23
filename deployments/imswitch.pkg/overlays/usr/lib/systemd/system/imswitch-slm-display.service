@@ -1,0 +1,20 @@
+[Unit]
+Description=Kernel parameters for the HDMI output as an ImSwitch SLM/DMD display (/dev/fb0)
+# consoleblank=0: the output never blanks; vt.global_cursor_default=0: no blinking cursor;
+# fbcon=map:1: the text console stays off /dev/fb0 (it would overwrite the pattern), the
+# serial console and SSH remain. An optional video mode for a DMD without usable EDID goes
+# into /etc/imswitch-slm-display.conf as SLM_VIDEO_MODE=HDMI-A-1:1920x1080@60D.
+# Changes apply at the next boot. Disabling the slm-display feature undoes them
+# (imswitch-slm-display-revert.service), again at the next boot.
+ConditionPathExists=/boot/firmware/cmdline.txt
+ConditionFileIsExecutable=/usr/libexec/imswitch-slm-display-cmdline
+After=boot-init-root.service
+
+[Service]
+Type=oneshot
+EnvironmentFile=-/etc/imswitch-slm-display.conf
+ExecStart=/usr/libexec/imswitch-slm-display-cmdline apply
+RemainAfterExit=yes
+
+[Install]
+WantedBy=multi-user.target
