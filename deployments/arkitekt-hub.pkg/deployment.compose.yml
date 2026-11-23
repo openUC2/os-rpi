@@ -161,7 +161,7 @@ services:
 
   reporter:
     # Tells the coordination server how the hub is doing, once the hub is connected to it.
-    image: jhnnsrs/reporter:latest@sha256:f4dc575a4c8af2b1860e2c3c65b17bd7c6f2ac0843e7c489e8d14029e9a8af6b
+    image: jhnnsrs/reporter:latest@sha256:ef63bc5cd46754e55030ce7a09c75b208b9ad737ac319be63c470f6ca53dda4f
     entrypoint:
       - /bin/sh
       - -c
