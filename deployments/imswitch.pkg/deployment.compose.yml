@@ -1,6 +1,6 @@
 services:
   server:
-    image: ghcr.io/openuc2/imswitch:sha-6e793c7
+    image: ghcr.io/openuc2/imswitch:sha-6e793c7@sha256:644c6491fb19cb6786a6de4f6cf3488b39e5ead54041faa928f166a20056f5d4
     volumes:
       - /etc/machine-id:/etc/machine-id:ro
       # The host's name (= the Wi-Fi hotspot SSID), shown on the HAT's status display. Without this

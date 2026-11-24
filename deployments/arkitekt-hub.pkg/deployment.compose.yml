@@ -44,11 +44,11 @@ services:
     restart: unless-stopped
 
   redis:
-    image: redis:8.10.1@sha256:8a1efc5f479551822b47424ccae982026b633f28818eab0387348120a61e10e2
+    image: redis:8.12.0@sha256:0b0065bf70f1493580c1dffe6963091716da3731b8e0ba7821d4c7e357156ae2
     restart: unless-stopped
 
   rustfs:
-    image: rustfs/rustfs:latest@sha256:b81d16a90ee25bd9511280127ca1471788c6e874cf0f0da759645f46b2dc1d74
+    image: rustfs/rustfs:latest@sha256:ee717072290bec9b11abfc0365f8310b00df1cd9b3639943edae47bdef05044a
     environment:
       RUSTFS_ACCESS_KEY_FILE: /run/hub-secrets/RUSTFS_ACCESS_KEY
       RUSTFS_SECRET_KEY_FILE: /run/hub-secrets/RUSTFS_SECRET_KEY
@@ -91,7 +91,7 @@ services:
         condition: service_started
 
   rekuest:
-    image: jhnnsrs/rekuest:19@sha256:df456730c14bb1c92e85f241936245e91b8ae5adf2cdc5513c4fc4ca4be7a31e
+    image: jhnnsrs/rekuest:22@sha256:ff4a3568ff5f8e16f4be594ab49cc68e0069019d39377f01033f150d316bf953
     entrypoint: *wait-for-config
     command: [arkitekt-service, serve]
     environment:
@@ -112,7 +112,7 @@ services:
     restart: unless-stopped
 
   mikro:
-    image: jhnnsrs/mikro:15@sha256:2e6069aa93b17bd9323ad7b131099ee68f882ed53b27e880dcd1c5abb9385b1f
+    image: jhnnsrs/mikro:15@sha256:d6a4b0621f6cf06b8a7986c273a76b464aa7ec562f7dd91f519fb4bfbe32713d
     entrypoint: *wait-for-config
     command: [arkitekt-service, serve]
     environment:
@@ -124,7 +124,7 @@ services:
     restart: unless-stopped
 
   rekuest-takt:
-    image: jhnnsrs/rekuest-takt:19@sha256:4b73f111499de61e2caea8e802f77b90e1f5e1fdc2e471e9b518a92d1fda1319
+    image: jhnnsrs/rekuest-takt:22@sha256:7c49730d00c694fb0959d499fafbf1d1e11f23e30992cda5db78055883020439
     entrypoint: *wait-for-config
     command: [takt]
     environment:
@@ -149,7 +149,7 @@ services:
     restart: unless-stopped
 
   gateway:
-    image: caddy:2.11.4@sha256:0c994536bddb66445885237f1a5dcc1916bccea922661c76b4e9fc24061f9b52
+    image: caddy:2.11.9@sha256:4851e54a46b206517c574821bb5cc67f170d2156041e9fbc4c9193b45e84a75b
     command: [caddy, run, --config, /hub/configs/Caddyfile, --adapter, caddyfile]
     ports:
       - 2754:80
@@ -161,7 +161,7 @@ services:
 
   reporter:
     # Tells the coordination server how the hub is doing, once the hub is connected to it.
-    image: jhnnsrs/reporter:latest@sha256:f4dc575a4c8af2b1860e2c3c65b17bd7c6f2ac0843e7c489e8d14029e9a8af6b
+    image: jhnnsrs/reporter:latest@sha256:ef63bc5cd46754e55030ce7a09c75b208b9ad737ac319be63c470f6ca53dda4f
     entrypoint:
       - /bin/sh
       - -c
