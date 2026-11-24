@@ -91,7 +91,7 @@ services:
         condition: service_started
 
   rekuest:
-    image: jhnnsrs/rekuest:22@sha256:ff4a3568ff5f8e16f4be594ab49cc68e0069019d39377f01033f150d316bf953
+    image: jhnnsrs/rekuest:23@sha256:40bdb16342411f4c75928093f07beddff5d1f087e76c9763a19d0019fe1d46ef
     entrypoint: *wait-for-config
     command: [arkitekt-service, serve]
     environment:
