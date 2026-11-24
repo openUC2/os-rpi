@@ -124,7 +124,7 @@ services:
     restart: unless-stopped
 
   rekuest-takt:
-    image: jhnnsrs/rekuest-takt:22@sha256:c3224f7a805e60b6c446ac6251c1af53a9ee5f7e9754ac8d3b341b4522b4142c
+    image: jhnnsrs/rekuest-takt:22@sha256:7c49730d00c694fb0959d499fafbf1d1e11f23e30992cda5db78055883020439
     entrypoint: *wait-for-config
     command: [takt]
     environment:
