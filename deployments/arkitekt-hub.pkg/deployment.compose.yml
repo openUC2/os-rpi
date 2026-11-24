@@ -44,7 +44,7 @@ services:
     restart: unless-stopped
 
   redis:
-    image: redis:8.12.0@sha256:0b0065bf70f1493580c1dffe6963091716da3731b8e0ba7821d4c7e357156ae2
+    image: redis:8.12.0@sha256:3c4881844c6421f29fb9f9e8ca4f573d9fbdfb35967d65834504b6994cf6cd3b
     restart: unless-stopped
 
   rustfs:
@@ -91,7 +91,7 @@ services:
         condition: service_started
 
   rekuest:
-    image: jhnnsrs/rekuest:22@sha256:ff4a3568ff5f8e16f4be594ab49cc68e0069019d39377f01033f150d316bf953
+    image: jhnnsrs/rekuest:23@sha256:40bdb16342411f4c75928093f07beddff5d1f087e76c9763a19d0019fe1d46ef
     entrypoint: *wait-for-config
     command: [arkitekt-service, serve]
     environment:
@@ -112,7 +112,7 @@ services:
     restart: unless-stopped
 
   mikro:
-    image: jhnnsrs/mikro:15@sha256:d6a4b0621f6cf06b8a7986c273a76b464aa7ec562f7dd91f519fb4bfbe32713d
+    image: jhnnsrs/mikro:15@sha256:c529ae2662b5a8c4ae1c931ec758068d104c3d2905423e0cd9aca5800c89360f
     entrypoint: *wait-for-config
     command: [arkitekt-service, serve]
     environment:
@@ -124,7 +124,7 @@ services:
     restart: unless-stopped
 
   rekuest-takt:
-    image: jhnnsrs/rekuest-takt:22@sha256:7c49730d00c694fb0959d499fafbf1d1e11f23e30992cda5db78055883020439
+    image: jhnnsrs/rekuest-takt:23@sha256:d2780f62d3cfb3f11bed759b04f0f771dec5bfe6d1e2ddc819013ca8b2346f34
     entrypoint: *wait-for-config
     command: [takt]
     environment:
