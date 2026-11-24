@@ -112,7 +112,7 @@ services:
     restart: unless-stopped
 
   mikro:
-    image: jhnnsrs/mikro:15@sha256:d6a4b0621f6cf06b8a7986c273a76b464aa7ec562f7dd91f519fb4bfbe32713d
+    image: jhnnsrs/mikro:15@sha256:c529ae2662b5a8c4ae1c931ec758068d104c3d2905423e0cd9aca5800c89360f
     entrypoint: *wait-for-config
     command: [arkitekt-service, serve]
     environment:
